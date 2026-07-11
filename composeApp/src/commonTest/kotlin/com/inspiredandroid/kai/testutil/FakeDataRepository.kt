@@ -602,4 +602,40 @@ class FakeDataRepository : DataRepository {
     override fun startLocalModelDownload(model: LocalModel) {}
     override fun cancelLocalModelDownload() {}
     override suspend fun deleteLocalModel(modelId: String) {}
+
+    private var _wakeWordEnabled = false
+    override fun setWakeWordEnabled(enabled: Boolean) { _wakeWordEnabled = enabled }
+    override fun isWakeWordEnabled(): Boolean = _wakeWordEnabled
+    
+    private var _wakeWordModelLang = ""
+    override fun setWakeWordModelLang(lang: String) { _wakeWordModelLang = lang }
+    override fun getWakeWordModelLang(): String = _wakeWordModelLang
+    
+    private var _wakeWordTrigger = ""
+    override fun setWakeWordTrigger(trigger: String) { _wakeWordTrigger = trigger }
+    override fun getWakeWordTrigger(): String = _wakeWordTrigger
+    
+    private var _wakeWordVibrationEnabled = false
+    override fun setWakeWordVibration(enabled: Boolean) { _wakeWordVibrationEnabled = enabled }
+    override fun isWakeWordVibrationEnabled(): Boolean = _wakeWordVibrationEnabled
+    
+    private var _wakeWordSoundEnabled = false
+    override fun setWakeWordSound(enabled: Boolean) { _wakeWordSoundEnabled = enabled }
+    override fun isWakeWordSoundEnabled(): Boolean = _wakeWordSoundEnabled
+    
+    private var _voiceResponseEnabled = false
+    override fun isVoiceResponseEnabled(): Boolean = _voiceResponseEnabled
+    override fun setVoiceResponseEnabled(enabled: Boolean) { _voiceResponseEnabled = enabled }
+    
+    private var _vlessEnabled = false
+    override fun isVlessEnabled(): Boolean = _vlessEnabled
+    override fun setVlessEnabled(enabled: Boolean) { _vlessEnabled = enabled }
+    
+    private var _vlessUri = ""
+    override fun getVlessUri(): String = _vlessUri
+    override fun setVlessUri(uri: String) { _vlessUri = uri }
+    
+    private var _quickActions = emptyList<com.inspiredandroid.kai.data.QuickAction>()
+    override fun getQuickActions(): List<com.inspiredandroid.kai.data.QuickAction> = _quickActions
+    override fun setQuickActions(actions: List<com.inspiredandroid.kai.data.QuickAction>) { _quickActions = actions }
 }

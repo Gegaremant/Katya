@@ -235,3 +235,10 @@ This project is open-source and maintained by a single developer. If you find th
 - Based on [Kai 9000](https://github.com/SimonSchubert/Kai) by Simon Schubert
 - Vosk speech recognition: https://alphacephei.com/vosk/
 - Mistral: https://mistral.ai/
+
+## Release Notes
+
+### v1.x (Latest Changes)
+- **Wake Word Settings fixed**: Added missing tests implementations and fixed crashes during the CI/CD test phases.
+- **Cross-Platform Compatibility**: Fixed line-ending syntax issues on iOS and JVM targets for the Wake Word feature.
+- **WASM Support**: Initialized WakeWordPlatform stubs for WASM module.

@@ -9,5 +9,6 @@ class DummyWakeWordPlatform : WakeWordPlatform {
     override fun isModelReady(modelUrl: String): Boolean = false
     override fun startDownload(modelUrl: String) {}
     override fun startListening(modelUrl: String, triggerWord: String, onWakeWordDetected: () -> Unit) {}
-    override fun stopListening() {}\n    override fun triggerWakeWordResponse(vibrate: Boolean, sound: Boolean) {}
+    override fun stopListening() {}
+    override fun triggerWakeWordResponse(vibrate: Boolean, sound: Boolean) {}
 }
