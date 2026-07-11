@@ -264,15 +264,6 @@ class AppSettings(internal val settings: Settings) {
     fun getWakeWord(): String = settings.getString(KEY_WAKE_WORD, "привет катя")
     fun setWakeWord(word: String) { settings.putString(KEY_WAKE_WORD, word) }
 
-    fun isWakeWordEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_ENABLED, false)
-    fun setWakeWordEnabled(enabled: Boolean) { settings.putBoolean(KEY_WAKE_WORD_ENABLED, enabled) }
-
-    fun isWakeWordSoundEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_SOUND_ENABLED, true)
-    fun setWakeWordSoundEnabled(enabled: Boolean) { settings.putBoolean(KEY_WAKE_WORD_SOUND_ENABLED, enabled) }
-
-    fun isWakeWordVibrationEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_VIBRATION_ENABLED, true)
-    fun setWakeWordVibrationEnabled(enabled: Boolean) { settings.putBoolean(KEY_WAKE_WORD_VIBRATION_ENABLED, enabled) }
-
     fun isVoiceResponseEnabled(): Boolean = settings.getBoolean(KEY_VOICE_RESPONSE_ENABLED, true)
 
     fun setWakeWordEnabled(enabled: Boolean) {
@@ -308,8 +299,6 @@ class AppSettings(internal val settings: Settings) {
 
 
 
-    fun getWakeWordTrigger(): String = settings.getString("wake_word_trigger", "Катя")
-    fun setWakeWordTrigger(trigger: String) { settings.putString("wake_word_trigger", trigger) }
 
     fun setFreeServicePrimary(primary: Boolean) {
         settings.putBoolean(KEY_FREE_SERVICE_PRIMARY, primary)

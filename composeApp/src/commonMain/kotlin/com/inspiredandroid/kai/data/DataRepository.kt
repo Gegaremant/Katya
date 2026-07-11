@@ -238,10 +238,6 @@ interface DataRepository {
      * `ChatViewModel` in its init block.
      */
     val openHeartbeatRequested: StateFlow<Boolean>
-    fun isWakeWordEnabled(): Boolean
-    fun setWakeWordEnabled(enabled: Boolean)
-    fun getWakeWordTrigger(): String
-    fun setWakeWordTrigger(trigger: String)
     
     fun requestOpenHeartbeat()
     fun consumeOpenHeartbeatRequest()

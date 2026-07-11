@@ -154,9 +154,9 @@ class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.st
         onSaveSoul = ::onSaveSoul,
         onToggleDynamicUi = ::onToggleDynamicUi,
         onToggleVoiceResponse = ::onToggleVoiceResponse,
-        setIsWakeWordEnabled = ::onToggleWakeWord,
+        onToggleWakeWord = ::onToggleWakeWord,
+        onChangeWakeWordTrigger = ::onChangeWakeWordTrigger,
         setWakeWordModelLang = ::onChangeWakeWordModelLang,
-        setWakeWordTrigger = ::onChangeWakeWordTrigger,
         setIsWakeWordVibrationEnabled = ::onToggleWakeWordVibration,
         setIsWakeWordSoundEnabled = ::onToggleWakeWordSound,
         onAddQuickAction = ::onAddQuickAction,
@@ -172,8 +172,6 @@ class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.st
         onToggleVless = ::onToggleVless,
         onChangeVlessUri = ::onChangeVlessUri,
         onToggleHeartbeat = ::onToggleHeartbeat,
-        onToggleWakeWord = ::onToggleWakeWord,
-        onChangeWakeWordTrigger = ::onChangeWakeWordTrigger,
         onDownloadVosk = ::onDownloadVosk,
         onChangeHeartbeatInterval = ::onChangeHeartbeatInterval,
         onChangeHeartbeatActiveHours = ::onChangeHeartbeatActiveHours,
@@ -608,6 +606,16 @@ class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.st
         } else {
             wakeWordPlatform.stopListening()
         }
+    }
+
+    private fun onToggleWakeWordVibration(enabled: Boolean) {
+        dataRepository.setWakeWordVibration(enabled)
+        _state.update { it.copy(isWakeWordVibrationEnabled = enabled) }
+    }
+
+    private fun onToggleWakeWordSound(enabled: Boolean) {
+        dataRepository.setWakeWordSound(enabled)
+        _state.update { it.copy(isWakeWordSoundEnabled = enabled) }
     }
 
     private fun onChangeWakeWordTrigger(trigger: String) {

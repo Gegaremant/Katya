@@ -1,0 +1,15 @@
+package com.inspiredandroid.kai.stt
+
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+class StubWakeWordPlatform : WakeWordPlatform {
+    override val isDownloading: StateFlow<Boolean> = MutableStateFlow(false)
+    override val downloadProgress: StateFlow<Float?> = MutableStateFlow(null)
+
+    override fun isModelReady(modelUrl: String): Boolean = false
+    override fun startDownload(modelUrl: String) {}
+    override fun startListening(modelUrl: String, triggerWord: String, onWakeWordDetected: () -> Unit) {}
+    override fun stopListening() {}
+    override fun triggerWakeWordResponse(vibrate: Boolean, playSound: Boolean) {}
+}

@@ -2212,21 +2212,6 @@ class RemoteDataRepository(
         localInferenceEngine?.cancelDownload()
     }
 
-    override fun isWakeWordEnabled(): Boolean {
-        return appSettings.isWakeWordEnabled()
-    }
-
-    override fun setWakeWordEnabled(enabled: Boolean) {
-        appSettings.setWakeWordEnabled(enabled)
-    }
-
-    override fun getWakeWordTrigger(): String {
-        return appSettings.getWakeWordTrigger()
-    }
-
-    override fun setWakeWordTrigger(trigger: String) {
-        appSettings.setWakeWordTrigger(trigger)
-    }
 
     override suspend fun deleteLocalModel(modelId: String) {
         localInferenceEngine?.deleteModel(modelId)
