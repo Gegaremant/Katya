@@ -57,4 +57,11 @@ object AndroidHostShellTool : Tool {
             mapOf("success" to false, "error" to "Execution failed: ${e.message}")
         }
     }
+    val toolInfo = ToolInfo(
+        id = "host_shell_command",
+        name = "Android Shell Command",
+        description = "Execute a shell command directly on the Android host OS",
+        nameRes = null, // Or define strings in string.xml
+        descriptionRes = null,
+    )
 }
