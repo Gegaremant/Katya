@@ -415,4 +415,11 @@
     <string name="model_sort_date">Date</string>
     <string name="model_sort_score">Score</string>
     <string name="model_sort_context">Context</string>
+    <string name="settings_wake_word">Voice Activation (Wake Word)</string>
+    <string name="settings_wake_word_description">Katya listens for a trigger in the background (default "Katya") and vibrates upon detection.</string>
+    <string name="settings_wake_word_trigger">Trigger Word</string>
+    <string name="settings_wake_word_trigger_description">The name the agent will respond to.</string>
+    <string name="settings_wake_word_download_vosk">Download Speech Recognition Model (Vosk)</string>
+    <string name="settings_voice_response">Voice Response</string>
+    <string name="settings_voice_response_description">Katya reads aloud the generated responses.</string>
 </resources>

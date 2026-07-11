@@ -261,6 +261,56 @@ class AppSettings(internal val settings: Settings) {
     fun getServerPassword(): String = settings.getString(KEY_SERVER_PASSWORD, "")
     fun setServerPassword(password: String) { settings.putString(KEY_SERVER_PASSWORD, password) }
 
+    fun getWakeWord(): String = settings.getString(KEY_WAKE_WORD, "привет катя")
+    fun setWakeWord(word: String) { settings.putString(KEY_WAKE_WORD, word) }
+
+    fun isWakeWordEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_ENABLED, false)
+    fun setWakeWordEnabled(enabled: Boolean) { settings.putBoolean(KEY_WAKE_WORD_ENABLED, enabled) }
+
+    fun isWakeWordSoundEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_SOUND_ENABLED, true)
+    fun setWakeWordSoundEnabled(enabled: Boolean) { settings.putBoolean(KEY_WAKE_WORD_SOUND_ENABLED, enabled) }
+
+    fun isWakeWordVibrationEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_VIBRATION_ENABLED, true)
+    fun setWakeWordVibrationEnabled(enabled: Boolean) { settings.putBoolean(KEY_WAKE_WORD_VIBRATION_ENABLED, enabled) }
+
+    fun isVoiceResponseEnabled(): Boolean = settings.getBoolean(KEY_VOICE_RESPONSE_ENABLED, true)
+
+    fun setWakeWordEnabled(enabled: Boolean) {
+        settings.putBoolean(KEY_WAKE_WORD_ENABLED, enabled)
+    }
+
+    fun isWakeWordEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_ENABLED, false)
+
+    fun setWakeWordModelLang(lang: String) {
+        settings.putString(KEY_WAKE_WORD_MODEL_LANG, lang)
+    }
+
+    fun getWakeWordModelLang(): String = settings.getString(KEY_WAKE_WORD_MODEL_LANG, "ru")
+
+    fun setWakeWordTrigger(trigger: String) {
+        settings.putString(KEY_WAKE_WORD_TRIGGER, trigger)
+    }
+
+    fun getWakeWordTrigger(): String = settings.getString(KEY_WAKE_WORD_TRIGGER, "привет катя")
+
+    fun setWakeWordVibration(enabled: Boolean) {
+        settings.putBoolean(KEY_WAKE_WORD_VIBRATION, enabled)
+    }
+
+    fun isWakeWordVibrationEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_VIBRATION, true)
+
+    fun setWakeWordSound(enabled: Boolean) {
+        settings.putBoolean(KEY_WAKE_WORD_SOUND, enabled)
+    }
+
+    fun isWakeWordSoundEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_SOUND, true)
+    fun setVoiceResponseEnabled(enabled: Boolean) { settings.putBoolean(KEY_VOICE_RESPONSE_ENABLED, enabled) }
+
+
+
+    fun getWakeWordTrigger(): String = settings.getString("wake_word_trigger", "Катя")
+    fun setWakeWordTrigger(trigger: String) { settings.putString("wake_word_trigger", trigger) }
+
     fun setFreeServicePrimary(primary: Boolean) {
         settings.putBoolean(KEY_FREE_SERVICE_PRIMARY, primary)
     }
@@ -626,6 +676,16 @@ class AppSettings(internal val settings: Settings) {
         const val KEY_SERVER_PORT = "server_port"
         const val KEY_SERVER_USER = "server_user"
         const val KEY_SERVER_PASSWORD = "server_password"
+
+        const val KEY_WAKE_WORD = "wake_word"
+        const val KEY_WAKE_WORD_ENABLED = "wake_word_enabled"
+        const val KEY_WAKE_WORD_SOUND_ENABLED = "wake_word_sound_enabled"
+        const val KEY_WAKE_WORD_VIBRATION_ENABLED = "wake_word_vibration_enabled"
+        private const val KEY_VOICE_RESPONSE_ENABLED = "voice_response_enabled"
+        private const val KEY_WAKE_WORD_MODEL_LANG = "wake_word_model_lang"
+        private const val KEY_WAKE_WORD_TRIGGER = "wake_word_trigger"
+        private const val KEY_WAKE_WORD_VIBRATION = "wake_word_vibration"
+        private const val KEY_WAKE_WORD_SOUND = "wake_word_sound"
 
         // Basic memory guidance shared by every chat variant. The advanced `## Structured
         // Learning` block lives in `ChatSystemPromptBuilder.DEFAULT_STRUCTURED_LEARNING_SECTION`

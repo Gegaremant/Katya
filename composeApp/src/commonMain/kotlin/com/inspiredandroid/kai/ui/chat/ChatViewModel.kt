@@ -82,6 +82,7 @@ class ChatViewModel(
         ChatUiState(
             actions = actions,
             showPrivacyInfo = dataRepository.isUsingSharedKey(),
+            isSpeechOutputEnabled = dataRepository.isVoiceResponseEnabled(),
         ),
     )
 
@@ -350,9 +351,11 @@ class ChatViewModel(
     }
 
     private fun toggleSpeechOutput() {
+        val newState = !_state.value.isSpeechOutputEnabled
+        dataRepository.setVoiceResponseEnabled(newState)
         _state.update {
             it.copy(
-                isSpeechOutputEnabled = !it.isSpeechOutputEnabled,
+                isSpeechOutputEnabled = newState,
             )
         }
     }

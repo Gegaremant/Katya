@@ -428,7 +428,11 @@ fun SettingsScreenContent(
             }
 
             val visibleTabs = remember(sandboxState.showSandbox) {
-                SettingsTab.entries.filter { it != SettingsTab.Sandbox || sandboxState.showSandbox }.toImmutableList()
+                SettingsTab.entries.filter { 
+                    it != SettingsTab.Sandbox || sandboxState.showSandbox 
+                }.filter { 
+                    it != SettingsTab.Integrations // Temporarily hidden
+                }.toImmutableList()
             }
 
             SettingsTabSelector(
@@ -591,7 +595,7 @@ private fun SettingsTabSelector(
                             SettingsTab.Tools -> stringResource(Res.string.settings_tab_tools)
                             SettingsTab.Sandbox -> stringResource(Res.string.settings_tab_sandbox)
                             SettingsTab.Integrations -> stringResource(Res.string.settings_tab_integrations)
-                            SettingsTab.Servers -> "Servers"
+                            SettingsTab.Servers -> "Серверы"
                         },
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                         color = MaterialTheme.colorScheme.primary,
@@ -634,23 +638,12 @@ private fun BottomInfo() {
                 .clip(CircleShape)
                 .size(24.dp)
                 .clickable(onClick = {
-                    uriHandler.openUri("https://github.com/SimonSchubert/Kai")
+                    uriHandler.openUri("https://github.com/Gegaremant/Katya")
                 })
                 .handCursor(),
             painter = painterResource(Res.drawable.github_mark),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground,
-        )
-
-        Spacer(Modifier.width(12.dp))
-
-        Text(
-            text = stringResource(Res.string.settings_documentation),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable { uriHandler.openUri("https://kai9000.com/docs/") }
-                .handCursor(),
         )
     }
 

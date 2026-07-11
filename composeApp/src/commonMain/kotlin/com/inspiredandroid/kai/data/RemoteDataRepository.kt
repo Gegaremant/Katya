@@ -1730,10 +1730,20 @@ class RemoteDataRepository(
     }
 
     override fun isDynamicUiEnabled(): Boolean = appSettings.isDynamicUiEnabled()
+    override fun setDynamicUiEnabled(enabled: Boolean) = appSettings.setDynamicUiEnabled(enabled)
 
-    override fun setDynamicUiEnabled(enabled: Boolean) {
-        appSettings.setDynamicUiEnabled(enabled)
-    }
+    override fun isVoiceResponseEnabled(): Boolean = appSettings.isVoiceResponseEnabled()
+    override fun setWakeWordEnabled(enabled: Boolean) = appSettings.setWakeWordEnabled(enabled)
+    override fun isWakeWordEnabled(): Boolean = appSettings.isWakeWordEnabled()
+    override fun setWakeWordModelLang(lang: String) = appSettings.setWakeWordModelLang(lang)
+    override fun getWakeWordModelLang(): String = appSettings.getWakeWordModelLang()
+    override fun setWakeWordTrigger(trigger: String) = appSettings.setWakeWordTrigger(trigger)
+    override fun getWakeWordTrigger(): String = appSettings.getWakeWordTrigger()
+    override fun setWakeWordVibration(enabled: Boolean) = appSettings.setWakeWordVibration(enabled)
+    override fun isWakeWordVibrationEnabled(): Boolean = appSettings.isWakeWordVibrationEnabled()
+    override fun setWakeWordSound(enabled: Boolean) = appSettings.setWakeWordSound(enabled)
+    override fun isWakeWordSoundEnabled(): Boolean = appSettings.isWakeWordSoundEnabled()
+    override fun setVoiceResponseEnabled(enabled: Boolean) = appSettings.setVoiceResponseEnabled(enabled)
 
     override fun getThemeMode(): ThemeMode = appSettings.getThemeMode()
 
@@ -2200,6 +2210,22 @@ class RemoteDataRepository(
 
     override fun cancelLocalModelDownload() {
         localInferenceEngine?.cancelDownload()
+    }
+
+    override fun isWakeWordEnabled(): Boolean {
+        return appSettings.isWakeWordEnabled()
+    }
+
+    override fun setWakeWordEnabled(enabled: Boolean) {
+        appSettings.setWakeWordEnabled(enabled)
+    }
+
+    override fun getWakeWordTrigger(): String {
+        return appSettings.getWakeWordTrigger()
+    }
+
+    override fun setWakeWordTrigger(trigger: String) {
+        appSettings.setWakeWordTrigger(trigger)
     }
 
     override suspend fun deleteLocalModel(modelId: String) {

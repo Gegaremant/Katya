@@ -1,4 +1,4 @@
-# Kai 9000
+# Katya AI Assistant
 
 <img src="https://img.shields.io/badge/Platform-Web-f7df1c?logo=javascript" alt="Web"> <img src="https://img.shields.io/badge/Platform-Android-34a853.svg?logo=android" alt="Android" /> <img src="https://img.shields.io/badge/Platform-iOS-lightgrey.svg?logo=apple" alt="iOS" /> <img src="https://img.shields.io/badge/Platform-Windows/macOS/Linux-e10707.svg?logo=openjdk" alt="Platform JVM" />
 <div align="center">
@@ -10,25 +10,32 @@
 
 An **open-source AI assistant with persistent memory** that runs on **Android, iOS, Windows, Mac, Linux, and Web**.
 
-**[Website](https://kai9000.com)** - **[Documentation](https://kai9000.com/docs/)**
 </div>
 
-<div align="center">
-<br>
 
-**Sponsor: [Atlas Cloud](https://www.atlascloud.ai?utm_source=github&utm_medium=link&utm_campaign=Kai)**
+## Features
 
-<a href="https://www.atlascloud.ai?utm_source=github&utm_medium=link&utm_campaign=Kai"><img src="https://www.atlascloud.ai/logo.svg" height="36" alt="Atlas Cloud"></a>
+### Wake Word (Voice Activation)
 
+Katya supports offline voice wake word detection using [Vosk](https://alphacephei.com/vosk/) speech recognition.
 
-</div>
+- **Offline processing** — all speech recognition happens on-device, no internet required
+- **Multi-language** — built-in Russian and English models, or choose any Vosk model from the portal
+- **Customizable trigger** — change the wake word phrase (default: "привет катя")
+- **Vibration & sound feedback** — configurable haptic and audio response on wake word detection
+- **Auto-download** — models are downloaded and extracted in the background with progress notification
+- **Portal integration** — browse and select any Vosk model from alphacephei.com; the app intercepts the download link automatically
+
+Configure in **Settings > General > Wake Word**.
+
+### System Permissions (Android)
+
+On first launch, Katya sequentially requests:
+- Root access (if available)
+- Battery optimization exclusion (keeps background services alive)
+- Unused app restrictions pause (prevents Android from killing the app)
 
 ## Installation
-
-[![App Store](https://raw.githubusercontent.com/SimonSchubert/Kai/main/screenshots/app_store_badge.png)](https://apps.apple.com/us/app/kai-ai/id6758148023)
-[![Play Store](https://raw.githubusercontent.com/SimonSchubert/Kai/main/screenshots/play_store_badge.png)](https://play.google.com/store/apps/details?id=com.inspiredandroid.kai)
-[![F-Droid](https://raw.githubusercontent.com/SimonSchubert/Kai/main/screenshots/fdroid_badge.png)](https://f-droid.org/en/packages/com.inspiredandroid.kai/)
-[![Web](https://raw.githubusercontent.com/SimonSchubert/Kai/main/screenshots/web_badge.png)](https://kai9000.com/app/)
 
 Homebrew (macOS):
 
@@ -225,4 +232,6 @@ This project is open-source and maintained by a single developer. If you find th
 
 ## Credits
 
+- Based on [Kai 9000](https://github.com/SimonSchubert/Kai) by Simon Schubert
+- Vosk speech recognition: https://alphacephei.com/vosk/
 - Mistral: https://mistral.ai/

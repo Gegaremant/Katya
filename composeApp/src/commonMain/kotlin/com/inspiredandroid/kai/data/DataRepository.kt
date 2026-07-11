@@ -106,6 +106,20 @@ interface DataRepository {
     fun isDynamicUiEnabled(): Boolean
     fun setDynamicUiEnabled(enabled: Boolean)
 
+    // Voice & Wake Word
+    fun isVoiceResponseEnabled(): Boolean
+    fun setWakeWordEnabled(enabled: Boolean)
+    fun isWakeWordEnabled(): Boolean
+    fun setWakeWordModelLang(lang: String)
+    fun getWakeWordModelLang(): String
+    fun setWakeWordTrigger(trigger: String)
+    fun getWakeWordTrigger(): String
+    fun setWakeWordVibration(enabled: Boolean)
+    fun isWakeWordVibrationEnabled(): Boolean
+    fun setWakeWordSound(enabled: Boolean)
+    fun isWakeWordSoundEnabled(): Boolean
+    fun setVoiceResponseEnabled(enabled: Boolean)
+
     // Theme mode
     fun getThemeMode(): ThemeMode
     fun setThemeMode(mode: ThemeMode)
@@ -224,6 +238,11 @@ interface DataRepository {
      * `ChatViewModel` in its init block.
      */
     val openHeartbeatRequested: StateFlow<Boolean>
+    fun isWakeWordEnabled(): Boolean
+    fun setWakeWordEnabled(enabled: Boolean)
+    fun getWakeWordTrigger(): String
+    fun setWakeWordTrigger(trigger: String)
+    
     fun requestOpenHeartbeat()
     fun consumeOpenHeartbeatRequest()
 

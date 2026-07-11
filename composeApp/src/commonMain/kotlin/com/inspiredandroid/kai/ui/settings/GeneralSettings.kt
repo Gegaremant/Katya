@@ -43,6 +43,8 @@ import kai.composeapp.generated.resources.settings_theme_light
 import kai.composeapp.generated.resources.settings_theme_oled
 import kai.composeapp.generated.resources.settings_theme_system
 import kai.composeapp.generated.resources.settings_ui_scale
+import kai.composeapp.generated.resources.settings_voice_response
+import kai.composeapp.generated.resources.settings_voice_response_description
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import kotlin.math.roundToInt
@@ -72,6 +74,10 @@ internal fun GeneralContent(uiState: SettingsUiState, actions: SettingsActions) 
                         DynamicUiToggle(
                             isDynamicUiEnabled = uiState.isDynamicUiEnabled,
                             onToggleDynamicUi = actions.onToggleDynamicUi,
+                        )
+                        VoiceResponseToggle(
+                            isVoiceResponseEnabled = uiState.isVoiceResponseEnabled,
+                            onToggleVoiceResponse = actions.onToggleVoiceResponse,
                         )
                     }
                     SettingsCard {
@@ -124,6 +130,25 @@ internal fun GeneralContent(uiState: SettingsUiState, actions: SettingsActions) 
                     DynamicUiToggle(
                         isDynamicUiEnabled = uiState.isDynamicUiEnabled,
                         onToggleDynamicUi = actions.onToggleDynamicUi,
+                    )
+                    VoiceResponseToggle(
+                        isVoiceResponseEnabled = uiState.isVoiceResponseEnabled,
+                        onToggleVoiceResponse = actions.onToggleVoiceResponse,
+                    )
+                    WakeWordToggle(
+                        isWakeWordEnabled = uiState.isWakeWordEnabled,
+                        onToggleWakeWord = actions.onToggleWakeWord,
+                        wakeWordTrigger = uiState.wakeWordTrigger,
+                        onChangeWakeWordTrigger = actions.onChangeWakeWordTrigger,
+                        wakeWordModelLang = uiState.wakeWordModelLang,
+                        onChangeWakeWordModelLang = actions.setWakeWordModelLang,
+                        isWakeWordVibrationEnabled = uiState.isWakeWordVibrationEnabled,
+                        onToggleWakeWordVibration = actions.setIsWakeWordVibrationEnabled,
+                        isWakeWordSoundEnabled = uiState.isWakeWordSoundEnabled,
+                        onToggleWakeWordSound = actions.setIsWakeWordSoundEnabled,
+                        isVoskDownloading = uiState.isVoskDownloading,
+                        voskDownloadProgress = uiState.voskDownloadProgress,
+                        onDownloadVosk = actions.onDownloadVosk
                     )
                 }
                 SettingsCard {
@@ -186,6 +211,21 @@ private fun DynamicUiToggle(
             description = stringResource(Res.string.settings_dynamic_ui_description),
             checked = isDynamicUiEnabled,
             onCheckedChange = onToggleDynamicUi,
+        )
+    }
+}
+
+@Composable
+private fun VoiceResponseToggle(
+    isVoiceResponseEnabled: Boolean,
+    onToggleVoiceResponse: (Boolean) -> Unit,
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        ToggleableHeadline(
+            title = stringResource(Res.string.settings_voice_response),
+            description = stringResource(Res.string.settings_voice_response_description),
+            checked = isVoiceResponseEnabled,
+            onCheckedChange = onToggleVoiceResponse,
         )
     }
 }
@@ -334,12 +374,12 @@ private fun QuickActionsSection(
         ) {
             Column(modifier = Modifier.weight(1f).padding(16.dp)) {
                 Text(
-                    text = "Quick Actions",
+                    text = "Быстрые действия",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Manage quick actions displayed above the chat input.",
+                    text = "Управление кнопками быстрых действий, отображаемыми над полем ввода чата.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -348,7 +388,7 @@ private fun QuickActionsSection(
                 onClick = { showAddDialog = true },
                 modifier = Modifier.padding(end = 8.dp)
             ) {
-                Text("Add")
+                Text("Добавить")
             }
         }
 

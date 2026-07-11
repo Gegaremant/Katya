@@ -18,7 +18,7 @@ class KaiApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@KaiApplication)
-            modules(appModule, sandboxModule)
+            modules(appModule, sandboxModule, com.inspiredandroid.kai.stt.sttModule)
         }
         // Track app foreground state so the scheduler only pushes a heartbeat notification
         // when the in-app banner isn't visible. ViewModel lifecycle is the wrong signal —

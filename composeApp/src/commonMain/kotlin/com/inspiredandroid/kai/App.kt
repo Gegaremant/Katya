@@ -102,7 +102,7 @@ fun App(
     } else {
         KoinApplication(
             configuration = koinConfiguration {
-                modules(appModule)
+                modules(appModule, com.inspiredandroid.kai.stt.sttModule)
             },
         ) {
             AppContent(navController, lightColorScheme, darkColorScheme, textToSpeech, onAppOpens)

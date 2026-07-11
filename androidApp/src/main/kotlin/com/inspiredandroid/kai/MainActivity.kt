@@ -1,6 +1,9 @@
 package com.inspiredandroid.kai
 
 import android.content.Intent
+import android.content.Context
+import android.os.PowerManager
+import androidx.activity.result.contract.ActivityResultContracts
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -39,6 +42,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         FileKit.init(this)
         handleDeepLinkIntent(intent)
+        checkSystemPermissions()
 
         val dynamicColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
         val appSettings: AppSettings = get()
@@ -132,9 +136,72 @@ class MainActivity : ComponentActivity() {
         if (intent?.action == Intent.ACTION_ASSIST) {
             val dataRepository: DataRepository = get()
             dataRepository.requestOpenAssist()
-            // Clear the action so a configuration change doesn't re-trigger a fresh
+            // clear action so it does not keep triggering on rotation or reopening
             // chat after ChatViewModel has already consumed the request.
             intent.action = null
+        }
+        if (intent?.action == Intent.ACTION_VIEW) {
+            val url = intent.dataString
+            if (url != null && url.endsWith(".zip") && url.contains("alphacephei.com")) {
+                val dataRepository: DataRepository = get()
+                val wakeWordPlatform: com.inspiredandroid.kai.stt.WakeWordPlatform = get()
+                dataRepository.setWakeWordModelLang(url)
+                dataRepository.setWakeWordEnabled(true)
+                wakeWordPlatform.startDownload(url)
+            }
+        }
+    }
+
+    private val autoRevokeLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        // finished
+    }
+
+    private val batteryOptLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        checkAutoRevokePermission()
+    }
+
+    private fun checkSystemPermissions() {
+        // 1. Root
+        Thread {
+            try {
+                val process = Runtime.getRuntime().exec("su")
+                process.outputStream.write("exit\n".toByteArray())
+                process.outputStream.flush()
+                process.waitFor()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
+
+        // 2. Battery Optimization
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+            val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+            intent.data = android.net.Uri.parse("package:$packageName")
+            try {
+                batteryOptLauncher.launch(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                checkAutoRevokePermission()
+            }
+        } else {
+            checkAutoRevokePermission()
+        }
+    }
+    
+    private fun checkAutoRevokePermission() {
+        // 3. Disable App Hibernation (API 30+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val pm = packageManager
+            if (!pm.isAutoRevokeWhitelisted) {
+                try {
+                    val intent = Intent(android.content.Intent.ACTION_AUTO_REVOKE_PERMISSIONS)
+                    intent.data = android.net.Uri.parse("package:$packageName")
+                    autoRevokeLauncher.launch(intent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
         }
     }
 }

@@ -186,61 +186,7 @@ internal fun FreeSettings(
 
             Spacer(Modifier.height(12.dp))
 
-            val uriHandler = LocalUriHandler.current
-            Button(
-                onClick = {
-                    uriHandler.openUri("https://github.com/sponsors/SimonSchubert")
-                },
-                Modifier
-                    .align(CenterHorizontally)
-                    .handCursor(),
-            ) {
-                Icon(Icons.Default.Favorite, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(Res.string.settings_become_sponsor))
-            }
 
-            val allSponsors = remember(currentSponsors, pastSponsors) {
-                val activeUsernames = currentSponsors.map { it.username }.toSet()
-                (currentSponsors + pastSponsors.filter { it.username !in activeUsernames })
-                    .toImmutableList()
-            }
-
-            if (allSponsors.isNotEmpty()) {
-                Spacer(Modifier.height(16.dp))
-                HorizontalDivider(thickness = 0.5.dp)
-                Spacer(Modifier.height(16.dp))
-                SponsorList(
-                    title = stringResource(Res.string.settings_sponsors),
-                    sponsors = allSponsors,
-                )
-            }
-
-            Spacer(Modifier.height(16.dp))
-            HorizontalDivider(thickness = 0.5.dp)
-            Spacer(Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(Res.string.settings_business_partnerships),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                text = stringResource(Res.string.settings_business_partnerships_description),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-
-            TextButton(
-                onClick = {
-                    uriHandler.openUri("https://schubert-simon.de")
-                },
-                Modifier
-                    .handCursor(),
-            ) {
-                Text(stringResource(Res.string.settings_contact_sponsorship))
-            }
         }
     }
 }

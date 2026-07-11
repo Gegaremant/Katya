@@ -246,6 +246,13 @@
     <string name="snackbar_service_removed">Сервис удалён</string>
     <string name="snackbar_mcp_server_removed">MCP-сервер удалён</string>
     <string name="snackbar_conversation_deleted">Беседа удалена</string>
+    <string name="settings_voice_response">Голосовой ответ</string>
+    <string name="settings_voice_response_description">Катя читает вслух сгенерированные ответы.</string>
+    <string name="settings_wake_word">Голосовая активация</string>
+    <string name="settings_wake_word_description">Катя слушает в фоне триггер (по умолчанию "Катя") и вибрирует при обнаружении.</string>
+    <string name="settings_wake_word_trigger">Триггер-слово</string>
+    <string name="settings_wake_word_trigger_description">Имя, на которое будет отзываться агент</string>
+    <string name="settings_wake_word_download_vosk">Скачать модель для распознавания речи (Vosk)</string>
     <string name="start_interactive_ui">Запустить интерактивный UI</string>
     <string name="settings_reorder_content_description">Изменить порядок</string>
     <string name="litert_on_device_description">Запускайте модели ИИ прямо на устройстве. API-ключ и интернет не требуются.</string>

@@ -60,7 +60,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-class SettingsViewModel(
+class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.stt.WakeWordPlatform, 
     private val dataRepository: DataRepository,
     private val daemonController: DaemonController,
     private val notificationPermissionController: NotificationPermissionController,
@@ -79,6 +79,12 @@ class SettingsViewModel(
         tools = dataRepository.getToolDefinitions().toImmutableList(),
         soulText = dataRepository.getSoulText(),
         isDynamicUiEnabled = dataRepository.isDynamicUiEnabled(),
+        isVoiceResponseEnabled = dataRepository.isVoiceResponseEnabled(),
+        isWakeWordEnabled = dataRepository.isWakeWordEnabled(),
+        wakeWordModelLang = dataRepository.getWakeWordModelLang(),
+        wakeWordTrigger = dataRepository.getWakeWordTrigger(),
+        isWakeWordVibrationEnabled = dataRepository.isWakeWordVibrationEnabled(),
+        isWakeWordSoundEnabled = dataRepository.isWakeWordSoundEnabled(),
         themeMode = dataRepository.getThemeMode(),
         isMemoryEnabled = dataRepository.isMemoryEnabled(),
         memories = dataRepository.getMemories().toImmutableList(),
@@ -147,6 +153,12 @@ class SettingsViewModel(
         onToggleTool = ::onToggleTool,
         onSaveSoul = ::onSaveSoul,
         onToggleDynamicUi = ::onToggleDynamicUi,
+        onToggleVoiceResponse = ::onToggleVoiceResponse,
+        setIsWakeWordEnabled = ::onToggleWakeWord,
+        setWakeWordModelLang = ::onChangeWakeWordModelLang,
+        setWakeWordTrigger = ::onChangeWakeWordTrigger,
+        setIsWakeWordVibrationEnabled = ::onToggleWakeWordVibration,
+        setIsWakeWordSoundEnabled = ::onToggleWakeWordSound,
         onAddQuickAction = ::onAddQuickAction,
         onUpdateQuickAction = ::onUpdateQuickAction,
         onDeleteQuickAction = ::onDeleteQuickAction,
@@ -160,6 +172,9 @@ class SettingsViewModel(
         onToggleVless = ::onToggleVless,
         onChangeVlessUri = ::onChangeVlessUri,
         onToggleHeartbeat = ::onToggleHeartbeat,
+        onToggleWakeWord = ::onToggleWakeWord,
+        onChangeWakeWordTrigger = ::onChangeWakeWordTrigger,
+        onDownloadVosk = ::onDownloadVosk,
         onChangeHeartbeatInterval = ::onChangeHeartbeatInterval,
         onChangeHeartbeatActiveHours = ::onChangeHeartbeatActiveHours,
         onSaveHeartbeatPrompt = ::onSaveHeartbeatPrompt,
@@ -209,6 +224,23 @@ class SettingsViewModel(
     )
 
     init {
+        if (_state.value.isWakeWordEnabled) {
+            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), _state.value.wakeWordTrigger) {
+                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
+            }
+        }
+        
+        viewModelScope.launch {
+            wakeWordPlatform.isDownloading.collect { isDownloading ->
+                _state.update { it.copy(isVoskDownloading = isDownloading) }
+            }
+        }
+        viewModelScope.launch {
+            wakeWordPlatform.downloadProgress.collect { progress ->
+                _state.update { it.copy(voskDownloadProgress = progress) }
+            }
+        }
+
         // Observe download state from the engine singleton (survives activity recreation)
         val downloadingFlow = dataRepository.getLocalDownloadingModelId() ?: flowOf(null)
         val progressFlow = dataRepository.getLocalDownloadProgress() ?: flowOf(null)
@@ -435,6 +467,11 @@ class SettingsViewModel(
         _state.update { it.copy(isDynamicUiEnabled = enabled) }
     }
 
+    private fun onToggleVoiceResponse(enabled: Boolean) {
+        dataRepository.setVoiceResponseEnabled(enabled)
+        _state.update { it.copy(isVoiceResponseEnabled = enabled) }
+    }
+
     private fun onAddQuickAction(action: com.inspiredandroid.kai.data.QuickAction) {
         val actions = dataRepository.getQuickActions().toMutableList()
         actions.add(action)
@@ -559,6 +596,52 @@ class SettingsViewModel(
     private fun onChangeHeartbeatService(instanceId: String?) {
         dataRepository.setHeartbeatInstanceId(instanceId)
         _state.update { it.copy(heartbeatSelectedInstanceId = instanceId) }
+    }
+
+        private fun onToggleWakeWord(enabled: Boolean) {
+        dataRepository.setWakeWordEnabled(enabled)
+        _state.update { it.copy(isWakeWordEnabled = enabled) }
+        if (enabled) {
+            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), _state.value.wakeWordTrigger) {
+                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
+            }
+        } else {
+            wakeWordPlatform.stopListening()
+        }
+    }
+
+    private fun onChangeWakeWordTrigger(trigger: String) {
+        dataRepository.setWakeWordTrigger(trigger)
+        _state.update { it.copy(wakeWordTrigger = trigger) }
+        if (_state.value.isWakeWordEnabled) {
+            wakeWordPlatform.stopListening()
+            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), trigger) {
+                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
+            }
+        }
+    }
+
+    private fun onChangeWakeWordModelLang(lang: String) {
+        dataRepository.setWakeWordModelLang(lang)
+        _state.update { it.copy(wakeWordModelLang = lang) }
+        if (_state.value.isWakeWordEnabled) {
+            wakeWordPlatform.stopListening()
+            wakeWordPlatform.startListening(getModelUrl(lang), _state.value.wakeWordTrigger) {
+                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
+            }
+        }
+    }
+
+    private fun getModelUrl(lang: String): String {
+        return when (lang) {
+            "ru" -> "https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip"
+            "en" -> "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+            else -> lang
+        }
+    }
+
+    private fun onDownloadVosk() {
+        wakeWordPlatform.startDownload(getModelUrl(_state.value.wakeWordModelLang))
     }
 
     private fun onRefreshHeartbeat() {
