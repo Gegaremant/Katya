@@ -114,6 +114,7 @@ kotlin {
             implementation(libs.bouncycastle.provider)
             implementation(libs.litert.lm)
             implementation(libs.sqldelight.android.driver)
+            implementation(libs.jsch)
         }
         commonMain.dependencies {
             implementation(libs.compose.material3)
@@ -168,6 +169,7 @@ kotlin {
             implementation(libs.slf4j.nop)
             implementation(libs.litert.lm.jvm)
             implementation(libs.sqldelight.sqlite.driver)
+            implementation(libs.jsch)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
