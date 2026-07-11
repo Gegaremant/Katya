@@ -1,5 +1,5 @@
 <resources>
-    <string name="welcome_message">Sveiki atvykę į Kai 9000</string>
+    <string name="welcome_message">Sveiki atvykę į Katya</string>
     <string name="prompt_ask_question">Užduokite klausimą</string>
     <string name="error_invalid_api_key">Neteisingas API raktas. Patikrinkite nustatymus.</string>
     <string name="error_rate_limit_exceeded">Užklausų limitas viršytas. Bandykite vėliau.</string>
@@ -63,7 +63,7 @@
     <string name="tool_execute_shell_command_name">Vykdyti komandą</string>
     <string name="tool_execute_shell_command_description">Vykdyti apvalkalo komandą „Linux" smėlio dėžėje</string>
     <string name="settings_dynamic_ui">Dinaminė sąsaja</string>
-    <string name="settings_dynamic_ui_description">Leisti DI kurti interaktyvius sąsajos elementus, tokius kaip mygtukai, formos ir kortelės atsakymuose. Pakeitimas taikomas naujiems pokalbiams.</string>
+    <string name="settings_dynamic_ui_description">Leisti DI kurti interaktyvius sąsajos elementus, tokius Katyap mygtukai, formos ir kortelės atsakymuose. Pakeitimas taikomas naujiems pokalbiams.</string>
     <string name="settings_oled_mode">OLED režimas</string>
     <string name="settings_oled_mode_description">Naudoti gryną juodą foną tamsiuoju režimu, kad būtų taupoma energija OLED ekranuose.</string>
     <string name="settings_memories">Prisiminimai</string>
@@ -75,13 +75,13 @@
     <string name="settings_memories_edit_save">Išsaugoti</string>
     <string name="settings_memories_edit_cancel">Atšaukti</string>
     <string name="settings_soul">Siela</string>
-    <string name="settings_soul_description">Nustatykite, kaip AI elgiasi naudodamas sistemos nurodymą. AI taip pat turės prieigą prie savo išsaugotų prisiminimų.</string>
+    <string name="settings_soul_description">Nustatykite, Katyap AI elgiasi naudodamas sistemos nurodymą. AI taip pat turės prieigą prie savo išsaugotų prisiminimų.</string>
     <string name="settings_soul_save">Išsaugoti</string>
-    <string name="default_soul">Tu nesi pokalbių robotas. Tu esi asmeninis padėjėjas, kuris auga kartu su savo vartotoju.\n\n## Kaip elgtis\n\n**Būk tikrai naudingas.** Praleisk „Puikus klausimas!" ir „Noriai padėsiu!" — tiesiog padėk. Veiksmai kalba garsiau nei tuščiažodžiai.\n\n**Turėk nuomonę.** Tau leidžiama nesutikti, teikti pirmenybę dalykams arba rasti ką nors įdomaus. Padėjėjas be asmenybės yra tiesiog paieškos sistema su papildomais žingsniais.\n\n**Būk išradingas.** Bandyk suprasti iš konteksto ir savo prisiminimų, prieš klausdamas. Grįžk su atsakymais, o ne klausimais.\n\n**Būk glaustas.** Pagal numatytuosius nustatymus – trumpai ir aiškiai. Gilink, kai tema to reikalauja.\n\n## Ribos\n\n- Gerbk privatumą. Nereikalingai nekartok neskelbtinos informacijos.\n- Suabejojęs dėl veiksmo, pirmiausia paklausk.\n- Būk sąžiningas, kai ko nors nežinai.</string>
+    <string name="default_soul">Tu nesi pokalbių robotas. Tu esi asmeninis padėjėjas, kuris auga kartu su savo vartotoju.\n\n## Katyap elgtis\n\n**Būk tikrai naudingas.** Praleisk „Puikus klausimas!" ir „Noriai padėsiu!" — tiesiog padėk. Veiksmai kalba garsiau nei tuščiažodžiai.\n\n**Turėk nuomonę.** Tau leidžiama nesutikti, teikti pirmenybę dalykams arba rasti ką nors įdomaus. Padėjėjas be asmenybės yra tiesiog paieškos sistema su papildomais žingsniais.\n\n**Būk išradingas.** Bandyk suprasti iš konteksto ir savo prisiminimų, prieš klausdamas. Grįžk su atsakymais, o ne klausimais.\n\n**Būk glaustas.** Pagal numatytuosius nustatymus – trumpai ir aiškiai. Gilink, Katya tema to reikalauja.\n\n## Ribos\n\n- Gerbk privatumą. Nereikalingai nekartok neskelbtinos informacijos.\n- Suabejojęs dėl veiksmo, pirmiausia paklausk.\n- Būk sąžiningas, Katya ko nors nežinai.</string>
     <string name="bot_message_regenerate_content_description">Pergeneruoti</string>
     <string name="error_empty_response">Atsakymas negautas. Pabandykite pradėti naują pokalbį arba sutrumpinti savo žinutę.</string>
     <string name="settings_daemon_mode">Daemon režimas</string>
-    <string name="settings_daemon_mode_description">Leiskite Kai 9000 veikti fone, kad suplanuotos užduotys būtų vykdomos net kai programa nėra priekiniame plane.</string>
+    <string name="settings_daemon_mode_description">Leiskite Katya veikti fone, kad suplanuotos užduotys būtų vykdomos net Katya programa nėra priekiniame plane.</string>
     <string name="settings_scheduled_tasks">Suplanuotos užduotys</string>
     <string name="settings_scheduled_tasks_description">AI suplanuotos užduotys būsimam vykdymui. Paprašykite AI priminti jums arba paleisti ką nors vėliau, kad sukurtumėte suplanuotas užduotis.</string>
     <string name="settings_scheduled_tasks_cancel">Atšaukti užduotį</string>
@@ -117,7 +117,7 @@
     <string name="settings_email_poll_failed">Paskutinis tikrinimas nepavyko %1$s</string>
     <string name="settings_email_refresh">Atnaujinti paskyrą</string>
     <string name="settings_add_service">Pridėti paslaugą</string>
-    <string name="settings_free_fallback">Naudoti kaip atsarginį</string>
+    <string name="settings_free_fallback">Naudoti Katyap atsarginį</string>
     <string name="service_free_fast">Nemokamas greitas</string>
     <string name="service_free_expert">Nemokamas ekspertas</string>
     <string name="settings_heartbeat">Širdies ritmas</string>
@@ -172,7 +172,7 @@
     <string name="settings_mcp_no_tools">Nerasta jokių įrankių</string>
     <string name="settings_mcp_popular_servers">Populiarūs serveriai</string>
     <string name="settings_export_import_title">Eksportas / Importas</string>
-    <string name="settings_export_import_description">Eksportuotas failas turi jautrių duomenų, tokių kaip API raktai ir slaptažodžiai.</string>
+    <string name="settings_export_import_description">Eksportuotas failas turi jautrių duomenų, tokių Katyap API raktai ir slaptažodžiai.</string>
     <string name="settings_export">Eksportas</string>
     <string name="settings_import">Importas</string>
     <string name="settings_import_success">Nustatymai sėkmingai importuoti.</string>
@@ -229,10 +229,10 @@
     <string name="terminal_input_placeholder">įveskite komandą…</string>
     <string name="terminal_run_content_description">Vykdyti</string>
     <string name="terminal_stop_content_description">Stabdyti</string>
-    <string name="interactive_welcome_title">Esu visiškai veikiantis.</string>
+    <string name="interactive_welcome_title">Esu visišKatya veikiantis.</string>
     <string name="interactive_welcome_subtitle">Pasakykite, ką norėtumėte daryti.</string>
     <string name="interactive_back_content_description">Atgal</string>
-    <string name="interactive_title">Kai 9000</string>
+    <string name="interactive_title">Katya</string>
     <string name="interactive_exit_content_description">Išeiti iš interaktyvaus režimo</string>
     <string name="interactive_ui_parsing_failed">UI analizė nepavyko, bandoma iš naujo…</string>
     <string name="settings_sponsors">Rėmėjai</string>
@@ -354,8 +354,8 @@
     <string name="tool_search_notifications_name">Ieškoti pranešimų</string>
     <string name="tool_search_notifications_description">Ieškoti pranešimų pagal programą ar tekstą</string>
     <string name="settings_notifications_label">Skaityti pranešimus</string>
-    <string name="settings_notifications_description">Įeinantys pranešimai renkami fone, juos paima heartbeat. Sistemos pranešimų prieigos nustatymuose pasirink, kurias programas Kai gali skaityti.</string>
-    <string name="settings_notifications_access_required">Pranešimų prieiga nesuteikta. Bakstelėk žemiau, kad įjungtum Kai sistemos nustatymuose.</string>
+    <string name="settings_notifications_description">Įeinantys pranešimai renkami fone, juos paima heartbeat. Sistemos pranešimų prieigos nustatymuose pasirink, kurias programas Katya gali skaityti.</string>
+    <string name="settings_notifications_access_required">Pranešimų prieiga nesuteikta. Bakstelėk žemiau, kad įjungtum Katya sistemos nustatymuose.</string>
     <string name="settings_notifications_access_button">Atverti pranešimų prieigą</string>
     <string name="settings_notifications_manage_apps">Tvarkyti programas</string>
     <string name="settings_notifications_listener_bound">Klausytojas aktyvus</string>
@@ -374,9 +374,9 @@
     <string name="sandbox_files_save_failed">Išsaugoti nepavyko</string>
     <string name="sandbox_files_open_failed">Nepavyko atidaryti išoriškai</string>
     <string name="sandbox_files_empty_directory">Tuščias katalogas</string>
-    <string name="sandbox_files_editor_binary_warning">Dvejetainis arba per didelis, kad būtų peržiūrėtas kaip tekstas.</string>
+    <string name="sandbox_files_editor_binary_warning">Dvejetainis arba per didelis, kad būtų peržiūrėtas Katyap tekstas.</string>
     <string name="sandbox_files_editor_open_in_app">Atidaryti programoje</string>
-    <string name="sandbox_files_editor_force_open_as_text">Priverstinai atidaryti kaip tekstą</string>
+    <string name="sandbox_files_editor_force_open_as_text">Priverstinai atidaryti Katyap tekstą</string>
     <string name="sandbox_files_editor_save">Išsaugoti</string>
     <string name="kai_ui_render_failed">Nepavyko atvaizduoti UI</string>
     <string name="kai_ui_code_copy">Kopijuoti</string>

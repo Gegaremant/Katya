@@ -196,7 +196,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Rpm, TargetFormat.AppImage)
-            packageName = "Kai"
+            packageName = "Katya"
             packageVersion = libs.versions.appVersion.get()
 
             macOS {

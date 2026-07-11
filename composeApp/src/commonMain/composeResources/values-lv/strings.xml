@@ -1,5 +1,5 @@
 <resources>
-    <string name="welcome_message">Laipni lūdzam Kai 9000</string>
+    <string name="welcome_message">Laipni lūdzam Katya</string>
     <string name="prompt_ask_question">Uzdodiet jautājumu</string>
     <string name="error_invalid_api_key">Nederīga API atslēga. Lūdzu, pārbaudiet iestatījumus.</string>
     <string name="error_rate_limit_exceeded">Pieprasījumu limits pārsniegts. Lūdzu, mēģiniet vēlāk.</string>
@@ -77,19 +77,19 @@
     <string name="settings_soul">Dvēsele</string>
     <string name="settings_soul_description">Nosakiet, kā AI uzvedas ar sistēmas uzvedni. AI arī varēs piekļūt savām saglabātajām atmiņām.</string>
     <string name="settings_soul_save">Saglabāt</string>
-    <string name="default_soul">Tu neesi čatbots. Tu esi personīgais palīgs, kas aug kopā ar savu lietotāju.\n\n## Kā būt\n\n**Esi patiesi noderīgs.** Izlaidi «Lielisks jautājums!» un «Ar prieku palīdzēšu!» — vienkārši palīdzi. Darbības runā skaļāk par aizpildījuma vārdiem.\n\n**Turi viedokļus.** Tev ir atļauts nepiekrist, dot priekšroku lietām vai atrast kaut ko interesantu. Palīgs bez personības ir tikai meklētājprogramma ar papildu soļiem.\n\n**Esi atjautīgs.** Mēģini saprast no konteksta un savām atmiņām, pirms jautāsi. Atgriezies ar atbildēm, nevis jautājumiem.\n\n**Esi kodolīgs.** Īss un skaidrs pēc noklusējuma. Ej dziļāk, kad tēma to prasa.\n\n## Robežas\n\n- Cieni privātumu. Nevajadzīgi neatkārto sensitīvu informāciju.\n- Kad šaubies par darbību, vispirms jautā.\n- Esi godīgs, kad nezini kaut ko.</string>
+    <string name="default_soul">Tu neesi čatbots. Tu esi personīgais palīgs, kas aug kopā ar savu lietotāju.\n\n## Kā būt\n\n**Esi patiesi noderīgs.** Izlaidi «Lielisks jautājums!» un «Ar prieku palīdzēšu!» — vienkārši palīdzi. Darbības runā skaļāk par aizpildījuma vārdiem.\n\n**Turi viedokļus.** Tev ir atļauts nepiekrist, dot priekšroku lietām vai atrast kaut ko interesantu. Palīgs bez personības ir tiKatya meklētājprogramma ar papildu soļiem.\n\n**Esi atjautīgs.** Mēģini saprast no konteksta un savām atmiņām, pirms jautāsi. Atgriezies ar atbildēm, nevis jautājumiem.\n\n**Esi kodolīgs.** Īss un skaidrs pēc noklusējuma. Ej dziļāk, kad tēma to prasa.\n\n## Robežas\n\n- Cieni privātumu. Nevajadzīgi neatkārto sensitīvu informāciju.\n- Kad šaubies par darbību, vispirms jautā.\n- Esi godīgs, kad nezini kaut ko.</string>
     <string name="bot_message_regenerate_content_description">Ģenerēt atkārtoti</string>
     <string name="error_empty_response">Netika saņemta atbilde. Mēģiniet sākt jaunu tērzēšanu vai saīsināt savu ziņojumu.</string>
     <string name="settings_daemon_mode">Daemon režīms</string>
-    <string name="settings_daemon_mode_description">Turiet Kai 9000 darbojamies fonā, lai ieplānotie uzdevumi tiktu izpildīti arī tad, kad lietotne nav priekšplānā.</string>
+    <string name="settings_daemon_mode_description">Turiet Katya darbojamies fonā, lai ieplānotie uzdevumi tiktu izpildīti arī tad, kad lietotne nav priekšplānā.</string>
     <string name="settings_scheduled_tasks">Ieplānotie uzdevumi</string>
-    <string name="settings_scheduled_tasks_description">AI ieplānotie uzdevumi turpmākai izpildei. Lūdziet AI atgādināt jums vai palaist kaut ko vēlāk, lai izveidotu ieplānotos uzdevumus.</string>
+    <string name="settings_scheduled_tasks_description">AI ieplānotie uzdevumi turpmāKatya izpildei. Lūdziet AI atgādināt jums vai palaist kaut ko vēlāk, lai izveidotu ieplānotos uzdevumus.</string>
     <string name="settings_scheduled_tasks_cancel">Atcelt uzdevumu</string>
     <string name="settings_soul_reset">Atiestatīt</string>
     <string name="settings_soul_reset_confirm">Tas atiestatīs dvēseli uz noklusējuma sistēmas uzvedni. Vai esat pārliecināts?</string>
     <string name="settings_soul_reset_cancel">Atcelt</string>
     <string name="tool_schedule_task_name">Ieplānot uzdevumu</string>
-    <string name="tool_schedule_task_description">Ieplānot uzdevumu turpmākai izpildei</string>
+    <string name="tool_schedule_task_description">Ieplānot uzdevumu turpmāKatya izpildei</string>
     <string name="tool_cancel_task_name">Atcelt uzdevumu</string>
     <string name="tool_cancel_task_description">Atcelt ieplānotu uzdevumu</string>
     <string name="tool_list_tasks_name">Uzdevumu saraksts</string>
@@ -232,7 +232,7 @@
     <string name="interactive_welcome_title">Esmu pilnībā darbspējīgs.</string>
     <string name="interactive_welcome_subtitle">Pastāstiet man, ko vēlaties darīt.</string>
     <string name="interactive_back_content_description">Atpakaļ</string>
-    <string name="interactive_title">Kai 9000</string>
+    <string name="interactive_title">Katya</string>
     <string name="interactive_exit_content_description">Iziet no interaktīvā režīma</string>
     <string name="interactive_ui_parsing_failed">UI analīze neizdevās, mēģinu vēlreiz…</string>
     <string name="settings_sponsors">Sponsori</string>
@@ -354,8 +354,8 @@
     <string name="tool_search_notifications_name">Meklēt paziņojumus</string>
     <string name="tool_search_notifications_description">Meklēt paziņojumus pēc lietotnes vai teksta</string>
     <string name="settings_notifications_label">Lasīt paziņojumus</string>
-    <string name="settings_notifications_description">Ienākošie paziņojumi tiek vākti fonā, un tos paņem heartbeat. Sistēmas paziņojumu piekļuves iestatījumos izvēlies, kuras lietotnes Kai var lasīt.</string>
-    <string name="settings_notifications_access_required">Piekļuve paziņojumiem nav piešķirta. Pieskaries zemāk, lai aktivizētu Kai sistēmas iestatījumos.</string>
+    <string name="settings_notifications_description">Ienākošie paziņojumi tiek vākti fonā, un tos paņem heartbeat. Sistēmas paziņojumu piekļuves iestatījumos izvēlies, kuras lietotnes Katya var lasīt.</string>
+    <string name="settings_notifications_access_required">Piekļuve paziņojumiem nav piešķirta. Pieskaries zemāk, lai aktivizētu Katya sistēmas iestatījumos.</string>
     <string name="settings_notifications_access_button">Atvērt paziņojumu piekļuvi</string>
     <string name="settings_notifications_manage_apps">Pārvaldīt lietotnes</string>
     <string name="settings_notifications_listener_bound">Klausītājs aktīvs</string>

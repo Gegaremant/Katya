@@ -1,5 +1,5 @@
 <resources>
-    <string name="welcome_message">Tervetuloa Kai 9000-sovellukseen</string>
+    <string name="welcome_message">Tervetuloa Katya-sovellukseen</string>
     <string name="prompt_ask_question">Kysy kysymys</string>
     <string name="error_invalid_api_key">Virheellinen API-avain. Tarkista asetuksesi.</string>
     <string name="error_rate_limit_exceeded">Pyynt\u00f6raja ylitetty. Yrit\u00e4 my\u00f6hemmin uudelleen.</string>
@@ -16,7 +16,7 @@
     <string name="bot_message_copy_content_description">Kopioi</string>
     <string name="bot_message_flag_content_description">Ilmianna sis\u00e4lt\u00f6</string>
     <string name="settings_free_tier_title">Ilmainen taso</string>
-    <string name="settings_free_tier_description">K\u00e4ytt\u00e4j\u00e4m\u00e4\u00e4r\u00e4n kasvaessa sponsorointi auttaa skaalaamaan infrastruktuuria, nostamaan pyynt\u00f6rajoja kaikille ja pit\u00e4m\u00e4\u00e4n kehityksen aktiivisena.</string>
+    <string name="settings_free_tier_description">K\u00e4ytt\u00e4j\u00e4m\u00e4\u00e4r\u00e4n kasvaessa sponsorointi auttaa skaalaamaan infrastruktuuria, nostamaan pyynt\u00f6rajoja Katyakille ja pit\u00e4m\u00e4\u00e4n kehityksen aktiivisena.</string>
     <string name="settings_become_sponsor">Ryhdy GitHub-sponsoriksi</string>
     <string name="settings_business_partnerships">Yrityskumppanuudet</string>
     <string name="settings_business_partnerships_description">Haluatko esitell\u00e4 yrityksesi logon tai keskustella strategisesta kumppanuudesta?</string>
@@ -69,7 +69,7 @@
     <string name="settings_memories">Muistot</string>
     <string name="settings_memories_description">Tekoälyn keskustelujen aikana tallentamat muistot. Ne sisällytetään jokaiseen viestiin kontekstin tarjoamiseksi.</string>
     <string name="settings_memories_delete">Poista muisto</string>
-    <string name="settings_memories_show_all">Näytä kaikki (%1$d)</string>
+    <string name="settings_memories_show_all">Näytä Katyakki (%1$d)</string>
     <string name="settings_memories_all_title">Kaikki muistot</string>
     <string name="settings_memories_edit_title">Muokkaa muistoa</string>
     <string name="settings_memories_edit_save">Tallenna</string>
@@ -81,7 +81,7 @@
     <string name="bot_message_regenerate_content_description">Luo uudelleen</string>
     <string name="error_empty_response">Vastausta ei saatu. Kokeile aloittaa uusi keskustelu tai lyhentää viestiäsi.</string>
     <string name="settings_daemon_mode">Taustaprosessitila</string>
-    <string name="settings_daemon_mode_description">Pidä Kai 9000 käynnissä taustalla, jotta ajoitetut tehtävät suoritetaan, vaikka sovellus ei olisi etualalla.</string>
+    <string name="settings_daemon_mode_description">Pidä Katya käynnissä taustalla, jotta ajoitetut tehtävät suoritetaan, vaikka sovellus ei olisi etualalla.</string>
     <string name="settings_scheduled_tasks">Ajoitetut tehtävät</string>
     <string name="settings_scheduled_tasks_description">Tekoälyn tulevaisuudessa suoritettavaksi ajoittamat tehtävät. Pyydä tekoälyä muistuttamaan sinua tai suorittamaan jotain myöhemmin luodaksesi ajoitettuja tehtäviä.</string>
     <string name="settings_scheduled_tasks_cancel">Peruuta tehtävä</string>
@@ -93,7 +93,7 @@
     <string name="tool_cancel_task_name">Peruuta tehtävä</string>
     <string name="tool_cancel_task_description">Peruuta ajoitettu tehtävä</string>
     <string name="tool_list_tasks_name">Listaa tehtävät</string>
-    <string name="tool_list_tasks_description">Näytä kaikki ajoitetut tehtävät</string>
+    <string name="tool_list_tasks_description">Näytä Katyakki ajoitetut tehtävät</string>
     <string name="tool_setup_email_name">Määritä sähköposti</string>
     <string name="tool_setup_email_description">Yhdistä sähköpostitili lukemista ja lähettämistä varten</string>
     <string name="tool_check_email_name">Tarkista sähköposti</string>
@@ -121,7 +121,7 @@
     <string name="service_free_fast">Ilmainen nopea</string>
     <string name="service_free_expert">Ilmainen asiantuntija</string>
     <string name="settings_heartbeat">Syke</string>
-    <string name="settings_heartbeat_default_prompt">[HEARTBEAT] Tämä on automaattinen itsetarkistus. Tarkista muistisi ja odottavat tehtävät. Jos kaikki näyttää hyvältä eikä mikään vaadi huomiota, vastaa tarkasti: HEARTBEAT_OK
+    <string name="settings_heartbeat_default_prompt">[HEARTBEAT] Tämä on automaattinen itsetarkistus. Tarkista muistisi ja odottavat tehtävät. Jos Katyakki näyttää hyvältä eikä mikään vaadi huomiota, vastaa tarkasti: HEARTBEAT_OK
 Jos jokin vaatii huomiota (vanhentuneet muistot, erääntyneet tehtävät, käyttäjän seurannat), hoida se.</string>
     <string name="settings_heartbeat_description">Jaksolliset itsetarkistukset, jotka antavat tekoälyn tarkistaa muistot ja tehtävät ilman käyttäjän syötettä. Suoritetaan %1$d minuutin välein aktiivisina tunteina.</string>
     <string name="settings_heartbeat_prompt_label">Sykekehote</string>
@@ -180,7 +180,7 @@ Jos jokin vaatii huomiota (vanhentuneet muistot, erääntyneet tehtävät, käyt
     <string name="settings_import_error">Tuonti epäonnistui. Tiedostomuoto on virheellinen.</string>
     <string name="settings_import_preview_title">Tuo asetukset</string>
     <string name="settings_export_preview_title">Vie asetukset</string>
-    <string name="settings_import_replace_all">Korvaa kaikki nykyiset asetukset</string>
+    <string name="settings_import_replace_all">Korvaa Katyakki nykyiset asetukset</string>
     <string name="settings_import_replace_all_description">Valitsemattomat osiot palautetaan oletusarvoihin.</string>
     <string name="settings_import_section_services">Palvelut</string>
     <string name="settings_import_section_soul">Sielu</string>
@@ -233,7 +233,7 @@ Jos jokin vaatii huomiota (vanhentuneet muistot, erääntyneet tehtävät, käyt
     <string name="interactive_welcome_title">Olen täysin toimintakykyinen.</string>
     <string name="interactive_welcome_subtitle">Kerro minulle, mitä haluaisit tehdä.</string>
     <string name="interactive_back_content_description">Takaisin</string>
-    <string name="interactive_title">Kai 9000</string>
+    <string name="interactive_title">Katya</string>
     <string name="interactive_exit_content_description">Poistu vuorovaikutustilasta</string>
     <string name="interactive_ui_parsing_failed">Käyttöliittymän jäsennys epäonnistui, yritetään uudelleen…</string>
     <string name="settings_sponsors">Sponsorit</string>
@@ -322,7 +322,7 @@ Jos jokin vaatii huomiota (vanhentuneet muistot, erääntyneet tehtävät, käyt
     <string name="sandbox_files_dialog_cancel">Peruuta</string>
     <string name="sandbox_files_delete_title">Poistetaanko %1$s?</string>
     <string name="sandbox_files_delete_message_file">Tämä tiedosto poistetaan pysyvästi.</string>
-    <string name="sandbox_files_delete_message_directory">Tämä kansio ja kaikki sen sisältö poistetaan pysyvästi.</string>
+    <string name="sandbox_files_delete_message_directory">Tämä kansio ja Katyakki sen sisältö poistetaan pysyvästi.</string>
     <string name="sandbox_files_delete_confirm">Poista</string>
     <string name="sandbox_files_delete_failed">Poisto epäonnistui</string>
     <string name="sandbox_files_delete_success">Poistettu</string>
@@ -356,8 +356,8 @@ Jos jokin vaatii huomiota (vanhentuneet muistot, erääntyneet tehtävät, käyt
     <string name="tool_search_notifications_name">Etsi ilmoituksia</string>
     <string name="tool_search_notifications_description">Etsi ilmoituksia sovelluksen tai tekstin mukaan</string>
     <string name="settings_notifications_label">Lue ilmoituksia</string>
-    <string name="settings_notifications_description">Saapuvat ilmoitukset kerätään taustalla ja syke poimii ne. Valitse järjestelmän ilmoitusten käyttöoikeusasetuksista, mitä sovelluksia Kai voi lukea.</string>
-    <string name="settings_notifications_access_required">Ilmoitusten käyttöoikeutta ei ole myönnetty. Napauta alta ottaaksesi Kain käyttöön järjestelmäasetuksissa.</string>
+    <string name="settings_notifications_description">Saapuvat ilmoitukset kerätään taustalla ja syke poimii ne. Valitse järjestelmän ilmoitusten käyttöoikeusasetuksista, mitä sovelluksia Katya voi lukea.</string>
+    <string name="settings_notifications_access_required">Ilmoitusten käyttöoikeutta ei ole myönnetty. Napauta alta ottaaksesi Katyan käyttöön järjestelmäasetuksissa.</string>
     <string name="settings_notifications_access_button">Avaa ilmoitusten käyttöoikeus</string>
     <string name="settings_notifications_manage_apps">Hallinnoi sovelluksia</string>
     <string name="settings_notifications_listener_bound">Kuuntelija aktiivinen</string>
