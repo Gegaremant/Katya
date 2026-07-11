@@ -248,6 +248,19 @@ class AppSettings(internal val settings: Settings) {
 
     fun isFreeServicePrimary(): Boolean = settings.getBoolean(KEY_FREE_SERVICE_PRIMARY, false)
 
+    // Server Monitoring
+    fun getServerIp(): String = settings.getString(KEY_SERVER_IP, "")
+    fun setServerIp(ip: String) { settings.putString(KEY_SERVER_IP, ip) }
+
+    fun getServerPort(): Int = settings.getInt(KEY_SERVER_PORT, 22)
+    fun setServerPort(port: Int) { settings.putInt(KEY_SERVER_PORT, port) }
+
+    fun getServerUser(): String = settings.getString(KEY_SERVER_USER, "")
+    fun setServerUser(user: String) { settings.putString(KEY_SERVER_USER, user) }
+
+    fun getServerPassword(): String = settings.getString(KEY_SERVER_PASSWORD, "")
+    fun setServerPassword(password: String) { settings.putString(KEY_SERVER_PASSWORD, password) }
+
     fun setFreeServicePrimary(primary: Boolean) {
         settings.putBoolean(KEY_FREE_SERVICE_PRIMARY, primary)
     }
@@ -608,6 +621,11 @@ class AppSettings(internal val settings: Settings) {
         const val KEY_SANDBOX_ENABLED = "sandbox_enabled"
         const val KEY_VLESS_ENABLED = "vless_enabled"
         const val KEY_VLESS_URI = "vless_uri"
+
+        const val KEY_SERVER_IP = "server_ip"
+        const val KEY_SERVER_PORT = "server_port"
+        const val KEY_SERVER_USER = "server_user"
+        const val KEY_SERVER_PASSWORD = "server_password"
 
         // Basic memory guidance shared by every chat variant. The advanced `## Structured
         // Learning` block lives in `ChatSystemPromptBuilder.DEFAULT_STRUCTURED_LEARNING_SECTION`

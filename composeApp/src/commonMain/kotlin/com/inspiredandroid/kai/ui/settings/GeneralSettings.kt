@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -369,6 +372,22 @@ private fun QuickActionsSection(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(action.text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+                                Text(action.prompt, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            Row {
+                                androidx.compose.material3.IconButton(onClick = { isEditing = true }) {
+                                    Icon(imageVector = androidx.compose.material.icons.Icons.Default.Edit, contentDescription = "Edit")
+                                }
+                                androidx.compose.material3.IconButton(onClick = { onDeleteQuickAction(action.id) }) {
+                                    Icon(imageVector = androidx.compose.material.icons.Icons.Default.Delete, contentDescription = "Delete")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -380,7 +399,7 @@ private fun QuickActionsSection(
             ) {
                 Box(Modifier.padding(16.dp)) {
                     QuickActionEditor(
-                        initialAction = com.inspiredandroid.kai.data.QuickAction("", "", ""),
+                        initialAction = com.inspiredandroid.kai.data.QuickAction(id = "", text = "", prompt = ""),
                         onSave = { 
                             onAddQuickAction(it.copy(id = kotlin.uuid.Uuid.random().toString()))
                             showAddDialog = false 

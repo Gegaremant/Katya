@@ -370,6 +370,7 @@ fun SettingsScreenContent(
             is PendingDeletion.Service -> serviceRemovedMsg
             is PendingDeletion.McpServer -> mcpServerRemovedMsg
             is PendingDeletion.Skill -> skillRemovedMsg
+            is PendingDeletion.QuickAction -> "Quick action removed"
         }
         val result = snackbarHostState.showSnackbar(
             message = message,
@@ -508,6 +509,10 @@ fun SettingsScreenContent(
                                     onInstallPackages = onInstallPackages,
                                 )
                             }
+
+                            SettingsTab.Servers -> {
+                                ServersContent()
+                            }
                         }
 
                         Spacer(Modifier.height(16.dp))
@@ -586,6 +591,7 @@ private fun SettingsTabSelector(
                             SettingsTab.Tools -> stringResource(Res.string.settings_tab_tools)
                             SettingsTab.Sandbox -> stringResource(Res.string.settings_tab_sandbox)
                             SettingsTab.Integrations -> stringResource(Res.string.settings_tab_integrations)
+                            SettingsTab.Servers -> "Servers"
                         },
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                         color = MaterialTheme.colorScheme.primary,

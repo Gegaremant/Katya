@@ -238,6 +238,13 @@ object CommonTools {
         ipLocationToolInfo,
         openUrlToolInfo,
         FetchUrlTool.toolInfo,
+        ToolInfo(
+            id = "server_monitor",
+            name = "Server Monitor",
+            description = "Monitor CPU, RAM, and Temperature of the configured server",
+            nameRes = Res.string.tool_memory_store_name, // fallback string resource
+            descriptionRes = Res.string.tool_memory_store_description // fallback
+        )
     ) +
         listOf(memoryStoreToolInfo, memoryForgetToolInfo, memoryLearnToolInfo, memoryReinforceToolInfo) +
         SchedulingTools.schedulingToolDefinitions +
@@ -275,6 +282,9 @@ object CommonTools {
         }
         if (appSettings.isToolEnabled(FetchUrlTool.schema.name)) {
             add(FetchUrlTool)
+        }
+        if (appSettings.isToolEnabled("server_monitor")) {
+            add(ServerMonitoringTool(appSettings))
         }
     }
 
