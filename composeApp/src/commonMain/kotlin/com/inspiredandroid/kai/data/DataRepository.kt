@@ -118,9 +118,19 @@ interface DataRepository {
     fun isDaemonEnabled(): Boolean
     fun setDaemonEnabled(enabled: Boolean)
 
+    // Vless proxy
+    fun isVlessEnabled(): Boolean
+    fun setVlessEnabled(enabled: Boolean)
+    fun getVlessUri(): String
+    fun setVlessUri(uri: String)
+
     // Linux Sandbox
     fun isSandboxEnabled(): Boolean
     fun setSandboxEnabled(enabled: Boolean)
+
+    // Quick Actions
+    fun getQuickActions(): List<QuickAction>
+    fun setQuickActions(actions: List<QuickAction>)
 
     // Heartbeat
     fun getHeartbeatConfig(): HeartbeatConfig

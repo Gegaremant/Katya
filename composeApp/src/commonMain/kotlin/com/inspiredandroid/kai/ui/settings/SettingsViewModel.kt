@@ -147,6 +147,9 @@ class SettingsViewModel(
         onToggleTool = ::onToggleTool,
         onSaveSoul = ::onSaveSoul,
         onToggleDynamicUi = ::onToggleDynamicUi,
+        onAddQuickAction = ::onAddQuickAction,
+        onUpdateQuickAction = ::onUpdateQuickAction,
+        onDeleteQuickAction = ::onDeleteQuickAction,
         onChangeThemeMode = ::onChangeThemeMode,
         onToggleMemory = ::onToggleMemory,
         onDeleteMemory = ::onDeleteMemory,
@@ -154,6 +157,8 @@ class SettingsViewModel(
         onToggleScheduling = ::onToggleScheduling,
         onCancelTask = ::onCancelTask,
         onToggleDaemon = ::onToggleDaemon,
+        onToggleVless = ::onToggleVless,
+        onChangeVlessUri = ::onChangeVlessUri,
         onToggleHeartbeat = ::onToggleHeartbeat,
         onChangeHeartbeatInterval = ::onChangeHeartbeatInterval,
         onChangeHeartbeatActiveHours = ::onChangeHeartbeatActiveHours,
@@ -430,6 +435,40 @@ class SettingsViewModel(
         _state.update { it.copy(isDynamicUiEnabled = enabled) }
     }
 
+    private fun onAddQuickAction(action: com.inspiredandroid.kai.data.QuickAction) {
+        val actions = dataRepository.getQuickActions().toMutableList()
+        actions.add(action)
+        dataRepository.setQuickActions(actions)
+        _state.update { it.copy(quickActions = actions.toImmutableList()) }
+    }
+
+    private fun onUpdateQuickAction(action: com.inspiredandroid.kai.data.QuickAction) {
+        val actions = dataRepository.getQuickActions().toMutableList()
+        val index = actions.indexOfFirst { it.id == action.id }
+        if (index != -1) {
+            actions[index] = action
+            dataRepository.setQuickActions(actions)
+            _state.update { it.copy(quickActions = actions.toImmutableList()) }
+        }
+    }
+
+    private fun onDeleteQuickAction(id: String) {
+        commitPendingDeletion()
+        val actions = dataRepository.getQuickActions().toMutableList()
+        val index = actions.indexOfFirst { it.id == id }
+        if (index != -1) {
+            val deletedAction = actions.removeAt(index)
+            dataRepository.setQuickActions(actions)
+            _state.update { it.copy(quickActions = actions.toImmutableList()) }
+
+            _state.update { it.copy(pendingDeletion = PendingDeletion.QuickAction(deletedAction, index)) }
+            pendingDeleteJob = viewModelScope.launch(backgroundDispatcher) {
+                delay(4.seconds)
+                executeDeletion(PendingDeletion.QuickAction(deletedAction, index))
+            }
+        }
+    }
+
     private fun onChangeThemeMode(mode: ThemeMode) {
         dataRepository.setThemeMode(mode)
         _state.update { it.copy(themeMode = mode) }
@@ -479,6 +518,22 @@ class SettingsViewModel(
             daemonController.stop()
         }
         _state.update { it.copy(isDaemonEnabled = enabled) }
+    }
+
+    private fun onToggleVless(enabled: Boolean) {
+        dataRepository.setVlessEnabled(enabled)
+        _state.update { it.copy(isVlessEnabled = enabled) }
+        if (_state.value.isDaemonEnabled) {
+            daemonController.start()
+        }
+    }
+
+    private fun onChangeVlessUri(uri: String) {
+        dataRepository.setVlessUri(uri)
+        _state.update { it.copy(vlessUri = uri) }
+        if (_state.value.isDaemonEnabled) {
+            daemonController.start() // Restart daemon to apply new proxy config
+        }
     }
 
     private fun onToggleHeartbeat(enabled: Boolean) {
@@ -939,6 +994,13 @@ class SettingsViewModel(
             is PendingDeletion.Memory -> {
                 dataRepository.deleteMemory(deletion.key)
                 _state.update { it.copy(memories = dataRepository.getMemories().toImmutableList()) }
+            }
+
+            is PendingDeletion.QuickAction -> {
+                val actions = dataRepository.getQuickActions().toMutableList()
+                actions.add(deletion.index.coerceIn(0, actions.size), deletion.action)
+                dataRepository.setQuickActions(actions)
+                _state.update { it.copy(quickActions = actions.toImmutableList()) }
             }
 
             is PendingDeletion.Task -> {

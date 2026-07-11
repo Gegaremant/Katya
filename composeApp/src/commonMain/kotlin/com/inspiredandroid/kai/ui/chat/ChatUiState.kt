@@ -9,6 +9,7 @@ import com.inspiredandroid.kai.data.ReasoningRequestMode
 import com.inspiredandroid.kai.data.ServiceEntry
 import com.inspiredandroid.kai.data.SharedJson
 import com.inspiredandroid.kai.data.SmsDraft
+import com.inspiredandroid.kai.data.QuickAction
 import com.inspiredandroid.kai.data.UiSubmission
 import com.inspiredandroid.kai.network.UiError
 import com.inspiredandroid.kai.network.dtos.gemini.GeminiChatRequestDto
@@ -89,6 +90,7 @@ data class ChatUiState(
     val pendingConversationDeletion: String? = null,
     val isInteractiveMode: Boolean = false,
     val fallbackStatus: FallbackStatus? = null,
+    val quickActions: ImmutableList<QuickAction> = persistentListOf(),
     val isRestoring: Boolean = true,
     val installedSkills: ImmutableList<com.inspiredandroid.kai.skills.SkillManifest> = persistentListOf(),
 ) {

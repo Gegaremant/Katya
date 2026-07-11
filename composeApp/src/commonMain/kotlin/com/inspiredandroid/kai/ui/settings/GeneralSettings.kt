@@ -77,6 +77,14 @@ internal fun GeneralContent(uiState: SettingsUiState, actions: SettingsActions) 
                             onChangeThemeMode = actions.onChangeThemeMode,
                         )
                     }
+                    SettingsCard {
+                        QuickActionsSection(
+                            quickActions = uiState.quickActions,
+                            onAddQuickAction = actions.onAddQuickAction,
+                            onUpdateQuickAction = actions.onUpdateQuickAction,
+                            onDeleteQuickAction = actions.onDeleteQuickAction,
+                        )
+                    }
                 }
                 Column(
                     modifier = Modifier.weight(1f),
@@ -119,6 +127,14 @@ internal fun GeneralContent(uiState: SettingsUiState, actions: SettingsActions) 
                     ThemeModePicker(
                         themeMode = uiState.themeMode,
                         onChangeThemeMode = actions.onChangeThemeMode,
+                    )
+                }
+                SettingsCard {
+                    QuickActionsSection(
+                        quickActions = uiState.quickActions,
+                        onAddQuickAction = actions.onAddQuickAction,
+                        onUpdateQuickAction = actions.onUpdateQuickAction,
+                        onDeleteQuickAction = actions.onDeleteQuickAction,
                     )
                 }
                 if (uiState.showUiScale) {
@@ -295,5 +311,119 @@ private fun UiScaleSection(
             valueRange = 0.5f..2.0f,
             steps = steps,
         )
+    }
+}
+
+@Composable
+private fun QuickActionsSection(
+    quickActions: kotlinx.collections.immutable.ImmutableList<com.inspiredandroid.kai.data.QuickAction>,
+    onAddQuickAction: (com.inspiredandroid.kai.data.QuickAction) -> Unit,
+    onUpdateQuickAction: (com.inspiredandroid.kai.data.QuickAction) -> Unit,
+    onDeleteQuickAction: (String) -> Unit,
+) {
+    var showAddDialog by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f).padding(16.dp)) {
+                Text(
+                    text = "Quick Actions",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Manage quick actions displayed above the chat input.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            androidx.compose.material3.TextButton(
+                onClick = { showAddDialog = true },
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
+                Text("Add")
+            }
+        }
+
+        if (quickActions.isNotEmpty()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                for (action in quickActions) {
+                    var isEditing by remember { mutableStateOf(false) }
+                    
+                    if (isEditing) {
+                        QuickActionEditor(
+                            initialAction = action,
+                            onSave = { 
+                                onUpdateQuickAction(it)
+                                isEditing = false
+                            },
+                            onCancel = { isEditing = false }
+                        )
+                    } else {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp)).padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+        }
+    }
+
+    if (showAddDialog) {
+        androidx.compose.ui.window.Dialog(onDismissRequest = { showAddDialog = false }) {
+            androidx.compose.material3.Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                Box(Modifier.padding(16.dp)) {
+                    QuickActionEditor(
+                        initialAction = com.inspiredandroid.kai.data.QuickAction("", "", ""),
+                        onSave = { 
+                            onAddQuickAction(it.copy(id = kotlin.uuid.Uuid.random().toString()))
+                            showAddDialog = false 
+                        },
+                        onCancel = { showAddDialog = false }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun QuickActionEditor(
+    initialAction: com.inspiredandroid.kai.data.QuickAction,
+    onSave: (com.inspiredandroid.kai.data.QuickAction) -> Unit,
+    onCancel: () -> Unit
+) {
+    var text by remember { mutableStateOf(initialAction.text) }
+    var prompt by remember { mutableStateOf(initialAction.prompt) }
+
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        KaiOutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Button Text") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        KaiOutlinedTextField(
+            value = prompt,
+            onValueChange = { prompt = it },
+            label = { Text("Prompt") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+            androidx.compose.material3.TextButton(onClick = onCancel) {
+                Text("Cancel")
+            }
+            androidx.compose.material3.TextButton(onClick = { 
+                onSave(initialAction.copy(text = text, prompt = prompt))
+            }, enabled = text.isNotBlank() && prompt.isNotBlank()) {
+                Text("Save")
+            }
+        }
     }
 }

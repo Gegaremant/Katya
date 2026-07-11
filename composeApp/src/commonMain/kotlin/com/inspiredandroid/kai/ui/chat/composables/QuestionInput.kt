@@ -46,6 +46,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.material.icons.filled.Mic
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.inspiredandroid.kai.stt.createSttController
+import com.inspiredandroid.kai.tools.AudioPermissionController
+import com.inspiredandroid.kai.tools.SetupAudioPermissionHandler
+import org.koin.compose.koinInject
+import kotlinx.coroutines.launch
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -99,6 +106,20 @@ fun QuestionInput(
     installedSkills: ImmutableList<SkillManifest> = persistentListOf(),
     modifier: Modifier = Modifier,
 ) {
+    val sttController = remember { createSttController() }
+    val audioPermissionController: AudioPermissionController = koinInject()
+    val isListening by sttController.isListening.collectAsStateWithLifecycle()
+    val partialResults by sttController.partialResults.collectAsStateWithLifecycle()
+    val coroutineScope = androidx.compose.runtime.rememberCoroutineScope()
+
+    SetupAudioPermissionHandler(audioPermissionController)
+
+    LaunchedEffect(partialResults) {
+        if (isListening && partialResults.isNotBlank()) {
+            onTextStateChange(TextFieldValue(partialResults, TextRange(partialResults.length)))
+        }
+    }
+
     Column(modifier = modifier) {
         // Slash autocomplete: shown when the user is typing the first token and it starts
         // with `/`. Selecting an entry rewrites the first token to the canonical skill id
@@ -248,8 +269,24 @@ fun QuestionInput(
                     }
                     if (isLoading) {
                         TrailingIcon(icon = Res.drawable.ic_stop, onClick = cancel, isPulsing = true)
-                    } else if (textState.text.isNotBlank()) {
+                    } else if (textState.text.isNotBlank() && !isListening) {
                         TrailingIcon(icon = Res.drawable.ic_up, onClick = { submitQuestion() })
+                    } else if (isListening) {
+                        TrailingIcon(icon = Res.drawable.ic_stop, onClick = { sttController.stopListening() }, isPulsing = true)
+                    } else {
+                        CircleIconButton(
+                            icon = Icons.Default.Mic,
+                            onClick = { 
+                                coroutineScope.launch {
+                                    if (audioPermissionController.requestPermission()) {
+                                        sttController.startListening { result ->
+                                            onTextStateChange(TextFieldValue(result, TextRange(result.length)))
+                                            submitQuestion()
+                                        }
+                                    }
+                                }
+                            }
+                        )
                     }
                 }
             },

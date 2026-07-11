@@ -326,6 +326,19 @@ class AppSettings(internal val settings: Settings) {
         settings.putBoolean(KEY_SANDBOX_ENABLED, enabled)
     }
 
+    // VLESS Proxy
+    fun isVlessEnabled(): Boolean = settings.getBoolean(KEY_VLESS_ENABLED, false)
+
+    fun setVlessEnabled(enabled: Boolean) {
+        settings.putBoolean(KEY_VLESS_ENABLED, enabled)
+    }
+
+    fun getVlessUri(): String = settings.getString(KEY_VLESS_URI, "")
+
+    fun setVlessUri(uri: String) {
+        settings.putString(KEY_VLESS_URI, uri)
+    }
+
     fun getScheduledTasksJson(): String = settings.getString(KEY_SCHEDULED_TASKS, "[]")
 
     fun setScheduledTasksJson(json: String) {
@@ -523,6 +536,12 @@ class AppSettings(internal val settings: Settings) {
         settings.putString(KEY_SPLINTERLANDS_BATTLE_LOG, json)
     }
 
+    fun getQuickActionsJson(): String = settings.getString(KEY_QUICK_ACTIONS, "[]")
+
+    fun setQuickActionsJson(json: String) {
+        settings.putString(KEY_QUICK_ACTIONS, json)
+    }
+
     companion object {
         const val KEY_CURRENT_SERVICE_ID = "current_service_id"
         const val KEY_APP_OPENS = "app_opens"
@@ -567,7 +586,8 @@ class AppSettings(internal val settings: Settings) {
         const val KEY_NOTIFICATIONS_STORE = "notifications_store"
         const val KEY_NOTIFICATIONS_SYNC_STATE = "notifications_sync_state"
         const val KEY_CONFIGURED_SERVICES = "configured_services"
-        const val KEY_FREE_FALLBACK_ENABLED = "free_fallback_enabled"
+        internal const val KEY_FREE_FALLBACK_ENABLED = "freeFallbackEnabled"
+        internal const val KEY_QUICK_ACTIONS = "quickActions"
         const val KEY_FREE_MODE = "free_mode"
         const val KEY_FREE_SERVICE_PRIMARY = "free_service_primary"
         const val KEY_SERVICES_MIGRATION_COMPLETE = "services_migration_complete_v1"
@@ -586,6 +606,8 @@ class AppSettings(internal val settings: Settings) {
         const val KEY_MODEL_CONTEXT_PREFIX = "model_context_"
 
         const val KEY_SANDBOX_ENABLED = "sandbox_enabled"
+        const val KEY_VLESS_ENABLED = "vless_enabled"
+        const val KEY_VLESS_URI = "vless_uri"
 
         // Basic memory guidance shared by every chat variant. The advanced `## Structured
         // Learning` block lives in `ChatSystemPromptBuilder.DEFAULT_STRUCTURED_LEARNING_SECTION`

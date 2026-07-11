@@ -10,6 +10,7 @@ import android.os.IBinder
 import com.inspiredandroid.kai.data.TaskScheduler
 import com.inspiredandroid.kai.shared.R
 import org.koin.android.ext.android.inject
+import com.inspiredandroid.kai.sandbox.VlessProxyManager
 
 class DaemonService : Service() {
 
@@ -19,6 +20,7 @@ class DaemonService : Service() {
     }
 
     private val taskScheduler: TaskScheduler by inject()
+    private val vlessProxyManager: VlessProxyManager by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -35,6 +37,7 @@ class DaemonService : Service() {
         // asks the OS to re-create us if we're killed, which will re-trigger onCreate and
         // call start() again — idempotent no-op if the loop is already running.
         taskScheduler.start()
+        vlessProxyManager.start()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
@@ -48,6 +51,7 @@ class DaemonService : Service() {
 
     override fun onDestroy() {
         stopForeground(STOP_FOREGROUND_REMOVE)
+        vlessProxyManager.stop()
         super.onDestroy()
     }
 

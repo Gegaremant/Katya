@@ -45,6 +45,7 @@ import com.inspiredandroid.kai.tools.OpenFileTool
 import com.inspiredandroid.kai.tools.ProcessManagerTool
 import com.inspiredandroid.kai.tools.SchedulingTools
 import com.inspiredandroid.kai.tools.ShellCommandTool
+import com.inspiredandroid.kai.tools.AndroidHostShellTool
 import com.inspiredandroid.kai.tools.SmsTools
 import com.inspiredandroid.kai.tools.SshConfigureHostTool
 import com.inspiredandroid.kai.tools.WebSearchTool
@@ -218,6 +219,7 @@ actual fun getPlatformToolDefinitions(): List<ToolInfo> = buildList {
             descriptionRes = Res.string.tool_open_file_description,
         ),
     )
+    add(AndroidHostShellTool.toolInfo)
     // SMS tools are intentionally absent here: availability is driven by the Agent-tab
     // master toggles (isSmsEnabled / isSmsSendEnabled) plus the FOSS-only `isSmsSupported`
     // check in `getAvailableTools()`. Listing per-tool toggles in the Tools tab was dead
@@ -437,6 +439,9 @@ actual fun getAvailableTools(): List<Tool> {
                 add(SshConfigureHostTool)
             }
         }
+        
+        // Host Shell Tool (bypassing sandbox)
+        add(AndroidHostShellTool)
 
         if (appSettings.isEmailEnabled()) {
             addAll(EmailTools.getEmailTools(emailStore))

@@ -165,6 +165,7 @@ class ChatViewModel(
             savedConversations = summaries.toImmutableList(),
             currentConversationId = conversationId,
             hasUnreadHeartbeat = hasUnreadHeartbeat,
+            quickActions = dataRepository.getQuickActions().toImmutableList(),
             installedSkills = dataRepository.getInstalledSkills().toImmutableList(),
         )
     }.distinctUntilChanged().stateIn(

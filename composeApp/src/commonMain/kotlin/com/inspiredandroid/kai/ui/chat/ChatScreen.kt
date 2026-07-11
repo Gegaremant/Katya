@@ -259,6 +259,13 @@ private fun InteractiveModeScreen(uiState: ChatUiState) {
 
                 // Full QuestionInput stays in the column flow
                 if (showFullInput) {
+                    com.inspiredandroid.kai.ui.chat.composables.QuickActionsRow(
+                        actions = uiState.quickActions,
+                        onActionClick = { 
+                            inputExpanded = false
+                            uiState.actions.ask(it) 
+                        }
+                    )
                     QuestionInput(
                         modifier = Modifier.align(Alignment.BottomEnd),
                         files = uiState.files,
@@ -900,6 +907,10 @@ private fun ChatModeScreen(
             }
 
             if (!isSandboxOpen) {
+                com.inspiredandroid.kai.ui.chat.composables.QuickActionsRow(
+                    actions = uiState.quickActions,
+                    onActionClick = uiState.actions.ask
+                )
                 QuestionInput(
                     files = uiState.files,
                     addFile = uiState.actions.addFile,

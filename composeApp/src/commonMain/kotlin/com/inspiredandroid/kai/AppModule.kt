@@ -28,6 +28,7 @@ import com.inspiredandroid.kai.splinterlands.SplinterlandsApi
 import com.inspiredandroid.kai.splinterlands.SplinterlandsBattleRunner
 import com.inspiredandroid.kai.splinterlands.SplinterlandsStore
 import com.inspiredandroid.kai.tools.CalendarPermissionController
+import com.inspiredandroid.kai.tools.AudioPermissionController
 import com.inspiredandroid.kai.tools.LocalNetworkPermissionController
 import com.inspiredandroid.kai.tools.NotificationListenerController
 import com.inspiredandroid.kai.tools.NotificationPermissionController
@@ -45,6 +46,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<CalendarPermissionController> { CalendarPermissionController() }
+    single<AudioPermissionController> { AudioPermissionController() }
     single<NotificationPermissionController> { NotificationPermissionController() }
     single<LocalNetworkPermissionController> { LocalNetworkPermissionController() }
     single<SmsPermissionController> { SmsPermissionController() }

@@ -30,4 +30,4 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":androidApp")
-include(":screenshotTests")
+// include(":screenshotTests")

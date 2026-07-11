@@ -16,6 +16,7 @@ import com.inspiredandroid.kai.network.dtos.SponsorsResponseDto
 import com.inspiredandroid.kai.network.tools.ToolInfo
 import com.inspiredandroid.kai.skills.RegistrySkillEntry
 import com.inspiredandroid.kai.skills.SkillManifest
+import com.inspiredandroid.kai.data.QuickAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.ImmutableSet
@@ -62,6 +63,7 @@ data class SettingsUiState(
     val configuredServices: ImmutableList<ConfiguredServiceEntry> = persistentListOf(),
     val expandedServiceId: String? = null,
     val availableServicesToAdd: ImmutableList<Service> = persistentListOf(),
+    val quickActions: ImmutableList<QuickAction> = persistentListOf(),
     val tools: ImmutableList<ToolInfo> = persistentListOf(),
     val soulText: String = "",
     val isDynamicUiEnabled: Boolean = true,
@@ -102,6 +104,8 @@ data class SettingsUiState(
     val notificationListenerAccessGranted: Boolean = false,
     val notificationListenerBound: Boolean = false,
     val notificationPendingCount: Int = 0,
+    val isVlessEnabled: Boolean = false,
+    val vlessUri: String = "",
     val isFreeFallbackEnabled: Boolean = true,
     val uiScale: Float = 1.0f,
     val showUiScale: Boolean = false,
@@ -145,6 +149,7 @@ enum class McpConnectionStatus {
 
 sealed interface PendingDeletion {
     data class Memory(val key: String) : PendingDeletion
+    data class QuickAction(val action: com.inspiredandroid.kai.data.QuickAction, val index: Int) : PendingDeletion
     data class Task(val id: String) : PendingDeletion
     data class EmailAccount(val id: String) : PendingDeletion
     data class Service(val instanceId: String) : PendingDeletion

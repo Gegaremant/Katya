@@ -1784,10 +1784,38 @@ class RemoteDataRepository(
         appSettings.setDaemonEnabled(enabled)
     }
 
+    override fun isVlessEnabled(): Boolean = appSettings.isVlessEnabled()
+
+    override fun setVlessEnabled(enabled: Boolean) {
+        appSettings.setVlessEnabled(enabled)
+    }
+
+    override fun getVlessUri(): String = appSettings.getVlessUri()
+
+    override fun setVlessUri(uri: String) {
+        appSettings.setVlessUri(uri)
+    }
+
     override fun isSandboxEnabled(): Boolean = appSettings.isSandboxEnabled()
 
     override fun setSandboxEnabled(enabled: Boolean) {
         appSettings.setSandboxEnabled(enabled)
+    }
+
+    override fun getQuickActions(): List<QuickAction> {
+        return try {
+            Json.decodeFromString<List<QuickAction>>(appSettings.getQuickActionsJson())
+        } catch (e: Exception) {
+            listOf(
+                QuickAction("1", "📊 Проверить сервер", "Проверь нагрузку на сервер (CPU/RAM/Temp)"),
+                QuickAction("2", "🔋 Статус батареи", "Покажи текущий заряд батареи"),
+                QuickAction("3", "📸 Скриншот", "Сделай скриншот телефона"),
+            )
+        }
+    }
+
+    override fun setQuickActions(actions: List<QuickAction>) {
+        appSettings.setQuickActionsJson(Json.encodeToString(actions))
     }
 
     override fun getHeartbeatConfig(): HeartbeatConfig = heartbeatManager.getConfig()
