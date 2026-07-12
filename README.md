@@ -15,6 +15,12 @@ An **open-source AI assistant with persistent memory** that runs on **Android, i
 
 ## Features
 
+### Release 1.0.7 Updates
+- **Custom Logo**: Replaced the default logo animation with a custom Fixiki "Pomogator" shield.
+- **In-App Logging System**: Added `AppLogger` to capture internal logs (such as SSH tunnel connection steps).
+- **Log Viewer UI**: Users can now enable/disable logging in Server Settings and view, copy, and clear logs directly from the app interface.
+- **UI Tweaks**: Ensured proper visibility of titles in Server Settings in dark mode and added a password visibility toggle.
+
 ### Release 1.0.5 Updates
 - **Voice Selection**: Added a quick link to Android's System TTS settings to change voices directly from the app.
 - **SSH Tunnel Fix**: The SSH tunnel now automatically reconnects reliably.

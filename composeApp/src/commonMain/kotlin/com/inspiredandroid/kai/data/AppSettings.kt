@@ -604,6 +604,13 @@ class AppSettings(internal val settings: Settings) {
         settings.putString(KEY_SPLINTERLANDS_BATTLE_LOG, json)
     }
 
+    // Logging
+    fun isLoggingEnabled(): Boolean = settings.getBoolean(KEY_LOGGING_ENABLED, false)
+
+    fun setLoggingEnabled(enabled: Boolean) {
+        settings.putBoolean(KEY_LOGGING_ENABLED, enabled)
+    }
+
     fun getQuickActionsJson(): String = settings.getString(KEY_QUICK_ACTIONS, "[]")
 
     fun setQuickActionsJson(json: String) {
@@ -682,6 +689,8 @@ class AppSettings(internal val settings: Settings) {
         const val KEY_SERVER_PORT = "server_port"
         const val KEY_SERVER_USER = "server_user"
         const val KEY_SERVER_PASSWORD = "server_password"
+
+        const val KEY_LOGGING_ENABLED = "logging_enabled"
 
         const val KEY_WAKE_WORD = "wake_word"
         const val KEY_WAKE_WORD_ENABLED = "wake_word_enabled"
