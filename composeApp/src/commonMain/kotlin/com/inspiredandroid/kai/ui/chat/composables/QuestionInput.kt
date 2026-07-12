@@ -107,13 +107,16 @@ fun QuestionInput(
     installedSkills: ImmutableList<SkillManifest> = persistentListOf(),
     modifier: Modifier = Modifier,
 ) {
-    val sttController = remember { createSttController() }
-    val audioPermissionController: AudioPermissionController = koinInject()
-    val isListening by sttController.isListening.collectAsStateWithLifecycle()
-    val partialResults by sttController.partialResults.collectAsStateWithLifecycle()
+    val isPreview = androidx.compose.ui.platform.LocalInspectionMode.current
+    val sttController = remember { if (isPreview) null else createSttController() }
+    val audioPermissionController: AudioPermissionController? = if (isPreview) null else koinInject()
+    val isListening by (sttController?.isListening ?: kotlinx.coroutines.flow.MutableStateFlow(false)).collectAsStateWithLifecycle()
+    val partialResults by (sttController?.partialResults ?: kotlinx.coroutines.flow.MutableStateFlow("")).collectAsStateWithLifecycle()
     val coroutineScope = androidx.compose.runtime.rememberCoroutineScope()
 
-    SetupAudioPermissionHandler(audioPermissionController)
+    if (audioPermissionController != null) {
+        SetupAudioPermissionHandler(audioPermissionController)
+    }
 
     LaunchedEffect(partialResults) {
         if (isListening && partialResults.isNotBlank()) {
