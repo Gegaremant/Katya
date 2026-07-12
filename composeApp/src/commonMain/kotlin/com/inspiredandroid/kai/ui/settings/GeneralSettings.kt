@@ -356,7 +356,11 @@ private fun UiScaleSection(
         )
     }
 }
-
+/**
+ * Раздел для управления быстрыми действиями. 
+ * Позволяет добавлять, редактировать и удалять кнопки с промптами, которые
+ * будут отображаться над полем ввода чата.
+ */
 @Composable
 private fun QuickActionsSection(
     quickActions: kotlinx.collections.immutable.ImmutableList<com.inspiredandroid.kai.data.QuickAction>,

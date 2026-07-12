@@ -197,6 +197,11 @@ class MainActivity : ComponentActivity() {
         }.start()
     }
 
+    /**
+     * Проверяет, отключена ли оптимизация энергосбережения для приложения.
+     * Если не отключена — показывает пользователю диалог с объяснением, зачем это нужно
+     * (для работы демона, туннелей в фоне), и предлагает перейти в настройки или проигнорировать.
+     */
     private fun checkBatteryOptimization() {
         // 2. Battery Optimization
         val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager

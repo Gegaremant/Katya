@@ -465,6 +465,11 @@ sealed class Service(
         apiKeyUrlDisplay = "platform.publicai.co",
     )
 
+    /**
+     * Сервис для подключения к локальным моделям (Ollama, LM Studio и др.),
+     * работающим по API, совместимому с OpenAI. Мы переименовали его в "Local API AI"
+     * для большего понимания пользователями.
+     */
     data object OpenAICompatible : Service(
         id = "openai-compatible",
         displayName = "Local API AI",

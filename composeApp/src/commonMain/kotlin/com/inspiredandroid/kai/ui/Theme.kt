@@ -110,6 +110,10 @@ val LightColorScheme = lightColorScheme(
 @Composable
 fun outlineTextFieldColors() = OutlinedTextFieldDefaults.colors()
 
+/**
+ * Обёртка над стандартным OutlinedTextField с применением нужных скруглений
+ * и принудительным заданием цвета текста (для фикса проблем на темной теме).
+ */
 @Composable
 fun KaiOutlinedTextField(
     value: String,
