@@ -276,14 +276,14 @@ fun QuestionInput(
                     } else if (textState.text.isNotBlank() && !isListening) {
                         TrailingIcon(icon = Res.drawable.ic_up, onClick = { submitQuestion() })
                     } else if (isListening) {
-                        TrailingIcon(icon = Res.drawable.ic_stop, onClick = { sttController.stopListening() }, isPulsing = true)
+                        TrailingIcon(icon = Res.drawable.ic_stop, onClick = { sttController?.stopListening() }, isPulsing = true)
                     } else {
                         CircleIconButton(
                             icon = Icons.Default.Mic,
                             onClick = {
                                 coroutineScope.launch {
-                                    if (audioPermissionController.requestPermission()) {
-                                        sttController.startListening { result ->
+                                    if (audioPermissionController?.requestPermission() == true) {
+                                        sttController?.startListening { result ->
                                             onTextStateChange(TextFieldValue(result, TextRange(result.length)))
                                             submitQuestion()
                                         }
