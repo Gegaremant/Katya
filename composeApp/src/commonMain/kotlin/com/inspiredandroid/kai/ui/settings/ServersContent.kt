@@ -7,6 +7,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.unit.dp
 import com.inspiredandroid.kai.data.AppSettings
 import com.inspiredandroid.kai.tunnel.SshTunnelService
@@ -27,12 +31,13 @@ fun ServersContent(
     var tunnelRemotePort by remember { mutableStateOf("11434") }
 
     var showSavedMessage by remember { mutableStateOf(false) }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     val tunnelState by tunnelService.tunnelState.collectAsState()
     val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Text("Настройки мониторинга серверов", style = MaterialTheme.typography.titleLarge)
+        Text("Настройки мониторинга серверов", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.height(8.dp))
         Text(
             "Настройте SSH доступы для удаленного мониторинга и управления серверами. Укажите IP-адрес, порт и учетные данные для подключения.",
@@ -70,7 +75,13 @@ fun ServersContent(
             value = password,
             onValueChange = { password = it },
             label = { Text("Пароль SSH") },
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, contentDescription = if (passwordVisible) "Hide password" else "Show password")
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(16.dp))
@@ -94,7 +105,7 @@ fun ServersContent(
         HorizontalDivider()
         Spacer(Modifier.height(16.dp))
 
-        Text("Настройка SSH-туннеля", style = MaterialTheme.typography.titleMedium)
+        Text("Настройка SSH-туннеля", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.height(8.dp))
         Text(
             "Создание локального перенаправления портов через настроенный сервер.",
