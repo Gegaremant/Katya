@@ -1,25 +1,25 @@
 package com.inspiredandroid.kai.ui.settings
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.inspiredandroid.kai.data.AppSettings
-import com.inspiredandroid.kai.tunnel.SshTunnelService
 import com.inspiredandroid.kai.tools.AppLogger
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.Alignment
+import com.inspiredandroid.kai.tunnel.SshTunnelService
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -222,7 +222,6 @@ fun LogsDialog(onDismiss: () -> Unit) {
                     Text("Очистить")
                 }
             }
-        }
+        },
     )
 }
-

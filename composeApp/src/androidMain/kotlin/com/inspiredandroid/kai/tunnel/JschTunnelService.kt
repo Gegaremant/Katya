@@ -1,5 +1,6 @@
 package com.inspiredandroid.kai.tunnel
 
+import com.inspiredandroid.kai.tools.AppLogger
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +13,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Properties
-import com.inspiredandroid.kai.tools.AppLogger
 
 class JschTunnelService : SshTunnelService {
     private val _tunnelState = MutableStateFlow(TunnelState())

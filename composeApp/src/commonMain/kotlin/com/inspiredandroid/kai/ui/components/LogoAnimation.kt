@@ -18,6 +18,6 @@ fun LogoAnimation(
     Image(
         painter = painterResource(Res.drawable.logo_pomogator),
         contentDescription = "Logo",
-        modifier = modifier.size(size)
+        modifier = modifier.size(size),
     )
 }
