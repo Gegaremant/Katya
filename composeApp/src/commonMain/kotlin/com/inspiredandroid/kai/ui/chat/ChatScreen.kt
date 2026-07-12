@@ -139,6 +139,14 @@ fun ChatScreen(
     navigationTabBar: (@Composable () -> Unit)? = null,
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val monitorStats by viewModel.monitorStats.collectAsStateWithLifecycle()
+    var wakeWordTriggerCount by remember { mutableStateOf(0) }
+    
+    LaunchedEffect(viewModel.wakeWordTriggered) {
+        viewModel.wakeWordTriggered.collect {
+            wakeWordTriggerCount++
+        }
+    }
 
     ChatScreenContent(
         uiState = uiState,
@@ -146,6 +154,8 @@ fun ChatScreen(
         onNavigateToSettings = onNavigateToSettings,
         isSandboxAvailable = isSandboxAvailable,
         navigationTabBar = navigationTabBar,
+        monitorStats = monitorStats,
+        wakeWordTriggerCount = wakeWordTriggerCount,
     )
 }
 
@@ -156,12 +166,14 @@ fun ChatScreenContent(
     onNavigateToSettings: () -> Unit = {},
     isSandboxAvailable: Boolean = false,
     navigationTabBar: (@Composable () -> Unit)? = null,
+    monitorStats: com.inspiredandroid.kai.monitor.MonitorStats = com.inspiredandroid.kai.monitor.MonitorStats(),
+    wakeWordTriggerCount: Int = 0,
     initialSandboxOpen: Boolean = false,
     previewSandboxState: SandboxUiState? = null,
     previewSandboxLines: ImmutableList<TerminalLine> = persistentListOf(),
 ) {
     if (uiState.isInteractiveMode && !uiState.isRestoring) {
-        InteractiveModeScreen(uiState = uiState)
+        InteractiveModeScreen(uiState = uiState, wakeWordTriggerCount = wakeWordTriggerCount)
     } else {
         ChatModeScreen(
             uiState = uiState,
@@ -169,6 +181,8 @@ fun ChatScreenContent(
             onNavigateToSettings = onNavigateToSettings,
             isSandboxAvailable = isSandboxAvailable,
             navigationTabBar = navigationTabBar,
+            monitorStats = monitorStats,
+            wakeWordTriggerCount = wakeWordTriggerCount,
             initialSandboxOpen = initialSandboxOpen,
             previewSandboxState = previewSandboxState,
             previewSandboxLines = previewSandboxLines,
@@ -179,7 +193,10 @@ fun ChatScreenContent(
 // --- Interactive Mode ---
 
 @Composable
-private fun InteractiveModeScreen(uiState: ChatUiState) {
+private fun InteractiveModeScreen(
+    uiState: ChatUiState,
+    wakeWordTriggerCount: Int
+) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Intercept system back to exit interactive mode instead of closing the app
@@ -283,6 +300,7 @@ private fun InteractiveModeScreen(uiState: ChatUiState) {
                         availableServices = interactiveServices,
                         onSelectService = uiState.actions.selectService,
                         installedSkills = uiState.installedSkills,
+                        wakeWordTriggerCount = wakeWordTriggerCount,
                     )
                 }
             }
@@ -477,6 +495,8 @@ private fun ChatModeScreen(
     onNavigateToSettings: () -> Unit,
     isSandboxAvailable: Boolean,
     navigationTabBar: (@Composable () -> Unit)?,
+    monitorStats: com.inspiredandroid.kai.monitor.MonitorStats,
+    wakeWordTriggerCount: Int,
     initialSandboxOpen: Boolean = false,
     previewSandboxState: SandboxUiState? = null,
     previewSandboxLines: ImmutableList<TerminalLine> = persistentListOf(),
@@ -553,6 +573,11 @@ private fun ChatModeScreen(
                 onDismiss = {
                     uiState.actions.clearUnreadHeartbeat()
                 },
+            )
+
+            com.inspiredandroid.kai.ui.chat.composables.MonitorOverlay(
+                mode = uiState.monitorOverlayMode,
+                stats = monitorStats
             )
 
             PendingSmsBanners(
@@ -924,6 +949,7 @@ private fun ChatModeScreen(
                     availableServices = uiState.availableServices,
                     onSelectService = uiState.actions.selectService,
                     installedSkills = uiState.installedSkills,
+                    wakeWordTriggerCount = wakeWordTriggerCount,
                 )
             }
         }

@@ -13,6 +13,7 @@ import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import com.inspiredandroid.kai.tools.AppLogger
 import java.util.TimeZone
 
 private const val TAG = "CalendarRepository"
@@ -75,18 +76,18 @@ class CalendarRepository(
         allDay: Boolean,
         reminderMinutes: Int,
     ): CalendarResult {
-        Log.d(TAG, "createEvent called: title=$title, startTime=$startTimeIso")
+        AppLogger.d(TAG, "createEvent called: title=$title, startTime=$startTimeIso")
 
         // Request permission if not already granted
         if (!hasCalendarPermission()) {
-            Log.d(TAG, "Permission not granted, requesting...")
+            AppLogger.d(TAG, "Permission not granted, requesting...")
             val granted = permissionController.requestPermission()
-            Log.d(TAG, "Permission request result: $granted")
+            AppLogger.d(TAG, "Permission request result: $granted")
             if (!granted) {
                 return CalendarResult.Error("Calendar permission denied. Please enable calendar access in Settings to create events.")
             }
         } else {
-            Log.d(TAG, "Permission already granted")
+            AppLogger.d(TAG, "Permission already granted")
         }
 
         val calendarId = getPrimaryCalendarId()

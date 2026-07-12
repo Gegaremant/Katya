@@ -44,7 +44,7 @@ fun main() {
             var ttsReady by remember { mutableStateOf(false) }
             LaunchedEffect(Unit) { ttsReady = true }
             val textToSpeech: TextToSpeechInstance? = if (ttsReady) {
-                rememberTextToSpeechOrNull(TextToSpeechEngine.Google)
+                rememberTextToSpeechOrNull(TextToSpeechEngine.SystemDefault)
             } else {
                 null
             }

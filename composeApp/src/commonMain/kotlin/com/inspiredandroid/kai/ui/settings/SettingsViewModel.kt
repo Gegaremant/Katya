@@ -61,6 +61,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class SettingsViewModel(
+    private val appSettings: com.inspiredandroid.kai.data.AppSettings,
     private val wakeWordPlatform: com.inspiredandroid.kai.stt.WakeWordPlatform,
     private val dataRepository: DataRepository,
     private val daemonController: DaemonController,
@@ -211,6 +212,7 @@ class SettingsViewModel(
         onExportSettings = ::onExportSettings,
         onPrepareExport = ::onPrepareExport,
         onImportSettings = ::onImportSettings,
+        onChangeMonitorOverlayMode = ::onChangeMonitorOverlayMode,
         onUndoDelete = ::onUndoDelete,
     )
 
@@ -224,9 +226,7 @@ class SettingsViewModel(
 
     init {
         if (_state.value.isWakeWordEnabled) {
-            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), _state.value.wakeWordTrigger) {
-                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
-            }
+            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), _state.value.wakeWordTrigger)
         }
 
         viewModelScope.launch {
@@ -515,9 +515,14 @@ class SettingsViewModel(
         }
     }
 
-    private fun onChangeThemeMode(mode: ThemeMode) {
-        dataRepository.setThemeMode(mode)
-        _state.update { it.copy(themeMode = mode) }
+    private fun onChangeThemeMode(themeMode: ThemeMode) {
+        appSettings.setThemeMode(themeMode)
+        _state.update { it.copy(themeMode = themeMode) }
+    }
+
+    private fun onChangeMonitorOverlayMode(mode: com.inspiredandroid.kai.data.MonitorOverlayMode) {
+        appSettings.setMonitorOverlayMode(mode)
+        _state.update { it.copy(monitorOverlayMode = mode) }
     }
 
     private fun onToggleMemory(enabled: Boolean) {
@@ -611,9 +616,7 @@ class SettingsViewModel(
         dataRepository.setWakeWordEnabled(enabled)
         _state.update { it.copy(isWakeWordEnabled = enabled) }
         if (enabled) {
-            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), _state.value.wakeWordTrigger) {
-                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
-            }
+            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), _state.value.wakeWordTrigger)
         } else {
             wakeWordPlatform.stopListening()
         }
@@ -634,9 +637,7 @@ class SettingsViewModel(
         _state.update { it.copy(wakeWordTrigger = trigger) }
         if (_state.value.isWakeWordEnabled) {
             wakeWordPlatform.stopListening()
-            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), trigger) {
-                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
-            }
+            wakeWordPlatform.startListening(getModelUrl(_state.value.wakeWordModelLang), trigger)
         }
     }
 
@@ -650,9 +651,7 @@ class SettingsViewModel(
         }
         if (_state.value.isWakeWordEnabled) {
             wakeWordPlatform.stopListening()
-            wakeWordPlatform.startListening(getModelUrl(lang), _state.value.wakeWordTrigger) {
-                wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
-            }
+            wakeWordPlatform.startListening(getModelUrl(lang), _state.value.wakeWordTrigger)
         }
     }
 

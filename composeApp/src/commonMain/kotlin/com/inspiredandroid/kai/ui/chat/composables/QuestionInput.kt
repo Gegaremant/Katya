@@ -103,7 +103,11 @@ fun QuestionInput(
     isLoading: Boolean = false,
     cancel: () -> Unit = {},
     availableServices: ImmutableList<ServiceEntry> = persistentListOf(),
+    selectedService: ServiceEntry = availableServices.first(),
     onSelectService: (String) -> Unit = {},
+    sttController: com.inspiredandroid.kai.stt.SttController? = koinInject(),
+    audioPermissionController: com.inspiredandroid.kai.tools.AudioPermissionController? = koinInject(),
+    wakeWordTriggerCount: Int = 0,
     installedSkills: ImmutableList<SkillManifest> = persistentListOf(),
     modifier: Modifier = Modifier,
 ) {
@@ -209,6 +213,17 @@ fun QuestionInput(
             }
         } else {
             null
+        }
+        
+        LaunchedEffect(wakeWordTriggerCount) {
+            if (wakeWordTriggerCount > 0) {
+                if (audioPermissionController?.requestPermission() == true) {
+                    sttController?.startListening { result ->
+                        onTextStateChange(TextFieldValue(result, TextRange(result.length)))
+                        submitQuestion()
+                    }
+                }
+            }
         }
 
         val focusRequester = remember { FocusRequester() }

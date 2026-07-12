@@ -46,6 +46,9 @@ import kotlin.time.Duration.Companion.seconds
 class ChatViewModel(
     private val dataRepository: DataRepository,
     private val taskScheduler: TaskScheduler,
+    private val monitorService: com.inspiredandroid.kai.monitor.MonitorService,
+    private val wakeWordPlatform: com.inspiredandroid.kai.stt.WakeWordPlatform,
+    private val appSettings: com.inspiredandroid.kai.data.AppSettings,
     private val backgroundDispatcher: CoroutineContext = getBackgroundDispatcher(),
     private val localNetworkPermissionController: LocalNetworkPermissionController = LocalNetworkPermissionController(),
 ) : ViewModel() {
@@ -83,8 +86,11 @@ class ChatViewModel(
             actions = actions,
             showPrivacyInfo = dataRepository.isUsingSharedKey(),
             isSpeechOutputEnabled = dataRepository.isVoiceResponseEnabled(),
+            monitorOverlayMode = appSettings.getMonitorOverlayMode(),
         ),
     )
+    val monitorStats = monitorService.stats
+    val wakeWordTriggered = wakeWordPlatform.wakeWordTriggered
 
     init {
         updateAvailableServices()
@@ -96,7 +102,28 @@ class ChatViewModel(
             dataRepository.loadConversations()
             dataRepository.restoreCurrentConversation()
             presetInteractiveModeForCurrentConversation()
+            
+            // Start Wake Word listening if enabled
+            if (dataRepository.isWakeWordEnabled()) {
+                val lang = dataRepository.getWakeWordModelLang()
+                val url = when (lang) {
+                    "ru" -> "https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip"
+                    "en" -> "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+                    else -> "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+                }
+                wakeWordPlatform.startListening(url, dataRepository.getWakeWordTrigger())
+            }
+            
             _state.update { it.copy(isRestoring = false) }
+        }
+
+        viewModelScope.launch {
+            wakeWordPlatform.wakeWordTriggered.collect {
+                wakeWordPlatform.triggerWakeWordResponse(
+                    dataRepository.isWakeWordVibrationEnabled(),
+                    dataRepository.isWakeWordSoundEnabled()
+                )
+            }
         }
 
         viewModelScope.launch(backgroundDispatcher) {
@@ -137,6 +164,23 @@ class ChatViewModel(
                     startNewChat()
                     dataRepository.consumeOpenAssistRequest()
                 }
+        }
+
+        viewModelScope.launch {
+            appSettings.monitorOverlayModeFlow.collect { mode ->
+                _state.update { it.copy(monitorOverlayMode = mode) }
+                if (mode != com.inspiredandroid.kai.data.MonitorOverlayMode.OFF) {
+                    monitorService.startMonitoring(
+                        host = appSettings.getServerIp(),
+                        port = appSettings.getServerPort(),
+                        user = appSettings.getServerUser(),
+                        pass = appSettings.getServerPassword(),
+                        isFullMode = (mode == com.inspiredandroid.kai.data.MonitorOverlayMode.FULL)
+                    )
+                } else {
+                    monitorService.stopMonitoring()
+                }
+            }
         }
     }
 

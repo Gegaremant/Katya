@@ -34,6 +34,8 @@ import com.inspiredandroid.kai.tools.NotificationListenerController
 import com.inspiredandroid.kai.tools.NotificationPermissionController
 import com.inspiredandroid.kai.tools.SmsPermissionController
 import com.inspiredandroid.kai.tools.SmsSendPermissionController
+import com.inspiredandroid.kai.monitor.MonitorService
+import com.inspiredandroid.kai.monitor.createMonitorService
 import com.inspiredandroid.kai.tunnel.SshTunnelService
 import com.inspiredandroid.kai.tunnel.createTunnelService
 import com.inspiredandroid.kai.ui.chat.ChatViewModel
@@ -154,13 +156,14 @@ val appModule = module {
         )
     }
     single<SshTunnelService> { createTunnelService() }
+    single<MonitorService> { createMonitorService() }
     single<DaemonController> { createDaemonController() }
     single<SandboxController> { createSandboxController() }
-    viewModel { SettingsViewModel(get<com.inspiredandroid.kai.stt.WakeWordPlatform>(), get<DataRepository>(), get<DaemonController>(), get<NotificationPermissionController>(), get<TaskScheduler>(), localNetworkPermissionController = get<LocalNetworkPermissionController>()) }
+    viewModel { SettingsViewModel(get<com.inspiredandroid.kai.data.AppSettings>(), get<com.inspiredandroid.kai.stt.WakeWordPlatform>(), get<DataRepository>(), get<DaemonController>(), get<NotificationPermissionController>(), get<TaskScheduler>(), localNetworkPermissionController = get<LocalNetworkPermissionController>()) }
     viewModel { SandboxViewModel(get<DataRepository>(), get<SandboxController>()) }
     viewModel { SandboxFileBrowserViewModel(get<SandboxController>()) }
     viewModel { SandboxPackagesViewModel(get<SandboxController>()) }
     viewModel { SandboxSessionViewModel(get<SandboxController>(), get<DataRepository>()) }
     viewModel { SplinterlandsViewModel(get<DataRepository>(), get(), get(), get<SplinterlandsApi>()) }
-    viewModel { ChatViewModel(get<DataRepository>(), get<TaskScheduler>(), localNetworkPermissionController = get<LocalNetworkPermissionController>()) }
+    viewModel { ChatViewModel(get<DataRepository>(), get<TaskScheduler>(), get<MonitorService>(), get<com.inspiredandroid.kai.stt.WakeWordPlatform>(), get<AppSettings>(), localNetworkPermissionController = get<LocalNetworkPermissionController>()) }
 }

@@ -93,6 +93,7 @@ data class ChatUiState(
     val quickActions: ImmutableList<QuickAction> = persistentListOf(),
     val isRestoring: Boolean = true,
     val installedSkills: ImmutableList<com.inspiredandroid.kai.skills.SkillManifest> = persistentListOf(),
+    val monitorOverlayMode: com.inspiredandroid.kai.data.MonitorOverlayMode = com.inspiredandroid.kai.data.MonitorOverlayMode.OFF,
 ) {
     val heartbeatConversationId: String?
         get() = savedConversations.firstOrNull { it.isHeartbeat }?.id

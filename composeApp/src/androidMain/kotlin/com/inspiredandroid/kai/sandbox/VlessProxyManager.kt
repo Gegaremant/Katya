@@ -2,6 +2,7 @@ package com.inspiredandroid.kai.sandbox
 
 import android.util.Log
 import com.inspiredandroid.kai.data.DataRepository
+import com.inspiredandroid.kai.tools.AppLogger
 import com.inspiredandroid.kai.tools.VlessParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,7 +60,7 @@ class VlessProxyManager(
                 }
 
                 if (isRooted) {
-                    Log.d("VlessProxyManager", "Starting xray with root privileges")
+                    AppLogger.d("VlessProxyManager", "Starting xray with root privileges")
                     val prootPath = linuxSandboxManager.prootPath
                     val rootfs = linuxSandboxManager.rootfsPath
                     val home = linuxSandboxManager.homePath
@@ -70,11 +71,11 @@ class VlessProxyManager(
                     rootProcess = Runtime.getRuntime().exec(arrayOf("su", "-c", command))
                     rootProcess?.waitFor()
                 } else {
-                    Log.d("VlessProxyManager", "Starting xray with proot (non-root)")
+                    AppLogger.d("VlessProxyManager", "Starting xray with proot (non-root)")
                     val executor = linuxSandboxManager.createProotExecutor()
                     prootHandle = executor.executeStreaming(
                         command = "$xrayBinary -c $configPathInSandbox",
-                        onStdout = { Log.d("XrayOut", it) },
+                        onStdout = { AppLogger.d("XrayOut", it) },
                         onStderr = { Log.e("XrayErr", it) },
                     )
                     prootHandle?.awaitExit()
@@ -86,7 +87,7 @@ class VlessProxyManager(
     }
 
     fun stop() {
-        Log.d("VlessProxyManager", "Stopping VLESS proxy")
+        AppLogger.d("VlessProxyManager", "Stopping VLESS proxy")
         proxyJob?.cancel()
         proxyJob = null
 

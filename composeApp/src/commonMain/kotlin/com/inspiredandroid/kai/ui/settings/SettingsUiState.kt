@@ -138,6 +138,7 @@ data class SettingsUiState(
     val currentSponsors: ImmutableList<SponsorsResponseDto.Sponsor> = persistentListOf(),
     val pastSponsors: ImmutableList<SponsorsResponseDto.Sponsor> = persistentListOf(),
     val pendingDeletion: PendingDeletion? = null,
+    val monitorOverlayMode: com.inspiredandroid.kai.data.MonitorOverlayMode = com.inspiredandroid.kai.data.MonitorOverlayMode.OFF,
 )
 
 @Immutable

@@ -50,6 +50,9 @@ fun ServersContent(
     val tunnelState by tunnelService.tunnelState.collectAsState()
     val scope = rememberCoroutineScope()
 
+    val monitorOverlayMode by appSettings.monitorOverlayModeFlow.collectAsState()
+    val onChangeMonitorOverlayMode: (com.inspiredandroid.kai.data.MonitorOverlayMode) -> Unit = { appSettings.setMonitorOverlayMode(it) }
+
     Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
         Text("Настройки мониторинга серверов", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onSurface)
         Spacer(Modifier.height(8.dp))
@@ -170,6 +173,28 @@ fun ServersContent(
         if (tunnelState.error != null) {
             Spacer(Modifier.height(8.dp))
             Text("Ошибка: ${tunnelState.error}", color = MaterialTheme.colorScheme.error)
+        }
+
+        Spacer(Modifier.height(32.dp))
+        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
+
+        Text("Мониторинг", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+            Text("Режим оверлея", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                listOf(
+                    com.inspiredandroid.kai.data.MonitorOverlayMode.OFF to "Откл",
+                    com.inspiredandroid.kai.data.MonitorOverlayMode.SHORT to "Кратко",
+                    com.inspiredandroid.kai.data.MonitorOverlayMode.FULL to "Полная"
+                ).forEach { (mode, label) ->
+                    androidx.compose.material3.FilterChip(
+                        selected = monitorOverlayMode == mode,
+                        onClick = { onChangeMonitorOverlayMode(mode) },
+                        label = { Text(label) }
+                    )
+                }
+            }
         }
 
         Spacer(Modifier.height(32.dp))

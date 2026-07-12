@@ -37,6 +37,12 @@ enum class ThemeMode {
     OledBlack,
 }
 
+enum class MonitorOverlayMode {
+    OFF,
+    SHORT,
+    FULL
+}
+
 /**
  * Stricter than [detectImportSections]: only includes sections that contain actual user data,
  * skipping ones that exist purely because of default feature-toggle flags (e.g. `sms_enabled = false`,
@@ -358,6 +364,29 @@ class AppSettings(internal val settings: Settings) {
     fun setThemeMode(mode: ThemeMode) {
         settings.putString(KEY_THEME_MODE, mode.name)
         _themeModeFlow.value = mode
+    }
+    
+    // Monitor Overlay Mode
+    private val _monitorOverlayModeFlow = MutableStateFlow(loadInitialMonitorOverlayMode())
+    val monitorOverlayModeFlow: StateFlow<MonitorOverlayMode> = _monitorOverlayModeFlow
+
+    fun getMonitorOverlayMode(): MonitorOverlayMode = _monitorOverlayModeFlow.value
+
+    fun setMonitorOverlayMode(mode: MonitorOverlayMode) {
+        settings.putString(KEY_MONITOR_OVERLAY_MODE, mode.name)
+        _monitorOverlayModeFlow.value = mode
+    }
+
+    private fun loadInitialMonitorOverlayMode(): MonitorOverlayMode {
+        val raw = settings.getString(KEY_MONITOR_OVERLAY_MODE, "")
+        if (raw.isNotEmpty()) {
+            return try {
+                MonitorOverlayMode.valueOf(raw)
+            } catch (_: IllegalArgumentException) {
+                MonitorOverlayMode.SHORT
+            }
+        }
+        return MonitorOverlayMode.SHORT
     }
 
     private fun loadInitialThemeMode(): ThemeMode {
@@ -701,6 +730,8 @@ class AppSettings(internal val settings: Settings) {
         private const val KEY_WAKE_WORD_TRIGGER = "wake_word_trigger"
         private const val KEY_WAKE_WORD_VIBRATION = "wake_word_vibration"
         private const val KEY_WAKE_WORD_SOUND = "wake_word_sound"
+
+        const val KEY_MONITOR_OVERLAY_MODE = "monitor_overlay_mode"
 
         // Basic memory guidance shared by every chat variant. The advanced `## Structured
         // Learning` block lives in `ChatSystemPromptBuilder.DEFAULT_STRUCTURED_LEARNING_SECTION`

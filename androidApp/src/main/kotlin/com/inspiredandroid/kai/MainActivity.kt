@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
             var ttsReady by remember { mutableStateOf(false) }
             LaunchedEffect(Unit) { ttsReady = true }
             val textToSpeech = if (ttsReady) {
-                rememberTextToSpeechOrNull(TextToSpeechEngine.Google)
+                rememberTextToSpeechOrNull(TextToSpeechEngine.SystemDefault)
             } else {
                 null
             }

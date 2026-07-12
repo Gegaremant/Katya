@@ -35,6 +35,9 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
     private val _isDownloading = MutableStateFlow(false)
     override val isDownloading: StateFlow<Boolean> = _isDownloading.asStateFlow()
 
+    private val _wakeWordTriggered = kotlinx.coroutines.flow.MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST)
+    override val wakeWordTriggered: kotlinx.coroutines.flow.SharedFlow<Unit> = _wakeWordTriggered
+
     private var speechService: SpeechService? = null
     private var activeModel: Model? = null
 
@@ -136,7 +139,7 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
         }
     }
 
-    override fun startListening(modelUrl: String, triggerWord: String, onWakeWordDetected: () -> Unit) {
+    override fun startListening(modelUrl: String, triggerWord: String) {
         if (modelUrl.isEmpty() || !isModelReady(modelUrl)) return
         currentModelUrl = modelUrl
 
@@ -151,10 +154,10 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
             speechService = SpeechService(recognizer, 16000.0f)
             speechService?.startListening(object : org.vosk.android.RecognitionListener {
                 override fun onPartialResult(hypothesis: String?) {
-                    checkWakeWord(hypothesis, triggerWord, onWakeWordDetected)
+                    checkWakeWord(hypothesis, triggerWord)
                 }
                 override fun onResult(hypothesis: String?) {
-                    checkWakeWord(hypothesis, triggerWord, onWakeWordDetected)
+                    checkWakeWord(hypothesis, triggerWord)
                 }
                 override fun onFinalResult(hypothesis: String?) {}
                 override fun onError(e: Exception?) {}
@@ -165,13 +168,13 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
         }
     }
 
-    private fun checkWakeWord(hypothesis: String?, triggerWord: String, onWakeWordDetected: () -> Unit) {
+    private fun checkWakeWord(hypothesis: String?, triggerWord: String) {
         val lowerHypothesis = hypothesis?.lowercase() ?: return
         val lowerTrigger = triggerWord.lowercase()
         if (lowerHypothesis.contains(lowerTrigger)) {
             // Prevent multiple triggers in a row
             stopListening()
-            onWakeWordDetected()
+            _wakeWordTriggered.tryEmit(Unit)
             // It will be restarted after response
         }
     }

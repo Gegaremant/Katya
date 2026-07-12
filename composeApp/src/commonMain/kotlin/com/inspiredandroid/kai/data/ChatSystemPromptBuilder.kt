@@ -231,6 +231,9 @@ internal fun buildChatSystemPrompt(
     }
 
     appendContextSection(runtime)
+    
+    append("\n## Output Formatting\n")
+    append("Do not use raw HTML tags (like <br>, <b>, <p>, etc) in your responses, as they will not be rendered correctly. Always use standard Markdown formatting instead.\n")
 
     if (variant == SystemPromptVariant.CHAT_REMOTE) {
         when (uiMode) {

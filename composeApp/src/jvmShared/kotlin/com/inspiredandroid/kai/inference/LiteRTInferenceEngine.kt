@@ -9,6 +9,7 @@ import com.google.ai.edge.litertlm.Message
 import com.google.ai.edge.litertlm.OpenApiTool
 import com.google.ai.edge.litertlm.SamplerConfig
 import com.google.ai.edge.litertlm.tool
+import com.inspiredandroid.kai.tools.AppLogger
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,7 +111,7 @@ class LiteRTInferenceEngine : LocalInferenceEngine {
                 }
 
                 val requestedTokens = if (contextTokens > 0) contextTokens else null
-                println("LiteRT: initializing model=${model.id} maxNumTokens=$requestedTokens")
+                AppLogger.d("LiteRT", "initializing model=${model.id} maxNumTokens=$requestedTokens")
 
                 val newEngine = try {
                     try {
@@ -120,7 +121,7 @@ class LiteRTInferenceEngine : LocalInferenceEngine {
                     }
                 } catch (e: Exception) {
                     // Context size not supported — retry with model default
-                    println("LiteRT: init failed with maxNumTokens=$requestedTokens, falling back to default: ${e.message}")
+                    AppLogger.e("LiteRT", "init failed with maxNumTokens=$requestedTokens, falling back to default: ${e.message}")
                     if (requestedTokens != null) {
                         try {
                             initWithBackend(Backend.GPU(), null)
