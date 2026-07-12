@@ -380,6 +380,13 @@ class AppSettings(internal val settings: Settings) {
         settings.putBoolean(KEY_DAEMON_ENABLED, enabled)
     }
 
+    // Root access dialog
+    fun hasRequestedRoot(): Boolean = settings.getBoolean(KEY_HAS_REQUESTED_ROOT, false)
+
+    fun setRequestedRoot(requested: Boolean) {
+        settings.putBoolean(KEY_HAS_REQUESTED_ROOT, requested)
+    }
+
     // Linux Sandbox
     fun isSandboxEnabled(): Boolean = settings.getBoolean(KEY_SANDBOX_ENABLED, true)
 
@@ -624,6 +631,7 @@ class AppSettings(internal val settings: Settings) {
         const val KEY_OLED_MODE_ENABLED = "oled_mode_enabled"
         const val KEY_THEME_MODE = "theme_mode"
         const val KEY_DAEMON_ENABLED = "daemon_enabled"
+        const val KEY_HAS_REQUESTED_ROOT = "has_requested_root"
         const val KEY_HEARTBEAT_CONFIG = "heartbeat_config"
         const val KEY_HEARTBEAT_PROMPT = "heartbeat_prompt"
         const val KEY_HEARTBEAT_LOG = "heartbeat_log"

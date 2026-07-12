@@ -161,7 +161,30 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkSystemPermissions() {
-        // 1. Root
+        val appSettings: AppSettings = get()
+        if (!appSettings.hasRequestedRoot()) {
+            android.app.AlertDialog.Builder(this)
+                .setTitle("Запрос Root-прав")
+                .setMessage("Предоставить приложению Root-доступ? Это может понадобиться для продвинутого сетевого взаимодействия (туннелей) и некоторых системных функций.")
+                .setPositiveButton("Разрешить") { _, _ ->
+                    appSettings.setRequestedRoot(true)
+                    requestRoot()
+                    checkBatteryOptimization()
+                }
+                .setNegativeButton("Отклонить") { _, _ ->
+                    appSettings.setRequestedRoot(true)
+                    checkBatteryOptimization()
+                }
+                .setCancelable(false)
+                .show()
+        } else {
+            // If already requested, we can silently try to get root in background just in case it was granted
+            requestRoot()
+            checkBatteryOptimization()
+        }
+    }
+
+    private fun requestRoot() {
         Thread {
             try {
                 val process = Runtime.getRuntime().exec("su")
@@ -172,7 +195,9 @@ class MainActivity : ComponentActivity() {
                 e.printStackTrace()
             }
         }.start()
+    }
 
+    private fun checkBatteryOptimization() {
         // 2. Battery Optimization
         val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {

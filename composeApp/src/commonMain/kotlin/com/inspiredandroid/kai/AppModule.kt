@@ -34,6 +34,8 @@ import com.inspiredandroid.kai.tools.NotificationListenerController
 import com.inspiredandroid.kai.tools.NotificationPermissionController
 import com.inspiredandroid.kai.tools.SmsPermissionController
 import com.inspiredandroid.kai.tools.SmsSendPermissionController
+import com.inspiredandroid.kai.tunnel.SshTunnelService
+import com.inspiredandroid.kai.tunnel.createTunnelService
 import com.inspiredandroid.kai.ui.chat.ChatViewModel
 import com.inspiredandroid.kai.ui.sandbox.SandboxFileBrowserViewModel
 import com.inspiredandroid.kai.ui.sandbox.SandboxPackagesViewModel
@@ -151,6 +153,7 @@ val appModule = module {
             get<NotificationStore>(),
         )
     }
+    single<SshTunnelService> { createTunnelService() }
     single<DaemonController> { createDaemonController() }
     single<SandboxController> { createSandboxController() }
     viewModel { SettingsViewModel(get<com.inspiredandroid.kai.stt.WakeWordPlatform>(), get<DataRepository>(), get<DaemonController>(), get<NotificationPermissionController>(), get<TaskScheduler>(), localNetworkPermissionController = get<LocalNetworkPermissionController>()) }

@@ -9,20 +9,27 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.inspiredandroid.kai.data.AppSettings
+import com.inspiredandroid.kai.tunnel.SshTunnelService
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
-fun ServersContent(appSettings: AppSettings = koinInject()) {
+fun ServersContent(
+    appSettings: AppSettings = koinInject(),
+    tunnelService: SshTunnelService = koinInject()
+) {
     var ip by remember { mutableStateOf(appSettings.getServerIp()) }
     var port by remember { mutableStateOf(appSettings.getServerPort().toString()) }
     var user by remember { mutableStateOf(appSettings.getServerUser()) }
     var password by remember { mutableStateOf(appSettings.getServerPassword()) }
 
-    var tunnelLocalPort by remember { mutableStateOf("8080") }
-    var tunnelRemotePort by remember { mutableStateOf("80") }
+    var tunnelLocalPort by remember { mutableStateOf("11434") }
+    var tunnelRemotePort by remember { mutableStateOf("11434") }
 
     var showSavedMessage by remember { mutableStateOf(false) }
-    var showTunnelMessage by remember { mutableStateOf(false) }
+
+    val tunnelState by tunnelService.tunnelState.collectAsState()
+    val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
         Text("Настройки мониторинга серверов", style = MaterialTheme.typography.titleLarge)
@@ -103,6 +110,7 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
                 label = { Text("Локальный порт") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f),
+                enabled = !tunnelState.isRunning,
             )
             OutlinedTextField(
                 value = tunnelRemotePort,
@@ -110,20 +118,33 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
                 label = { Text("Удаленный порт") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f),
+                enabled = !tunnelState.isRunning,
             )
         }
         Spacer(Modifier.height(16.dp))
 
         Button(onClick = {
-            // Placeholder logic for raising a tunnel
-            showTunnelMessage = true
+            scope.launch {
+                if (tunnelState.isRunning) {
+                    tunnelService.stopTunnel()
+                } else {
+                    val local = tunnelLocalPort.toIntOrNull() ?: 11434
+                    val remote = tunnelRemotePort.toIntOrNull() ?: 11434
+                    val sshPort = port.toIntOrNull() ?: 22
+                    tunnelService.startTunnel(local, remote, ip, sshPort, user, password)
+                }
+            }
         }) {
-            Text("Поднять туннель")
+            Text(if (tunnelState.isRunning) "Остановить туннель" else "Поднять туннель")
         }
 
-        if (showTunnelMessage) {
+        if (tunnelState.message.isNotEmpty()) {
             Spacer(Modifier.height(8.dp))
-            Text("Запрос на создание туннеля отправлен (в разработке)", color = MaterialTheme.colorScheme.primary)
+            Text(tunnelState.message, color = MaterialTheme.colorScheme.primary)
+        }
+        if (tunnelState.error != null) {
+            Spacer(Modifier.height(8.dp))
+            Text("Ошибка: ${tunnelState.error}", color = MaterialTheme.colorScheme.error)
         }
     }
 }

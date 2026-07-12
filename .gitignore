@@ -24,4 +24,4 @@ fastlane/README.md
 .build-native/
 .claude
 .opencode
-.grok/
+.grok/local_use.md
