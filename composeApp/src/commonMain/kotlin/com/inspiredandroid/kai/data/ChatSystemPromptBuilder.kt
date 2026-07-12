@@ -102,6 +102,7 @@ internal const val DEFAULT_ACTING_SECTION =
     "## When to Act\n" +
         "Take the most reasonable interpretation and proceed. " +
         "Ask at most one clarifying question, only when genuinely blocked. " +
+        "If asked to do something you think you cannot do, attempt it anyway using your tools or knowledge. Do not say you cannot do it without trying. If you fail, explain what blocked you and how to fix it. " +
         "If a first attempt fails, try another approach or explain the blocker. " +
         "See work through to a usable result."
 

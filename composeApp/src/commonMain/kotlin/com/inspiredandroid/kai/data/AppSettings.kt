@@ -292,7 +292,7 @@ class AppSettings(internal val settings: Settings) {
         settings.putString(KEY_WAKE_WORD_TRIGGER, trigger)
     }
 
-    fun getWakeWordTrigger(): String = settings.getString(KEY_WAKE_WORD_TRIGGER, "привет катя")
+    fun getWakeWordTrigger(): String = settings.getString(KEY_WAKE_WORD_TRIGGER, "Привет Катя")
 
     fun setWakeWordVibration(enabled: Boolean) {
         settings.putBoolean(KEY_WAKE_WORD_VIBRATION, enabled)

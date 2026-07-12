@@ -231,13 +231,23 @@ class SettingsViewModel(
 
         viewModelScope.launch {
             wakeWordPlatform.isDownloading.collect { isDownloading ->
-                _state.update { it.copy(isVoskDownloading = isDownloading) }
+                _state.update { 
+                    it.copy(
+                        isVoskDownloading = isDownloading,
+                        isVoskReady = wakeWordPlatform.isModelReady(getModelUrl(it.wakeWordModelLang))
+                    ) 
+                }
             }
         }
         viewModelScope.launch {
             wakeWordPlatform.downloadProgress.collect { progress ->
                 _state.update { it.copy(voskDownloadProgress = progress) }
             }
+        }
+        
+        // Initial check for Vosk readiness
+        _state.update { 
+            it.copy(isVoskReady = wakeWordPlatform.isModelReady(getModelUrl(it.wakeWordModelLang))) 
         }
 
         // Observe download state from the engine singleton (survives activity recreation)
@@ -632,7 +642,12 @@ class SettingsViewModel(
 
     private fun onChangeWakeWordModelLang(lang: String) {
         dataRepository.setWakeWordModelLang(lang)
-        _state.update { it.copy(wakeWordModelLang = lang) }
+        _state.update { 
+            it.copy(
+                wakeWordModelLang = lang,
+                isVoskReady = wakeWordPlatform.isModelReady(getModelUrl(lang))
+            ) 
+        }
         if (_state.value.isWakeWordEnabled) {
             wakeWordPlatform.stopListening()
             wakeWordPlatform.startListening(getModelUrl(lang), _state.value.wakeWordTrigger) {

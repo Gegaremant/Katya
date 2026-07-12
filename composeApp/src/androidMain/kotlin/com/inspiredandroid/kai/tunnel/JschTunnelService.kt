@@ -2,12 +2,14 @@ package com.inspiredandroid.kai.tunnel
 
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Properties
 
@@ -15,6 +17,7 @@ class JschTunnelService : SshTunnelService {
     private val _tunnelState = MutableStateFlow(TunnelState())
     override val tunnelState: StateFlow<TunnelState> = _tunnelState
 
+    private var tunnelJob: Job? = null
     private var session: Session? = null
 
     override suspend fun startTunnel(
@@ -25,7 +28,10 @@ class JschTunnelService : SshTunnelService {
         sshUser: String,
         sshPass: String,
     ) {
-        withContext(Dispatchers.IO) {
+        // Cancel any existing tunnel job
+        tunnelJob?.cancel()
+        
+        tunnelJob = CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (session != null && session!!.isConnected) {
                     stopTunnel()

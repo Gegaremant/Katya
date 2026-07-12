@@ -18,6 +18,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -148,6 +149,7 @@ internal fun GeneralContent(uiState: SettingsUiState, actions: SettingsActions) 
                         onToggleWakeWordSound = actions.setIsWakeWordSoundEnabled,
                         isVoskDownloading = uiState.isVoskDownloading,
                         voskDownloadProgress = uiState.voskDownloadProgress,
+                        isVoskReady = uiState.isVoskReady,
                         onDownloadVosk = actions.onDownloadVosk,
                     )
                 }
@@ -227,6 +229,14 @@ private fun VoiceResponseToggle(
             checked = isVoiceResponseEnabled,
             onCheckedChange = onToggleVoiceResponse,
         )
+        if (com.inspiredandroid.kai.currentPlatform == com.inspiredandroid.kai.Platform.Mobile.Android) {
+            TextButton(
+                onClick = { com.inspiredandroid.kai.openTtsSettings() },
+                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
+            ) {
+                Text("Выбор голоса (Настройки Android)")
+            }
+        }
     }
 }
 

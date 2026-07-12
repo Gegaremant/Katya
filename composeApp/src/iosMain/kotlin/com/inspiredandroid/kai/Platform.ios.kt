@@ -213,3 +213,5 @@ actual fun sendHeartbeatNotification(title: String, body: String) {
     } catch (_: Throwable) {
     }
 }
+
+actual fun openTtsSettings() {}

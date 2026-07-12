@@ -16,6 +16,7 @@ class KaiApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        context = this
         startKoin {
             androidContext(this@KaiApplication)
             modules(appModule, sandboxModule, com.inspiredandroid.kai.stt.sttModule)
@@ -31,5 +32,9 @@ class KaiApplication : Application() {
                 taskScheduler.appInForeground = false
             }
         })
+    }
+
+    companion object {
+        lateinit var context: android.content.Context
     }
 }

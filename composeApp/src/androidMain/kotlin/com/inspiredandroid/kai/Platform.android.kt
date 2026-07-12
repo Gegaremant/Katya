@@ -529,3 +529,10 @@ actual suspend fun saveFileToDevice(bytes: ByteArray, baseName: String, extensio
     val file = FileKit.openFileSaver(suggestedName = baseName, defaultExtension = extension)
     file?.write(bytes)
 }
+
+actual fun openTtsSettings() {
+    val intent = android.content.Intent("com.android.settings.TTS_SETTINGS")
+    intent.flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+    val context: android.content.Context = org.koin.java.KoinJavaComponent.getKoin().get(android.content.Context::class)
+    context.startActivity(intent)
+}

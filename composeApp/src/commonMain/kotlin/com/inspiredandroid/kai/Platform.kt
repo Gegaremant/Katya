@@ -76,6 +76,8 @@ expect suspend fun compressImageBytes(bytes: ByteArray, mimeType: String): ByteA
 
 expect fun openUrl(url: String): Boolean
 
+expect fun openTtsSettings()
+
 @androidx.compose.runtime.Composable
 expect fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit)
 

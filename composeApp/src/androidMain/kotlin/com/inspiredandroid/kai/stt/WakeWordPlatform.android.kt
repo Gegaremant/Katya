@@ -141,6 +141,8 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
         currentModelUrl = modelUrl
 
         try {
+            stopListening() // Always stop any previous listening service before starting a new one
+            
             if (activeModel == null) {
                 activeModel = Model(getModelDirectory(modelUrl).absolutePath)
             }

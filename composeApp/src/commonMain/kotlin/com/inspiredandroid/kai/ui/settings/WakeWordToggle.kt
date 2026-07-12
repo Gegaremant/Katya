@@ -49,6 +49,7 @@ fun WakeWordToggle(
     onToggleWakeWordSound: (Boolean) -> Unit,
     isVoskDownloading: Boolean,
     voskDownloadProgress: Float?,
+    isVoskReady: Boolean,
     onDownloadVosk: () -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -107,30 +108,32 @@ fun WakeWordToggle(
             }
 
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                Text(text = "Вибрация при активации", modifier = Modifier.weight(1f))
+                Text(text = "Вибрация при активации", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
                 Switch(checked = isWakeWordVibrationEnabled, onCheckedChange = onToggleWakeWordVibration)
             }
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                Text(text = "Звук при активации", modifier = Modifier.weight(1f))
+                Text(text = "Звук при активации", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
                 Switch(checked = isWakeWordSoundEnabled, onCheckedChange = onToggleWakeWordSound)
             }
 
-            if (isVoskDownloading) {
-                LinearProgressIndicator(
-                    progress = { voskDownloadProgress ?: 0f },
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                )
-                Text(
-                    text = "Загрузка: ${((voskDownloadProgress ?: 0f) * 100).toInt()}%",
-                    modifier = Modifier.padding(start = 16.dp, top = 4.dp),
-                    style = MaterialTheme.typography.bodySmall,
-                )
-            } else {
-                TextButton(
-                    onClick = onDownloadVosk,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                ) {
-                    Text(stringResource(Res.string.settings_wake_word_download_vosk))
+            if (!isVoskReady) {
+                if (isVoskDownloading) {
+                    LinearProgressIndicator(
+                        progress = { voskDownloadProgress ?: 0f },
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    )
+                    Text(
+                        text = "Загрузка: ${((voskDownloadProgress ?: 0f) * 100).toInt()}%",
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                } else {
+                    TextButton(
+                        onClick = onDownloadVosk,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    ) {
+                        Text(stringResource(Res.string.settings_wake_word_download_vosk))
+                    }
                 }
             }
         }

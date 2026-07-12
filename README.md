@@ -15,6 +15,12 @@ An **open-source AI assistant with persistent memory** that runs on **Android, i
 
 ## Features
 
+### Release 1.0.5 Updates
+- **Voice Selection**: Added a quick link to Android's System TTS settings to change voices directly from the app.
+- **SSH Tunnel Fix**: The SSH tunnel now automatically reconnects reliably.
+- **AI Task Execution**: The assistant now makes an attempt to execute tasks before deciding it cannot do them.
+- **Microphone Privacy**: Fixed microphone permission usage so the microphone is completely inactive when Voice Activation is explicitly turned off.
+
 ### Wake Word (Voice Activation)
 
 Katya supports offline voice wake word detection using [Vosk](https://alphacephei.com/vosk/) speech recognition.

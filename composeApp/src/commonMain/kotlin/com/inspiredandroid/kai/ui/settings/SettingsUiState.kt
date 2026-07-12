@@ -76,6 +76,7 @@ data class SettingsUiState(
     val isWakeWordSoundEnabled: Boolean = true,
     val voskDownloadProgress: Float? = null,
     val isVoskDownloading: Boolean = false,
+    val isVoskReady: Boolean = false,
     val themeMode: ThemeMode = ThemeMode.System,
     val isMemoryEnabled: Boolean = true,
     val memories: ImmutableList<MemoryEntry> = persistentListOf(),
