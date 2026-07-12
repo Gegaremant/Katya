@@ -246,4 +246,8 @@ This project is open-source and maintained by a single developer. If you find th
 ## Release Notes v1.0.3
 - Added Root access confirmation dialog on first launch.
 - Implemented SSH Tunnel via JSch library for connecting to local models on srv-llm.
+- Added Battery Optimization explanation dialog in MainActivity.
+- Translated Quick Actions to Russian and added configuration examples.
+- Updated Local API AI description with reference to the Servers tab for SSH tunnels.
+- Fixed black text on dark theme in GeneralSettings (Dropdowns/Inputs).
 

@@ -467,7 +467,7 @@ sealed class Service(
 
     data object OpenAICompatible : Service(
         id = "openai-compatible",
-        displayName = "OpenAI-Compatible API",
+        displayName = "Local API AI",
         icon = Res.drawable.ic_service_openai_compatible,
         requiresApiKey = false,
         supportsOptionalApiKey = true,

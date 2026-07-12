@@ -201,14 +201,24 @@ class MainActivity : ComponentActivity() {
         // 2. Battery Optimization
         val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-            val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-            intent.data = android.net.Uri.parse("package:$packageName")
-            try {
-                batteryOptLauncher.launch(intent)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                checkAutoRevokePermission()
-            }
+            android.app.AlertDialog.Builder(this)
+                .setTitle("Настройка энергосбережения")
+                .setMessage("Для нормальной работы приложения в фоновом режиме (демон, туннели и автозапуск) требуется отключить автоматическое управление энергопитанием.")
+                .setPositiveButton("Настроить сейчас") { _, _ ->
+                    val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                    intent.data = android.net.Uri.parse("package:$packageName")
+                    try {
+                        batteryOptLauncher.launch(intent)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        checkAutoRevokePermission()
+                    }
+                }
+                .setNegativeButton("Игнорировать") { _, _ ->
+                    checkAutoRevokePermission()
+                }
+                .setCancelable(false)
+                .show()
         } else {
             checkAutoRevokePermission()
         }

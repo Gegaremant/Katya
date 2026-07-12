@@ -643,33 +643,11 @@ private fun OpenAICompatibleSettings(
 
     Spacer(Modifier.height(8.dp))
 
-    val linkColor = MaterialTheme.colorScheme.primary
-    val setupOllamaText = stringResource(Res.string.settings_openai_compatible_setup_ollama)
-    val orOtherServiceText = stringResource(Res.string.settings_openai_compatible_or_other_service)
-    val providersText = stringResource(Res.string.settings_openai_compatible_providers)
-    val annotatedString = remember(setupOllamaText, orOtherServiceText, providersText, linkColor) {
-        buildAnnotatedString {
-            append(setupOllamaText)
-            append(" ")
-            withLink(LinkAnnotation.Url(url = "https://github.com/ollama/ollama")) {
-                withStyle(style = SpanStyle(color = linkColor)) {
-                    append("github.com/ollama/ollama")
-                }
-            }
-            append(" ")
-            append(orOtherServiceText)
-            append(" ")
-            withLink(LinkAnnotation.Url(url = "https://docs.litellm.ai/docs/providers")) {
-                withStyle(style = SpanStyle(color = linkColor)) {
-                    append(providersText)
-                }
-            }
-        }
-    }
     Text(
-        annotatedString,
+        text = "Подключение к локальным AI моделям. При необходимости настройте SSH туннель на вкладке 'Серверы' для удаленного доступа.",
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.onBackground,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 
     Spacer(Modifier.height(16.dp))

@@ -140,6 +140,7 @@ fun KaiOutlinedTextField(
         maxLines = maxLines,
         shape = RoundedCornerShape(12.dp),
         colors = outlineTextFieldColors(),
+        textStyle = androidx.compose.material3.LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
     )
 }
 

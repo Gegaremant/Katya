@@ -379,7 +379,7 @@ private fun QuickActionsSection(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "Управление кнопками быстрых действий, отображаемыми над полем ввода чата.",
+                    text = "Управление кнопками быстрых действий, отображаемыми над полем ввода чата.\n\nПримеры:\n1. Кнопка: 'Переведи', Промпт: 'Переведи этот текст на английский'.\n2. Кнопка: 'Сократи', Промпт: 'Сделай краткую выжимку из этого текста'.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -418,10 +418,10 @@ private fun QuickActionsSection(
                             }
                             Row {
                                 androidx.compose.material3.IconButton(onClick = { isEditing = true }) {
-                                    Icon(imageVector = androidx.compose.material.icons.Icons.Default.Edit, contentDescription = "Edit")
+                                    Icon(imageVector = androidx.compose.material.icons.Icons.Default.Edit, contentDescription = "Редактировать")
                                 }
                                 androidx.compose.material3.IconButton(onClick = { onDeleteQuickAction(action.id) }) {
-                                    Icon(imageVector = androidx.compose.material.icons.Icons.Default.Delete, contentDescription = "Delete")
+                                    Icon(imageVector = androidx.compose.material.icons.Icons.Default.Delete, contentDescription = "Удалить")
                                 }
                             }
                         }
@@ -465,23 +465,23 @@ private fun QuickActionEditor(
         KaiOutlinedTextField(
             value = text,
             onValueChange = { text = it },
-            label = { Text("Button Text") },
+            label = { Text("Название кнопки") },
             modifier = Modifier.fillMaxWidth(),
         )
         KaiOutlinedTextField(
             value = prompt,
             onValueChange = { prompt = it },
-            label = { Text("Prompt") },
+            label = { Text("Промпт / Инструкция") },
             modifier = Modifier.fillMaxWidth(),
         )
         Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
             androidx.compose.material3.TextButton(onClick = onCancel) {
-                Text("Cancel")
+                Text("Отмена")
             }
             androidx.compose.material3.TextButton(onClick = {
                 onSave(initialAction.copy(text = text, prompt = prompt))
             }, enabled = text.isNotBlank() && prompt.isNotBlank()) {
-                Text("Save")
+                Text("Сохранить")
             }
         }
     }
