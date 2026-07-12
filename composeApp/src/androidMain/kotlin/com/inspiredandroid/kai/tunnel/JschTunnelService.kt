@@ -30,7 +30,7 @@ class JschTunnelService : SshTunnelService {
     ) {
         // Cancel any existing tunnel job
         tunnelJob?.cancel()
-        
+
         tunnelJob = CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (session != null && session!!.isConnected) {
