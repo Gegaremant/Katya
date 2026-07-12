@@ -243,7 +243,7 @@ This project is open-source and maintained by a single developer. If you find th
 - **Cross-Platform Compatibility**: Fixed line-ending syntax issues on iOS and JVM targets for the Wake Word feature.
 - **WASM Support**: Initialized WakeWordPlatform stubs for WASM module.
  
-## Release Notes v1.0.3
+## Release Notes v1.0.4
 - Added Root access confirmation dialog on first launch.
 - Implemented SSH Tunnel via JSch library for connecting to local models on srv-llm.
 - Added Battery Optimization explanation dialog in MainActivity.

@@ -1,7 +1,7 @@
 # Release Notes
 ## [Unreleased]
 
-## [1.0.3]
+## [1.0.4]
 ### Added
 - Added Root access confirmation dialog on first launch.
 - Implemented SSH Tunnel via JSch library for connecting to local models on srv-llm.
