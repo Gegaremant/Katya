@@ -15,6 +15,12 @@ An **open-source AI assistant with persistent memory** that runs on **Android, i
 
 ## Features
 
+### Release 1.0.8 Updates
+- **Server Monitor Overlay**: Added a real-time monitor overlay displaying CPU/RAM/GPU usage from your SSH-connected Linux server.
+- **Monitoring Modes**: Toggle between Off, Short, and Full diagnostics (runs `lspci`, `sensors`, `lsblk`, `df -h`) from Server Settings.
+- **Improved UI Safety**: Fixed HTML tags being rendered raw in chat bubbles.
+- **Dependency Refactoring**: Codebase refactored to cleanly pass `AppSettings` to ViewModels and UI.
+
 ### Release 1.0.7 Updates
 - **Custom Logo**: Replaced the default logo animation with a custom Fixiki "Pomogator" shield.
 - **In-App Logging System**: Added `AppLogger` to capture internal logs (such as SSH tunnel connection steps).
