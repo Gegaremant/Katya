@@ -14,6 +14,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.inspiredandroid.kai.data.AppSettings
 import com.inspiredandroid.kai.tunnel.SshTunnelService
+import com.inspiredandroid.kai.tools.AppLogger
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.Alignment
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -32,6 +38,14 @@ fun ServersContent(
 
     var showSavedMessage by remember { mutableStateOf(false) }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    var isLoggingEnabled by remember { mutableStateOf(appSettings.isLoggingEnabled()) }
+    var showLogsDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(isLoggingEnabled) {
+        appSettings.setLoggingEnabled(isLoggingEnabled)
+        AppLogger.isEnabled = isLoggingEnabled
+    }
 
     val tunnelState by tunnelService.tunnelState.collectAsState()
     val scope = rememberCoroutineScope()
@@ -157,5 +171,58 @@ fun ServersContent(
             Spacer(Modifier.height(8.dp))
             Text("Ошибка: ${tunnelState.error}", color = MaterialTheme.colorScheme.error)
         }
+
+        Spacer(Modifier.height(32.dp))
+        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
+
+        Text("Логи", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+            Text("Включить ведение логов", modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
+            Switch(checked = isLoggingEnabled, onCheckedChange = { isLoggingEnabled = it })
+        }
+        Button(onClick = { showLogsDialog = true }) {
+            Text("Посмотреть логи")
+        }
+
+        if (showLogsDialog) {
+            LogsDialog(onDismiss = { showLogsDialog = false })
+        }
     }
 }
+
+@Composable
+fun LogsDialog(onDismiss: () -> Unit) {
+    val logs by AppLogger.logs.collectAsState()
+    val clipboardManager = LocalClipboardManager.current
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Логи приложения") },
+        text = {
+            LazyColumn(modifier = Modifier.fillMaxWidth().height(400.dp)) {
+                items(logs) { log ->
+                    Text(log, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 2.dp), color = MaterialTheme.colorScheme.onSurface)
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Закрыть")
+            }
+        },
+        dismissButton = {
+            Row {
+                TextButton(onClick = {
+                    clipboardManager.setText(AnnotatedString(logs.joinToString("\n")))
+                }) {
+                    Text("Копировать")
+                }
+                TextButton(onClick = { AppLogger.clear() }) {
+                    Text("Очистить")
+                }
+            }
+        }
+    )
+}
+

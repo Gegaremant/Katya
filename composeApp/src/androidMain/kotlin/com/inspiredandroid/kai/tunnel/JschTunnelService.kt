@@ -12,6 +12,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Properties
+import com.inspiredandroid.kai.tools.AppLogger
 
 class JschTunnelService : SshTunnelService {
     private val _tunnelState = MutableStateFlow(TunnelState())
@@ -37,7 +38,7 @@ class JschTunnelService : SshTunnelService {
                     stopTunnel()
                 }
 
-                android.util.Log.i("SshTunnel", "Connecting to $sshIp:$sshPort as $sshUser...")
+                AppLogger.i("SshTunnel", "Connecting to $sshIp:$sshPort as $sshUser...")
                 _tunnelState.value = TunnelState(isRunning = true, message = "Connecting to $sshIp...")
 
                 val jsch = JSch()
@@ -48,15 +49,15 @@ class JschTunnelService : SshTunnelService {
                 config["StrictHostKeyChecking"] = "no"
                 session?.setConfig(config)
 
-                android.util.Log.i("SshTunnel", "Session configured, attempting to connect...")
+                AppLogger.i("SshTunnel", "Session configured, attempting to connect...")
                 // Try to connect
                 session?.connect(10000)
 
-                android.util.Log.i("SshTunnel", "Session connected, setting port forwarding L:$localPort -> 127.0.0.1:$remotePort")
+                AppLogger.i("SshTunnel", "Session connected, setting port forwarding L:$localPort -> 127.0.0.1:$remotePort")
                 // Set port forwarding: bind local port to loopback, forward to 127.0.0.1 on the server
                 session?.setPortForwardingL(localPort, "127.0.0.1", remotePort)
 
-                android.util.Log.i("SshTunnel", "Tunnel established successfully")
+                AppLogger.i("SshTunnel", "Tunnel established successfully")
                 _tunnelState.value = TunnelState(isRunning = true, message = "Tunnel established: localhost:$localPort -> $sshIp:$remotePort")
 
                 // Keep connection alive
@@ -65,12 +66,12 @@ class JschTunnelService : SshTunnelService {
                 }
 
                 if (isActive) {
-                    android.util.Log.w("SshTunnel", "Connection lost")
+                    AppLogger.w("SshTunnel", "Connection lost")
                     _tunnelState.value = TunnelState(isRunning = false, error = "Connection lost")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                android.util.Log.e("SshTunnel", "SSH Error: ${e.message}", e)
+                AppLogger.e("SshTunnel", "SSH Error: ${e.message}")
                 _tunnelState.value = TunnelState(isRunning = false, error = e.message ?: "Failed to establish tunnel")
                 stopTunnel()
             }
