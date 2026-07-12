@@ -90,10 +90,10 @@ class GoldenTrainingScreenshotTest {
      */
     private fun extractKaiUiJson(goldenFile: File): String {
         val content = goldenFile.readText()
-        val assistantMatch = Regex("## Assistant\\n(.*?)$", RegexOption.DOT_MATCHES_ALL).find(content)
+        val assistantMatch = Regex("## Assistant\\r?\\n(.*?)$", RegexOption.DOT_MATCHES_ALL).find(content)
             ?: error("No ## Assistant section in ${goldenFile.name}")
         val assistantContent = assistantMatch.groupValues[1].trim()
-        val fenceMatch = Regex("```kai-ui\\n(.*?)```", RegexOption.DOT_MATCHES_ALL).find(assistantContent)
+        val fenceMatch = Regex("```kai-ui\\r?\\n(.*?)```", RegexOption.DOT_MATCHES_ALL).find(assistantContent)
             ?: error("No kai-ui fence in ${goldenFile.name}")
         return fenceMatch.groupValues[1].trim()
     }

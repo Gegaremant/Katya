@@ -103,7 +103,7 @@ fun QuestionInput(
     isLoading: Boolean = false,
     cancel: () -> Unit = {},
     availableServices: ImmutableList<ServiceEntry> = persistentListOf(),
-    selectedService: ServiceEntry = availableServices.first(),
+    selectedService: ServiceEntry? = availableServices.firstOrNull(),
     onSelectService: (String) -> Unit = {},
     sttController: com.inspiredandroid.kai.stt.SttController? = koinInject(),
     audioPermissionController: com.inspiredandroid.kai.tools.AudioPermissionController? = koinInject(),
