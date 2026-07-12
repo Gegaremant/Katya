@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 data class TunnelState(
     val isRunning: Boolean = false,
     val error: String? = null,
-    val message: String = ""
+    val message: String = "",
 )
 
 interface SshTunnelService {
@@ -17,7 +17,7 @@ interface SshTunnelService {
         sshIp: String,
         sshPort: Int,
         sshUser: String,
-        sshPass: String
+        sshPass: String,
     )
 
     suspend fun stopTunnel()

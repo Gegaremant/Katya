@@ -23,7 +23,7 @@ class JschTunnelService : SshTunnelService {
         sshIp: String,
         sshPort: Int,
         sshUser: String,
-        sshPass: String
+        sshPass: String,
     ) {
         withContext(Dispatchers.IO) {
             try {

@@ -16,7 +16,7 @@ import org.koin.compose.koinInject
 @Composable
 fun ServersContent(
     appSettings: AppSettings = koinInject(),
-    tunnelService: SshTunnelService = koinInject()
+    tunnelService: SshTunnelService = koinInject(),
 ) {
     var ip by remember { mutableStateOf(appSettings.getServerIp()) }
     var port by remember { mutableStateOf(appSettings.getServerPort().toString()) }

@@ -12,7 +12,7 @@ class DummyTunnelService : SshTunnelService {
         sshIp: String,
         sshPort: Int,
         sshUser: String,
-        sshPass: String
+        sshPass: String,
     ) {
         // No-op
     }
