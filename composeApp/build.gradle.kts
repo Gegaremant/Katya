@@ -115,7 +115,8 @@ kotlin {
             implementation(libs.litert.lm)
             implementation(libs.sqldelight.android.driver)
             implementation(libs.jsch)
-            implementation("net.alphaceph:vosk-android:0.3.32")
+            implementation("com.alphacephei:vosk-android:0.3.38@aar")
+            implementation("net.java.dev.jna:jna:5.13.0@aar")
         }
         commonMain.dependencies {
             implementation(libs.compose.material3)
