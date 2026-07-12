@@ -126,6 +126,7 @@ fun WakeWordToggle(
                         text = "Загрузка: ${((voskDownloadProgress ?: 0f) * 100).toInt()}%",
                         modifier = Modifier.padding(start = 16.dp, top = 4.dp),
                         style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 } else {
                     TextButton(
