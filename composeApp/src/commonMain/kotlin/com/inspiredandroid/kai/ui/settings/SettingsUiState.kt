@@ -5,6 +5,7 @@ import com.inspiredandroid.kai.data.EmailAccount
 import com.inspiredandroid.kai.data.EmailSyncState
 import com.inspiredandroid.kai.data.HeartbeatLogEntry
 import com.inspiredandroid.kai.data.MemoryEntry
+import com.inspiredandroid.kai.data.QuickAction
 import com.inspiredandroid.kai.data.ScheduledTask
 import com.inspiredandroid.kai.data.Service
 import com.inspiredandroid.kai.data.ServiceEntry
@@ -16,7 +17,6 @@ import com.inspiredandroid.kai.network.dtos.SponsorsResponseDto
 import com.inspiredandroid.kai.network.tools.ToolInfo
 import com.inspiredandroid.kai.skills.RegistrySkillEntry
 import com.inspiredandroid.kai.skills.SkillManifest
-import com.inspiredandroid.kai.data.QuickAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.ImmutableSet

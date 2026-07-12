@@ -238,7 +238,7 @@ interface DataRepository {
      * `ChatViewModel` in its init block.
      */
     val openHeartbeatRequested: StateFlow<Boolean>
-    
+
     fun requestOpenHeartbeat()
     fun consumeOpenHeartbeatRequest()
 

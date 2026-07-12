@@ -48,13 +48,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.material.icons.filled.Mic
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.inspiredandroid.kai.stt.createSttController
-import com.inspiredandroid.kai.tools.AudioPermissionController
-import com.inspiredandroid.kai.tools.SetupAudioPermissionHandler
-import org.koin.compose.koinInject
-import kotlinx.coroutines.launch
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -65,11 +58,15 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.inspiredandroid.kai.Platform
 import com.inspiredandroid.kai.currentPlatform
 import com.inspiredandroid.kai.data.ServiceEntry
 import com.inspiredandroid.kai.data.imageExtensions
 import com.inspiredandroid.kai.skills.SkillManifest
+import com.inspiredandroid.kai.stt.createSttController
+import com.inspiredandroid.kai.tools.AudioPermissionController
+import com.inspiredandroid.kai.tools.SetupAudioPermissionHandler
 import com.inspiredandroid.kai.ui.gradientBrush
 import com.inspiredandroid.kai.ui.handCursor
 import com.inspiredandroid.kai.ui.outlineTextFieldColors
@@ -87,9 +84,11 @@ import kai.composeapp.generated.resources.ic_up
 import kai.composeapp.generated.resources.prompt_ask_question
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -278,7 +277,7 @@ fun QuestionInput(
                     } else {
                         CircleIconButton(
                             icon = Icons.Default.Mic,
-                            onClick = { 
+                            onClick = {
                                 coroutineScope.launch {
                                     if (audioPermissionController.requestPermission()) {
                                         sttController.startListening { result ->
@@ -287,7 +286,7 @@ fun QuestionInput(
                                         }
                                     }
                                 }
-                            }
+                            },
                         )
                     }
                 }

@@ -1,8 +1,13 @@
+@file:Suppress("ktlint:standard:filename")
+
 package com.inspiredandroid.kai.stt
 
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.inspiredandroid.kai.inference.ModelDownloadService
 import kotlinx.coroutines.*
@@ -17,9 +22,6 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.ZipInputStream
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.media.RingtoneManager
 
 class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
 
@@ -49,14 +51,14 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
     override fun startDownload(modelUrl: String) {
         if (modelUrl.isEmpty() || isModelReady(modelUrl) || _isDownloading.value) return
         currentModelUrl = modelUrl
-        
+
         downloadJob?.cancel()
         downloadJob = scope.launch(Dispatchers.IO) {
             _isDownloading.value = true
             _downloadProgress.value = 0f
             var notificationStarted = false
             val zipFile = File(context.cacheDir, "vosk_model.tmp.zip")
-            
+
             try {
                 val connection = URL(currentModelUrl).openConnection() as HttpURLConnection
                 connection.connectTimeout = 30_000
@@ -98,7 +100,7 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
 
                 _downloadProgress.value = 1f
                 updateDownloadNotificationProgress(100, "Распаковка...")
-                
+
                 ZipInputStream(zipFile.inputStream()).use { zis ->
                     var entry = zis.nextEntry
                     while (entry != null) {
@@ -106,7 +108,7 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
                         val name = entry.name
                         val index = name.indexOf("/")
                         val relativeName = if (index != -1) name.substring(index + 1) else name
-                        
+
                         if (relativeName.isNotEmpty()) {
                             val destFile = File(getModelDirectory(currentModelUrl), relativeName)
                             if (entry.isDirectory) {
@@ -122,7 +124,6 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
                     }
                 }
                 zipFile.delete()
-
             } catch (e: Throwable) {
                 if (zipFile.exists()) zipFile.delete()
                 if (getModelDirectory(currentModelUrl).exists()) getModelDirectory(currentModelUrl).deleteRecursively()
@@ -138,13 +139,13 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
     override fun startListening(modelUrl: String, triggerWord: String, onWakeWordDetected: () -> Unit) {
         if (modelUrl.isEmpty() || !isModelReady(modelUrl)) return
         currentModelUrl = modelUrl
-        
+
         try {
             if (activeModel == null) {
                 activeModel = Model(getModelDirectory(modelUrl).absolutePath)
             }
             val recognizer = Recognizer(activeModel, 16000.0f)
-            
+
             speechService = SpeechService(recognizer, 16000.0f)
             speechService?.startListening(object : org.vosk.android.RecognitionListener {
                 override fun onPartialResult(hypothesis: String?) {
@@ -201,7 +202,7 @@ class VoskWakeWordManager(private val context: Context) : WakeWordPlatform {
                 e.printStackTrace()
             }
         }
-        
+
         val intent = Intent(Intent.ACTION_ASSIST).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             setPackage(context.packageName)

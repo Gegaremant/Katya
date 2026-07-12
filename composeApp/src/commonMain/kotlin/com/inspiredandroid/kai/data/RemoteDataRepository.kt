@@ -1812,16 +1812,14 @@ class RemoteDataRepository(
         appSettings.setSandboxEnabled(enabled)
     }
 
-    override fun getQuickActions(): List<QuickAction> {
-        return try {
-            Json.decodeFromString<List<QuickAction>>(appSettings.getQuickActionsJson())
-        } catch (e: Exception) {
-            listOf(
-                QuickAction("1", "📊 Проверить сервер", "Проверь нагрузку на сервер (CPU/RAM/Temp)"),
-                QuickAction("2", "🔋 Статус батареи", "Покажи текущий заряд батареи"),
-                QuickAction("3", "📸 Скриншот", "Сделай скриншот телефона"),
-            )
-        }
+    override fun getQuickActions(): List<QuickAction> = try {
+        Json.decodeFromString<List<QuickAction>>(appSettings.getQuickActionsJson())
+    } catch (e: Exception) {
+        listOf(
+            QuickAction("1", "📊 Проверить сервер", "Проверь нагрузку на сервер (CPU/RAM/Temp)"),
+            QuickAction("2", "🔋 Статус батареи", "Покажи текущий заряд батареи"),
+            QuickAction("3", "📸 Скриншот", "Сделай скриншот телефона"),
+        )
     }
 
     override fun setQuickActions(actions: List<QuickAction>) {
@@ -2211,7 +2209,6 @@ class RemoteDataRepository(
     override fun cancelLocalModelDownload() {
         localInferenceEngine?.cancelDownload()
     }
-
 
     override suspend fun deleteLocalModel(modelId: String) {
         localInferenceEngine?.deleteModel(modelId)

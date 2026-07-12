@@ -428,9 +428,9 @@ fun SettingsScreenContent(
             }
 
             val visibleTabs = remember(sandboxState.showSandbox) {
-                SettingsTab.entries.filter { 
-                    it != SettingsTab.Sandbox || sandboxState.showSandbox 
-                }.filter { 
+                SettingsTab.entries.filter {
+                    it != SettingsTab.Sandbox || sandboxState.showSandbox
+                }.filter {
                     it != SettingsTab.Integrations // Temporarily hidden
                 }.toImmutableList()
             }

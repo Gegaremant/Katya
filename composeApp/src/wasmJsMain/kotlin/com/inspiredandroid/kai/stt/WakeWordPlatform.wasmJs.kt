@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:filename")
+
 package com.inspiredandroid.kai.stt
 
 import kotlinx.coroutines.flow.MutableStateFlow

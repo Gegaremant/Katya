@@ -14,8 +14,8 @@ object AndroidHostShellTool : Tool {
         name = "host_shell_command",
         description = "Execute a shell command directly on the Android host OS (outside the sandbox). Uses 'su' if available for root access, otherwise falls back to 'sh'. Use this for taking screenshots (screencap), tapping (input tap), or accessing host files.",
         parameters = mapOf(
-            "command" to ParameterSchema("string", "The shell command to execute", true)
-        )
+            "command" to ParameterSchema("string", "The shell command to execute", true),
+        ),
     )
 
     override suspend fun execute(args: Map<String, Any>): Any = withContext(Dispatchers.IO) {
@@ -33,13 +33,13 @@ object AndroidHostShellTool : Tool {
 
             val reader = BufferedReader(InputStreamReader(process.inputStream))
             val errorReader = BufferedReader(InputStreamReader(process.errorStream))
-            
+
             val output = StringBuilder()
             var line: String?
             while (reader.readLine().also { line = it } != null) {
                 output.append(line).append("\n")
             }
-            
+
             val errorOutput = StringBuilder()
             while (errorReader.readLine().also { line = it } != null) {
                 errorOutput.append(line).append("\n")
@@ -51,7 +51,7 @@ object AndroidHostShellTool : Tool {
                 "success" to (exitCode == 0),
                 "exit_code" to exitCode,
                 "stdout" to output.toString().trim(),
-                "stderr" to errorOutput.toString().trim()
+                "stderr" to errorOutput.toString().trim(),
             )
         } catch (e: Exception) {
             mapOf("success" to false, "error" to "Execution failed: ${e.message}")

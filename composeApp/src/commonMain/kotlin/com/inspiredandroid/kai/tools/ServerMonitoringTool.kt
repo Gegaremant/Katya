@@ -10,7 +10,7 @@ class ServerMonitoringTool(private val appSettings: AppSettings) : Tool {
     override val schema = ToolSchema(
         name = "server_monitor",
         description = "Connects to the server via SSH and returns current CPU, RAM, and Temperature metrics.",
-        parameters = emptyMap()
+        parameters = emptyMap(),
     )
 
     override suspend fun execute(args: Map<String, Any>): Any {
@@ -22,7 +22,7 @@ class ServerMonitoringTool(private val appSettings: AppSettings) : Tool {
         if (host.isBlank() || user.isBlank()) {
             return mapOf(
                 "success" to false,
-                "error" to "SSH credentials are not configured in settings."
+                "error" to "SSH credentials are not configured in settings.",
             )
         }
 
@@ -47,12 +47,12 @@ class ServerMonitoringTool(private val appSettings: AppSettings) : Tool {
 
             mapOf(
                 "success" to true,
-                "status_report" to combined
+                "status_report" to combined,
             )
         } catch (e: Exception) {
             mapOf(
                 "success" to false,
-                "error" to "Error executing SSH command: ${e.message}"
+                "error" to "Error executing SSH command: ${e.message}",
             )
         }
     }

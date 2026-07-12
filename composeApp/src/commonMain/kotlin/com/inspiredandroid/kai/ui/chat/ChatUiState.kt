@@ -5,11 +5,11 @@ package com.inspiredandroid.kai.ui.chat
 import androidx.compose.runtime.Immutable
 import com.inspiredandroid.kai.data.Attachment
 import com.inspiredandroid.kai.data.FallbackStatus
+import com.inspiredandroid.kai.data.QuickAction
 import com.inspiredandroid.kai.data.ReasoningRequestMode
 import com.inspiredandroid.kai.data.ServiceEntry
 import com.inspiredandroid.kai.data.SharedJson
 import com.inspiredandroid.kai.data.SmsDraft
-import com.inspiredandroid.kai.data.QuickAction
 import com.inspiredandroid.kai.data.UiSubmission
 import com.inspiredandroid.kai.network.UiError
 import com.inspiredandroid.kai.network.dtos.gemini.GeminiChatRequestDto

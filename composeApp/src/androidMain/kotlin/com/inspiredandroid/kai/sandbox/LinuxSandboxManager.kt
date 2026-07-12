@@ -285,7 +285,7 @@ class LinuxSandboxManager(
         if (currentJob?.isActive == true) return
         val packages = listOf(
             "bash", "curl", "wget", "git", "jq", "python3", "py3-pip", "nodejs",
-            "openssh-client", "lftp", "rsync", "xray"
+            "openssh-client", "lftp", "rsync", "xray",
         )
         currentJob = scope.launch {
             try {

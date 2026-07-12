@@ -185,8 +185,6 @@ internal fun FreeSettings(
             )
 
             Spacer(Modifier.height(12.dp))
-
-
         }
     }
 }

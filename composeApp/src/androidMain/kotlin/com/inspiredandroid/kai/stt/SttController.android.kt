@@ -17,7 +17,7 @@ actual fun createSttController(): SttController = AndroidSttController()
 
 class AndroidSttController : SttController {
     private val context: Context by inject(Context::class.java)
-    
+
     private val _isListening = MutableStateFlow(false)
     override val isListening: StateFlow<Boolean> = _isListening
 
@@ -34,7 +34,7 @@ class AndroidSttController : SttController {
             if (speechRecognizer == null) {
                 speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
             }
-            
+
             speechRecognizer?.setRecognitionListener(object : RecognitionListener {
                 override fun onReadyForSpeech(params: Bundle?) {
                     _isListening.value = true
@@ -68,7 +68,7 @@ class AndroidSttController : SttController {
                 }
                 override fun onEvent(eventType: Int, params: Bundle?) {}
             })
-            
+
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
                 putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)

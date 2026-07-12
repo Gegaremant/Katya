@@ -1,8 +1,8 @@
 package com.inspiredandroid.kai.tools
 
+import com.jcraft.jsch.ChannelExec
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
-import com.jcraft.jsch.ChannelExec
 import java.io.InputStream
 
 actual class SshClient actual constructor() {
@@ -11,7 +11,7 @@ actual class SshClient actual constructor() {
         port: Int,
         user: String,
         pass: String,
-        command: String
+        command: String,
     ): String {
         var session: Session? = null
         var channel: ChannelExec? = null

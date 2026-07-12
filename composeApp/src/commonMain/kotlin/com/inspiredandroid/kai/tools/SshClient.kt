@@ -6,6 +6,6 @@ expect class SshClient() {
         port: Int,
         user: String,
         pass: String,
-        command: String
+        command: String,
     ): String
 }

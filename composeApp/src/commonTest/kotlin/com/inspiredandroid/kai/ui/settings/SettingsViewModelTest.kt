@@ -40,7 +40,6 @@ class SettingsViewModelTest {
         override fun triggerWakeWordResponse(vibrate: Boolean, sound: Boolean) {}
     }
 
-
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)

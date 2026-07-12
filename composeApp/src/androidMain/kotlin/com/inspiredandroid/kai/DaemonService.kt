@@ -8,9 +8,9 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import com.inspiredandroid.kai.data.TaskScheduler
+import com.inspiredandroid.kai.sandbox.VlessProxyManager
 import com.inspiredandroid.kai.shared.R
 import org.koin.android.ext.android.inject
-import com.inspiredandroid.kai.sandbox.VlessProxyManager
 
 class DaemonService : Service() {
 

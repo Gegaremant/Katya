@@ -60,7 +60,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.stt.WakeWordPlatform, 
+class SettingsViewModel(
+    private val wakeWordPlatform: com.inspiredandroid.kai.stt.WakeWordPlatform,
     private val dataRepository: DataRepository,
     private val daemonController: DaemonController,
     private val notificationPermissionController: NotificationPermissionController,
@@ -227,7 +228,7 @@ class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.st
                 wakeWordPlatform.triggerWakeWordResponse(_state.value.isWakeWordVibrationEnabled, _state.value.isWakeWordSoundEnabled)
             }
         }
-        
+
         viewModelScope.launch {
             wakeWordPlatform.isDownloading.collect { isDownloading ->
                 _state.update { it.copy(isVoskDownloading = isDownloading) }
@@ -596,7 +597,7 @@ class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.st
         _state.update { it.copy(heartbeatSelectedInstanceId = instanceId) }
     }
 
-        private fun onToggleWakeWord(enabled: Boolean) {
+    private fun onToggleWakeWord(enabled: Boolean) {
         dataRepository.setWakeWordEnabled(enabled)
         _state.update { it.copy(isWakeWordEnabled = enabled) }
         if (enabled) {
@@ -640,12 +641,10 @@ class SettingsViewModel(private val wakeWordPlatform: com.inspiredandroid.kai.st
         }
     }
 
-    private fun getModelUrl(lang: String): String {
-        return when (lang) {
-            "ru" -> "https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip"
-            "en" -> "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
-            else -> lang
-        }
+    private fun getModelUrl(lang: String): String = when (lang) {
+        "ru" -> "https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip"
+        "en" -> "https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip"
+        else -> lang
     }
 
     private fun onDownloadVosk() {

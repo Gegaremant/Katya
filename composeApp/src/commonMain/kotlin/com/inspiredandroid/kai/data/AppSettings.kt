@@ -250,19 +250,29 @@ class AppSettings(internal val settings: Settings) {
 
     // Server Monitoring
     fun getServerIp(): String = settings.getString(KEY_SERVER_IP, "")
-    fun setServerIp(ip: String) { settings.putString(KEY_SERVER_IP, ip) }
+    fun setServerIp(ip: String) {
+        settings.putString(KEY_SERVER_IP, ip)
+    }
 
     fun getServerPort(): Int = settings.getInt(KEY_SERVER_PORT, 22)
-    fun setServerPort(port: Int) { settings.putInt(KEY_SERVER_PORT, port) }
+    fun setServerPort(port: Int) {
+        settings.putInt(KEY_SERVER_PORT, port)
+    }
 
     fun getServerUser(): String = settings.getString(KEY_SERVER_USER, "")
-    fun setServerUser(user: String) { settings.putString(KEY_SERVER_USER, user) }
+    fun setServerUser(user: String) {
+        settings.putString(KEY_SERVER_USER, user)
+    }
 
     fun getServerPassword(): String = settings.getString(KEY_SERVER_PASSWORD, "")
-    fun setServerPassword(password: String) { settings.putString(KEY_SERVER_PASSWORD, password) }
+    fun setServerPassword(password: String) {
+        settings.putString(KEY_SERVER_PASSWORD, password)
+    }
 
     fun getWakeWord(): String = settings.getString(KEY_WAKE_WORD, "привет катя")
-    fun setWakeWord(word: String) { settings.putString(KEY_WAKE_WORD, word) }
+    fun setWakeWord(word: String) {
+        settings.putString(KEY_WAKE_WORD, word)
+    }
 
     fun isVoiceResponseEnabled(): Boolean = settings.getBoolean(KEY_VOICE_RESPONSE_ENABLED, true)
 
@@ -295,10 +305,9 @@ class AppSettings(internal val settings: Settings) {
     }
 
     fun isWakeWordSoundEnabled(): Boolean = settings.getBoolean(KEY_WAKE_WORD_SOUND, true)
-    fun setVoiceResponseEnabled(enabled: Boolean) { settings.putBoolean(KEY_VOICE_RESPONSE_ENABLED, enabled) }
-
-
-
+    fun setVoiceResponseEnabled(enabled: Boolean) {
+        settings.putBoolean(KEY_VOICE_RESPONSE_ENABLED, enabled)
+    }
 
     fun setFreeServicePrimary(primary: Boolean) {
         settings.putBoolean(KEY_FREE_SERVICE_PRIMARY, primary)

@@ -1,15 +1,15 @@
 package com.inspiredandroid.kai
 
-import android.content.Intent
 import android.content.Context
-import android.os.PowerManager
-import androidx.activity.result.contract.ActivityResultContracts
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -188,7 +188,7 @@ class MainActivity : ComponentActivity() {
             checkAutoRevokePermission()
         }
     }
-    
+
     private fun checkAutoRevokePermission() {
         // 3. Disable App Hibernation (API 30+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

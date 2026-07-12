@@ -30,7 +30,7 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
         Text(
             "Настройте SSH доступы для удаленного мониторинга и управления серверами. Укажите IP-адрес, порт и учетные данные для подключения.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(Modifier.height(16.dp))
 
@@ -38,7 +38,7 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
             value = ip,
             onValueChange = { ip = it },
             label = { Text("IP-адрес / Имя хоста") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(8.dp))
 
@@ -47,7 +47,7 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
             onValueChange = { port = it.filter { char -> char.isDigit() } },
             label = { Text("SSH Порт") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(8.dp))
 
@@ -55,7 +55,7 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
             value = user,
             onValueChange = { user = it },
             label = { Text("Имя пользователя SSH") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(8.dp))
 
@@ -64,7 +64,7 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
             onValueChange = { password = it },
             label = { Text("Пароль SSH") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Spacer(Modifier.height(16.dp))
 
@@ -92,28 +92,28 @@ fun ServersContent(appSettings: AppSettings = koinInject()) {
         Text(
             "Создание локального перенаправления портов через настроенный сервер.",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(Modifier.height(16.dp))
-        
+
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedTextField(
                 value = tunnelLocalPort,
                 onValueChange = { tunnelLocalPort = it.filter { char -> char.isDigit() } },
                 label = { Text("Локальный порт") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             OutlinedTextField(
                 value = tunnelRemotePort,
                 onValueChange = { tunnelRemotePort = it.filter { char -> char.isDigit() } },
                 label = { Text("Удаленный порт") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
         }
         Spacer(Modifier.height(16.dp))
-        
+
         Button(onClick = {
             // Placeholder logic for raising a tunnel
             showTunnelMessage = true

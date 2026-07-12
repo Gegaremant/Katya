@@ -261,10 +261,10 @@ private fun InteractiveModeScreen(uiState: ChatUiState) {
                 if (showFullInput) {
                     com.inspiredandroid.kai.ui.chat.composables.QuickActionsRow(
                         actions = uiState.quickActions,
-                        onActionClick = { 
+                        onActionClick = {
                             inputExpanded = false
-                            uiState.actions.ask(it) 
-                        }
+                            uiState.actions.ask(it)
+                        },
                     )
                     QuestionInput(
                         modifier = Modifier.align(Alignment.BottomEnd),
@@ -909,7 +909,7 @@ private fun ChatModeScreen(
             if (!isSandboxOpen) {
                 com.inspiredandroid.kai.ui.chat.composables.QuickActionsRow(
                     actions = uiState.quickActions,
-                    onActionClick = uiState.actions.ask
+                    onActionClick = uiState.actions.ask,
                 )
                 QuestionInput(
                     files = uiState.files,

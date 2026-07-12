@@ -603,39 +603,57 @@ class FakeDataRepository : DataRepository {
     override fun cancelLocalModelDownload() {}
     override suspend fun deleteLocalModel(modelId: String) {}
 
-    private var _wakeWordEnabled = false
-    override fun setWakeWordEnabled(enabled: Boolean) { _wakeWordEnabled = enabled }
-    override fun isWakeWordEnabled(): Boolean = _wakeWordEnabled
-    
-    private var _wakeWordModelLang = ""
-    override fun setWakeWordModelLang(lang: String) { _wakeWordModelLang = lang }
-    override fun getWakeWordModelLang(): String = _wakeWordModelLang
-    
-    private var _wakeWordTrigger = ""
-    override fun setWakeWordTrigger(trigger: String) { _wakeWordTrigger = trigger }
-    override fun getWakeWordTrigger(): String = _wakeWordTrigger
-    
-    private var _wakeWordVibrationEnabled = false
-    override fun setWakeWordVibration(enabled: Boolean) { _wakeWordVibrationEnabled = enabled }
-    override fun isWakeWordVibrationEnabled(): Boolean = _wakeWordVibrationEnabled
-    
-    private var _wakeWordSoundEnabled = false
-    override fun setWakeWordSound(enabled: Boolean) { _wakeWordSoundEnabled = enabled }
-    override fun isWakeWordSoundEnabled(): Boolean = _wakeWordSoundEnabled
-    
-    private var _voiceResponseEnabled = false
-    override fun isVoiceResponseEnabled(): Boolean = _voiceResponseEnabled
-    override fun setVoiceResponseEnabled(enabled: Boolean) { _voiceResponseEnabled = enabled }
-    
-    private var _vlessEnabled = false
-    override fun isVlessEnabled(): Boolean = _vlessEnabled
-    override fun setVlessEnabled(enabled: Boolean) { _vlessEnabled = enabled }
-    
-    private var _vlessUri = ""
-    override fun getVlessUri(): String = _vlessUri
-    override fun setVlessUri(uri: String) { _vlessUri = uri }
-    
-    private var _quickActions = emptyList<com.inspiredandroid.kai.data.QuickAction>()
-    override fun getQuickActions(): List<com.inspiredandroid.kai.data.QuickAction> = _quickActions
-    override fun setQuickActions(actions: List<com.inspiredandroid.kai.data.QuickAction>) { _quickActions = actions }
+    private var mockWakeWordEnabled = false
+    override fun setWakeWordEnabled(enabled: Boolean) {
+        mockWakeWordEnabled = enabled
+    }
+    override fun isWakeWordEnabled(): Boolean = mockWakeWordEnabled
+
+    private var mockWakeWordModelLang = ""
+    override fun setWakeWordModelLang(lang: String) {
+        mockWakeWordModelLang = lang
+    }
+    override fun getWakeWordModelLang(): String = mockWakeWordModelLang
+
+    private var mockWakeWordTrigger = ""
+    override fun setWakeWordTrigger(trigger: String) {
+        mockWakeWordTrigger = trigger
+    }
+    override fun getWakeWordTrigger(): String = mockWakeWordTrigger
+
+    private var mockWakeWordVibrationEnabled = false
+    override fun setWakeWordVibration(enabled: Boolean) {
+        mockWakeWordVibrationEnabled = enabled
+    }
+    override fun isWakeWordVibrationEnabled(): Boolean = mockWakeWordVibrationEnabled
+
+    private var mockWakeWordSoundEnabled = false
+    override fun setWakeWordSound(enabled: Boolean) {
+        mockWakeWordSoundEnabled = enabled
+    }
+    override fun isWakeWordSoundEnabled(): Boolean = mockWakeWordSoundEnabled
+
+    private var mockVoiceResponseEnabled = false
+    override fun isVoiceResponseEnabled(): Boolean = mockVoiceResponseEnabled
+    override fun setVoiceResponseEnabled(enabled: Boolean) {
+        mockVoiceResponseEnabled = enabled
+    }
+
+    private var mockVlessEnabled = false
+    override fun isVlessEnabled(): Boolean = mockVlessEnabled
+    override fun setVlessEnabled(enabled: Boolean) {
+        mockVlessEnabled = enabled
+    }
+
+    private var mockVlessUri = ""
+    override fun getVlessUri(): String = mockVlessUri
+    override fun setVlessUri(uri: String) {
+        mockVlessUri = uri
+    }
+
+    private var mockQuickActions = emptyList<com.inspiredandroid.kai.data.QuickAction>()
+    override fun getQuickActions(): List<com.inspiredandroid.kai.data.QuickAction> = mockQuickActions
+    override fun setQuickActions(actions: List<com.inspiredandroid.kai.data.QuickAction>) {
+        mockQuickActions = actions
+    }
 }

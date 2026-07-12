@@ -148,7 +148,7 @@ internal fun GeneralContent(uiState: SettingsUiState, actions: SettingsActions) 
                         onToggleWakeWordSound = actions.setIsWakeWordSoundEnabled,
                         isVoskDownloading = uiState.isVoskDownloading,
                         voskDownloadProgress = uiState.voskDownloadProgress,
-                        onDownloadVosk = actions.onDownloadVosk
+                        onDownloadVosk = actions.onDownloadVosk,
                     )
                 }
                 SettingsCard {
@@ -370,23 +370,23 @@ private fun QuickActionsSection(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f).padding(16.dp)) {
                 Text(
                     text = "Быстрые действия",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = "Управление кнопками быстрых действий, отображаемыми над полем ввода чата.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             androidx.compose.material3.TextButton(
                 onClick = { showAddDialog = true },
-                modifier = Modifier.padding(end = 8.dp)
+                modifier = Modifier.padding(end = 8.dp),
             ) {
                 Text("Добавить")
             }
@@ -396,21 +396,21 @@ private fun QuickActionsSection(
             Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 for (action in quickActions) {
                     var isEditing by remember { mutableStateOf(false) }
-                    
+
                     if (isEditing) {
                         QuickActionEditor(
                             initialAction = action,
-                            onSave = { 
+                            onSave = {
                                 onUpdateQuickAction(it)
                                 isEditing = false
                             },
-                            onCancel = { isEditing = false }
+                            onCancel = { isEditing = false },
                         )
                     } else {
                         Row(
                             modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp)).padding(12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(action.text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
@@ -435,16 +435,16 @@ private fun QuickActionsSection(
         androidx.compose.ui.window.Dialog(onDismissRequest = { showAddDialog = false }) {
             androidx.compose.material3.Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface
+                color = MaterialTheme.colorScheme.surface,
             ) {
                 Box(Modifier.padding(16.dp)) {
                     QuickActionEditor(
                         initialAction = com.inspiredandroid.kai.data.QuickAction(id = "", text = "", prompt = ""),
-                        onSave = { 
+                        onSave = {
                             onAddQuickAction(it.copy(id = kotlin.uuid.Uuid.random().toString()))
-                            showAddDialog = false 
+                            showAddDialog = false
                         },
-                        onCancel = { showAddDialog = false }
+                        onCancel = { showAddDialog = false },
                     )
                 }
             }
@@ -456,7 +456,7 @@ private fun QuickActionsSection(
 private fun QuickActionEditor(
     initialAction: com.inspiredandroid.kai.data.QuickAction,
     onSave: (com.inspiredandroid.kai.data.QuickAction) -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
 ) {
     var text by remember { mutableStateOf(initialAction.text) }
     var prompt by remember { mutableStateOf(initialAction.prompt) }
@@ -466,19 +466,19 @@ private fun QuickActionEditor(
             value = text,
             onValueChange = { text = it },
             label = { Text("Button Text") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         KaiOutlinedTextField(
             value = prompt,
             onValueChange = { prompt = it },
             label = { Text("Prompt") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
             androidx.compose.material3.TextButton(onClick = onCancel) {
                 Text("Cancel")
             }
-            androidx.compose.material3.TextButton(onClick = { 
+            androidx.compose.material3.TextButton(onClick = {
                 onSave(initialAction.copy(text = text, prompt = prompt))
             }, enabled = text.isNotBlank() && prompt.isNotBlank()) {
                 Text("Save")

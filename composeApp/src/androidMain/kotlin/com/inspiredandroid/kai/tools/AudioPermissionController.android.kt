@@ -25,12 +25,10 @@ actual class AudioPermissionController actual constructor() {
 
     private val permissionResultFlow = MutableStateFlow<Boolean?>(null)
 
-    actual fun hasPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.RECORD_AUDIO,
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+    actual fun hasPermission(): Boolean = ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.RECORD_AUDIO,
+    ) == PackageManager.PERMISSION_GRANTED
 
     actual suspend fun requestPermission(): Boolean {
         if (hasPermission()) return true

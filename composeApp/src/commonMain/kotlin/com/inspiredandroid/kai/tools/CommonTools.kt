@@ -243,8 +243,8 @@ object CommonTools {
             name = "Server Monitor",
             description = "Monitor CPU, RAM, and Temperature of the configured server",
             nameRes = Res.string.tool_memory_store_name, // fallback string resource
-            descriptionRes = Res.string.tool_memory_store_description // fallback
-        )
+            descriptionRes = Res.string.tool_memory_store_description, // fallback
+        ),
     ) +
         listOf(memoryStoreToolInfo, memoryForgetToolInfo, memoryLearnToolInfo, memoryReinforceToolInfo) +
         SchedulingTools.schedulingToolDefinitions +

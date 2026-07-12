@@ -20,7 +20,7 @@ class VlessProxyManager(
 
     fun start() {
         stop()
-        
+
         if (!dataRepository.isVlessEnabled()) return
         val uri = dataRepository.getVlessUri()
         if (uri.isBlank()) return
@@ -64,9 +64,9 @@ class VlessProxyManager(
                     val rootfs = linuxSandboxManager.rootfsPath
                     val home = linuxSandboxManager.homePath
                     val tmp = linuxSandboxManager.tmpPath
-                    
+
                     val command = "$prootPath -0 --rootfs=$rootfs --bind=/dev --bind=/proc --bind=/sys --bind=$home:/root --bind=$tmp:/tmp -w /root /bin/sh -c '$xrayBinary -c $configPathInSandbox'"
-                    
+
                     rootProcess = Runtime.getRuntime().exec(arrayOf("su", "-c", command))
                     rootProcess?.waitFor()
                 } else {
@@ -75,7 +75,7 @@ class VlessProxyManager(
                     prootHandle = executor.executeStreaming(
                         command = "$xrayBinary -c $configPathInSandbox",
                         onStdout = { Log.d("XrayOut", it) },
-                        onStderr = { Log.e("XrayErr", it) }
+                        onStderr = { Log.e("XrayErr", it) },
                     )
                     prootHandle?.awaitExit()
                 }
@@ -89,10 +89,10 @@ class VlessProxyManager(
         Log.d("VlessProxyManager", "Stopping VLESS proxy")
         proxyJob?.cancel()
         proxyJob = null
-        
+
         prootHandle?.cancel()
         prootHandle = null
-        
+
         rootProcess?.destroyForcibly()
         rootProcess = null
     }

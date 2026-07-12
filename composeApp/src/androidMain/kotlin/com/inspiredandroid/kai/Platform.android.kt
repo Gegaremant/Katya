@@ -30,6 +30,7 @@ import com.inspiredandroid.kai.sandbox.SandboxState
 import com.inspiredandroid.kai.sms.SmsReader
 import com.inspiredandroid.kai.sms.SmsSender
 import com.inspiredandroid.kai.sms.declaresReadSms
+import com.inspiredandroid.kai.tools.AndroidHostShellTool
 import com.inspiredandroid.kai.tools.CalendarPermissionController
 import com.inspiredandroid.kai.tools.CalendarRepository
 import com.inspiredandroid.kai.tools.CalendarResult
@@ -45,7 +46,6 @@ import com.inspiredandroid.kai.tools.OpenFileTool
 import com.inspiredandroid.kai.tools.ProcessManagerTool
 import com.inspiredandroid.kai.tools.SchedulingTools
 import com.inspiredandroid.kai.tools.ShellCommandTool
-import com.inspiredandroid.kai.tools.AndroidHostShellTool
 import com.inspiredandroid.kai.tools.SmsTools
 import com.inspiredandroid.kai.tools.SshConfigureHostTool
 import com.inspiredandroid.kai.tools.WebSearchTool
@@ -439,7 +439,7 @@ actual fun getAvailableTools(): List<Tool> {
                 add(SshConfigureHostTool)
             }
         }
-        
+
         // Host Shell Tool (bypassing sandbox)
         add(AndroidHostShellTool)
 

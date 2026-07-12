@@ -6,8 +6,6 @@ actual class SshClient actual constructor() {
         port: Int,
         user: String,
         pass: String,
-        command: String
-    ): String {
-        return "SSH not supported on iOS yet."
-    }
+        command: String,
+    ): String = "SSH not supported on iOS yet."
 }

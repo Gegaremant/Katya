@@ -18,7 +18,7 @@ import com.inspiredandroid.kai.data.QuickAction
 fun QuickActionsRow(
     actions: List<QuickAction>,
     onActionClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (actions.isEmpty()) return
 
@@ -26,7 +26,7 @@ fun QuickActionsRow(
         modifier = modifier
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         for (action in actions) {
             AssistChip(
@@ -34,8 +34,8 @@ fun QuickActionsRow(
                 label = { Text(action.text) },
                 colors = AssistChipDefaults.assistChipColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    labelColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                    labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
             )
         }
     }
