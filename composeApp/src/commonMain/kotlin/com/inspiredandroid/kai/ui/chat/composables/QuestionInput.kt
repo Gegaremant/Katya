@@ -105,15 +105,15 @@ fun QuestionInput(
     availableServices: ImmutableList<ServiceEntry> = persistentListOf(),
     selectedService: ServiceEntry? = availableServices.firstOrNull(),
     onSelectService: (String) -> Unit = {},
-    sttController: com.inspiredandroid.kai.stt.SttController? = koinInject(),
-    audioPermissionController: com.inspiredandroid.kai.tools.AudioPermissionController? = koinInject(),
+    sttController: com.inspiredandroid.kai.stt.SttController? = null,
+    audioPermissionController: com.inspiredandroid.kai.tools.AudioPermissionController? = null,
     wakeWordTriggerCount: Int = 0,
     installedSkills: ImmutableList<SkillManifest> = persistentListOf(),
     modifier: Modifier = Modifier,
 ) {
     val isPreview = androidx.compose.ui.platform.LocalInspectionMode.current
-    val sttController = remember { if (isPreview) null else createSttController() }
-    val audioPermissionController: AudioPermissionController? = if (isPreview) null else koinInject()
+    val sttController = sttController ?: remember { if (isPreview) null else createSttController() }
+    val audioPermissionController: AudioPermissionController? = audioPermissionController ?: if (isPreview) null else koinInject()
     val isListening by (sttController?.isListening ?: kotlinx.coroutines.flow.MutableStateFlow(false)).collectAsStateWithLifecycle()
     val partialResults by (sttController?.partialResults ?: kotlinx.coroutines.flow.MutableStateFlow("")).collectAsStateWithLifecycle()
     val coroutineScope = androidx.compose.runtime.rememberCoroutineScope()
