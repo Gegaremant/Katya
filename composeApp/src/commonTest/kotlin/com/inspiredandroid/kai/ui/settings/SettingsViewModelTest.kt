@@ -23,6 +23,7 @@ import kotlin.test.assertTrue
 class SettingsViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
+    private lateinit var appSettings: com.inspiredandroid.kai.data.AppSettings
     private lateinit var fakeRepository: FakeDataRepository
     private lateinit var noOpScheduler: TaskScheduler
     private val fakeDaemonController = object : DaemonController {
@@ -44,6 +45,7 @@ class SettingsViewModelTest {
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        appSettings = com.inspiredandroid.kai.data.AppSettings(com.russhwolf.settings.MapSettings())
         fakeRepository = FakeDataRepository()
         noOpScheduler = TaskScheduler(fakeRepository, enabled = false)
     }
@@ -55,7 +57,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `initial state has empty configured services when none configured`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val state = awaitItem()
@@ -67,7 +69,7 @@ class SettingsViewModelTest {
     fun `initial state reflects configured services`() = runTest {
         fakeRepository.setConfiguredServices(Service.Gemini, Service.OpenAI)
 
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val state = awaitItem()
@@ -81,7 +83,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onAddService adds a new configured service`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -102,7 +104,7 @@ class SettingsViewModelTest {
     @Test
     fun `onRemoveService removes a configured service by instanceId`() = runTest {
         fakeRepository.setConfiguredServices(Service.Gemini, Service.OpenAI)
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -124,7 +126,7 @@ class SettingsViewModelTest {
     @Test
     fun `rapid onRemoveService keeps the new pendingDeletion after the previous commits`() = runTest {
         fakeRepository.setConfiguredServices(Service.Gemini, Service.OpenAI, Service.Groq)
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             assertEquals(3, awaitItem().configuredServices.size)
@@ -156,7 +158,7 @@ class SettingsViewModelTest {
     fun `availableServicesToAdd contains all non-Free services`() = runTest {
         fakeRepository.setConfiguredServices(Service.Gemini)
 
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val state = awaitItem()
@@ -171,7 +173,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `adding same service type twice creates unique instanceIds`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -197,7 +199,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `initial state has empty mcp servers when none configured`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val state = awaitItem()
@@ -207,7 +209,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onAddMcpServer adds server and closes dialog`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -231,7 +233,7 @@ class SettingsViewModelTest {
     fun `onRemoveMcpServer removes server`() = runTest {
         // Pre-add a server
         fakeRepository.addMcpServer("Test", "https://example.com/mcp", emptyMap())
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -251,7 +253,7 @@ class SettingsViewModelTest {
     @Test
     fun `onToggleMcpServer disables server and updates status`() = runTest {
         val config = fakeRepository.addMcpServer("Test", "https://example.com/mcp", emptyMap())
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -270,7 +272,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `showAddMcpServerDialog toggles correctly`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -288,7 +290,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onToggleTool does not crash with no mcp servers`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             awaitItem()
@@ -304,7 +306,7 @@ class SettingsViewModelTest {
     @Test
     fun `onChangeApiKey updates API key for specific instance`() = runTest {
         fakeRepository.setConfiguredServices(Service.Groq)
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -321,7 +323,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `adding Anthropic service shows no models before validation`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -348,7 +350,7 @@ class SettingsViewModelTest {
     @Test
     fun `onChangeApiKey persists to repository`() = runTest {
         fakeRepository.setConfiguredServices(Service.Anthropic)
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -365,7 +367,7 @@ class SettingsViewModelTest {
         fakeRepository.setConfiguredServices(Service.Anthropic)
         // Pre-populate models
         fakeRepository.setInstanceModels("anthropic", listOf(SettingsModel(id = "claude-old", subtitle = "")))
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -382,7 +384,7 @@ class SettingsViewModelTest {
     @Test
     fun `onChangeBaseUrl persists to repository`() = runTest {
         fakeRepository.setConfiguredServices(Service.OpenAICompatible)
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -401,7 +403,7 @@ class SettingsViewModelTest {
     @Test
     fun `onChangeBaseUrl resets connectionStatus to Unknown`() = runTest {
         fakeRepository.setConfiguredServices(Service.OpenAICompatible)
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -424,7 +426,7 @@ class SettingsViewModelTest {
                 SettingsModel(id = "gemini-pro", subtitle = ""),
             ),
         )
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -443,7 +445,7 @@ class SettingsViewModelTest {
     @Test
     fun `onExpandService updates expandedServiceId`() = runTest {
         fakeRepository.setConfiguredServices(Service.Gemini, Service.OpenAI)
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -466,7 +468,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onSelectTab updates currentTab`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -481,7 +483,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onSaveSoul persists soul text`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -496,7 +498,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onToggleDynamicUi persists and reflects in state`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -511,7 +513,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onToggleMemory persists and reflects in state`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -526,7 +528,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onToggleScheduling persists and reflects in state`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -541,7 +543,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onToggleFreeFallback persists and reflects in state`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -556,7 +558,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onChangeUiScale persists and reflects in state`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -570,7 +572,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onChangeEmailPollInterval persists and reflects in state`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()
@@ -584,7 +586,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onChangeHeartbeatInterval persists and reflects in state`() = runTest {
-        val viewModel = SettingsViewModel(fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
+        val viewModel = SettingsViewModel(appSettings, fakeWakeWordPlatform, fakeRepository, fakeDaemonController, fakeNotificationPermissionController, noOpScheduler, testDispatcher)
 
         viewModel.state.test {
             val initialState = awaitItem()

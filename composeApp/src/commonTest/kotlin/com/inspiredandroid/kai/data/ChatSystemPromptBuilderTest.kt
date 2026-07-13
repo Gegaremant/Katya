@@ -240,7 +240,9 @@ class ChatSystemPromptBuilderTest {
             "- UTC: 2026-04-11T00:00:00Z\n" +
             "- Platform: Test\n" +
             "- Model: test-model\n" +
-            "- Provider: Test Provider\n"
+            "- Provider: Test Provider\n\n" +
+            "## Output Formatting\n" +
+            "Do not use raw HTML tags (like <br>, <b>, <p>, etc) in your responses, as they will not be rendered correctly. Always use standard Markdown formatting instead.\n"
         assertEquals(expected, out)
     }
 
@@ -609,7 +611,9 @@ class ChatSystemPromptBuilderTest {
             "- UTC: 2026-04-11T00:00:00Z\n" +
             "- Platform: Test\n" +
             "- Model: test-model\n" +
-            "- Provider: Test Provider\n"
+            "- Provider: Test Provider\n\n" +
+            "## Output Formatting\n" +
+            "Do not use raw HTML tags (like <br>, <b>, <p>, etc) in your responses, as they will not be rendered correctly. Always use standard Markdown formatting instead.\n"
         assertEquals(expected, out)
     }
 

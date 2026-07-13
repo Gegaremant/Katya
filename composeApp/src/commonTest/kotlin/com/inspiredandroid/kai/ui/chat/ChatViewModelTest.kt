@@ -35,11 +35,13 @@ class ChatViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private val unconfinedDispatcher = UnconfinedTestDispatcher()
     private lateinit var fakeRepository: FakeDataRepository
+    private lateinit var appSettings: com.inspiredandroid.kai.data.AppSettings
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         fakeRepository = FakeDataRepository()
+        appSettings = com.inspiredandroid.kai.data.AppSettings(com.russhwolf.settings.MapSettings())
     }
 
     @AfterTest
@@ -49,7 +51,7 @@ class ChatViewModelTest {
 
     private fun createViewModel(): ChatViewModel {
         val noOpScheduler = TaskScheduler(fakeRepository, enabled = false)
-        return ChatViewModel(fakeRepository, noOpScheduler, unconfinedDispatcher)
+        return ChatViewModel(fakeRepository, noOpScheduler, com.inspiredandroid.kai.testutil.FakeMonitorService(), com.inspiredandroid.kai.testutil.FakeWakeWordPlatform(), appSettings, unconfinedDispatcher)
     }
 
     @Test
@@ -57,7 +59,7 @@ class ChatViewModelTest {
         // Isolated paused dispatcher so the launched restore coroutine doesn't run synchronously.
         val backgroundDispatcher = StandardTestDispatcher()
         val noOpScheduler = TaskScheduler(fakeRepository, enabled = false)
-        val viewModel = ChatViewModel(fakeRepository, noOpScheduler, backgroundDispatcher)
+        val viewModel = ChatViewModel(fakeRepository, noOpScheduler, com.inspiredandroid.kai.testutil.FakeMonitorService(), com.inspiredandroid.kai.testutil.FakeWakeWordPlatform(), appSettings, backgroundDispatcher)
 
         viewModel.state.test {
             // Restore hasn't run yet — initial state still has isRestoring=true.

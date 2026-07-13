@@ -27,11 +27,13 @@ class ChatViewModelExtendedTest {
     private val testDispatcher = StandardTestDispatcher()
     private val unconfinedDispatcher = UnconfinedTestDispatcher()
     private lateinit var fakeRepository: FakeDataRepository
+    private lateinit var appSettings: com.inspiredandroid.kai.data.AppSettings
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         fakeRepository = FakeDataRepository()
+        appSettings = com.inspiredandroid.kai.data.AppSettings(com.russhwolf.settings.MapSettings())
     }
 
     @AfterTest
@@ -41,7 +43,7 @@ class ChatViewModelExtendedTest {
 
     private fun createViewModel(): ChatViewModel {
         val noOpScheduler = TaskScheduler(fakeRepository, enabled = false)
-        return ChatViewModel(fakeRepository, noOpScheduler, unconfinedDispatcher)
+        return ChatViewModel(fakeRepository, noOpScheduler, com.inspiredandroid.kai.testutil.FakeMonitorService(), com.inspiredandroid.kai.testutil.FakeWakeWordPlatform(), appSettings, unconfinedDispatcher)
     }
 
     private fun makeServiceEntry(instanceId: String, service: Service) = ServiceEntry(

@@ -16,6 +16,9 @@ An **open-source AI assistant with persistent memory** that runs on **Android, i
 ## Features
 
 ### Release 1.0.8 Updates
+- **Bug fixes**: Fixed Server Monitor UI errors, refactored ChatViewModel and AppSettings, and fixed test compilation errors.
+- **Application Icon/Avatar**: Updated to a new image.
+- **UI Markdown Formatting**: Improved markdown formatting prompt to prevent raw HTML tags.
 - **Server Monitor Overlay**: Added a real-time monitor overlay displaying CPU/RAM/GPU usage from your SSH-connected Linux server.
 - **Monitoring Modes**: Toggle between Off, Short, and Full diagnostics (runs `lspci`, `sensors`, `lsblk`, `df -h`) from Server Settings.
 - **Improved UI Safety**: Fixed HTML tags being rendered raw in chat bubbles.
