@@ -16,12 +16,14 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File
 
-class AndroidMonitorService : MonitorService, KoinComponent {
+class AndroidMonitorService :
+    MonitorService,
+    KoinComponent {
     private val context: Context by inject()
-    
+
     private val _stats = MutableStateFlow(MonitorStats())
     override val stats: StateFlow<MonitorStats> = _stats
-    
+
     private var job: Job? = null
 
     override suspend fun startMonitoring(host: String, port: Int, user: String, pass: String, isFullMode: Boolean) {
@@ -33,7 +35,7 @@ class AndroidMonitorService : MonitorService, KoinComponent {
             while (isActive) {
                 try {
                     val local = getLocalStats()
-                    
+
                     if (isFullMode) {
                         val fullCommand = "lspci && echo '---' && sensors && echo '---' && lsblk && echo '---' && df -h"
                         val fullOutput = ssh.executeCommand(host, port, user, pass, fullCommand)
@@ -42,10 +44,10 @@ class AndroidMonitorService : MonitorService, KoinComponent {
                         // Short mode: top and nvidia-smi
                         val cpuRamCmd = "top -bn1 | grep -iE '^(%Cpu|KiB Mem|MiB Mem)'"
                         val gpuCmd = "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits"
-                        
+
                         val cpuRamOut = ssh.executeCommand(host, port, user, pass, cpuRamCmd)
                         val gpuOut = ssh.executeCommand(host, port, user, pass, gpuCmd)
-                        
+
                         val srvShort = parseShortStats(cpuRamOut, gpuOut)
                         _stats.value = MonitorStats(isRunning = true, locShort = local, srvShort = srvShort)
                     }
@@ -53,7 +55,7 @@ class AndroidMonitorService : MonitorService, KoinComponent {
                     AppLogger.e("MonitorService", "Error: ${e.message}")
                     _stats.value = _stats.value.copy(error = e.message)
                 }
-                
+
                 delay(5000)
             }
         }
@@ -97,12 +99,12 @@ class AndroidMonitorService : MonitorService, KoinComponent {
 
     private fun parseShortStats(cpuRam: String, gpu: String): String {
         // Very basic parsing
-        // cpuRam typically: 
+        // cpuRam typically:
         // %Cpu(s):  5.0 us,  2.0 sy, ...
         // MiB Mem :  16000 total,  8000 free, ...
         var cpu = "N/A"
         var ram = "N/A"
-        
+
         cpuRam.lines().forEach { line ->
             if (line.contains("Cpu")) {
                 // simple regex extract
@@ -113,19 +115,19 @@ class AndroidMonitorService : MonitorService, KoinComponent {
                 if (match != null) ram = "${match.groupValues[1]}M"
             }
         }
-        
+
         val gpus = gpu.lines().filter { it.isNotBlank() && !it.contains("Error") }
         var gpuStr = ""
         gpus.forEachIndexed { index, g ->
             val parts = g.split(",")
             if (parts.size >= 2) {
-                gpuStr += " GPU${index+1} ${parts[0].trim()}% [T:${parts[1].trim()}C]"
+                gpuStr += " GPU${index + 1} ${parts[0].trim()}% [T:${parts[1].trim()}C]"
             }
         }
         if (gpuStr.isBlank()) {
             gpuStr = " GPU N/A"
         }
-        
+
         return "Srv: CPU $cpu RAM $ram$gpuStr"
     }
 }

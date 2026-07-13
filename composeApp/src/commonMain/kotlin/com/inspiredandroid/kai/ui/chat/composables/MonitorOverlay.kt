@@ -18,7 +18,7 @@ import com.inspiredandroid.kai.monitor.MonitorStats
 fun MonitorOverlay(
     mode: MonitorOverlayMode,
     stats: MonitorStats,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (mode == MonitorOverlayMode.OFF) return
 
@@ -26,21 +26,21 @@ fun MonitorOverlay(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f))
-            .padding(4.dp)
+            .padding(4.dp),
     ) {
         if (stats.error != null) {
             Text(
                 text = "Monitor Error: ${stats.error}",
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
-                fontSize = 10.sp
+                fontSize = 10.sp,
             )
         } else if (!stats.isRunning) {
             Text(
                 text = "Starting Monitor...",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall,
-                fontSize = 10.sp
+                fontSize = 10.sp,
             )
         } else {
             if (mode == MonitorOverlayMode.SHORT) {
@@ -50,14 +50,14 @@ fun MonitorOverlay(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 10.sp
+                        fontSize = 10.sp,
                     )
                     Text(
                         text = stats.locShort ?: "Loc: N/A",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 10.sp
+                        fontSize = 10.sp,
                     )
                 }
             } else if (mode == MonitorOverlayMode.FULL) {
@@ -65,7 +65,7 @@ fun MonitorOverlay(
                 Column(
                     modifier = Modifier
                         .heightIn(max = 300.dp)
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(rememberScrollState()),
                 ) {
                     Text(
                         text = stats.locShort ?: "Loc: N/A",
@@ -73,14 +73,14 @@ fun MonitorOverlay(
                         style = MaterialTheme.typography.bodySmall,
                         fontFamily = FontFamily.Monospace,
                         fontSize = 10.sp,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                     Text(
                         text = stats.srvFull ?: "Srv: Waiting for data...",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 10.sp
+                        fontSize = 10.sp,
                     )
                 }
             }

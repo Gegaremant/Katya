@@ -12,7 +12,7 @@ class DummyMonitorService : MonitorService {
         port: Int,
         user: String,
         pass: String,
-        isFullMode: Boolean
+        isFullMode: Boolean,
     ) {
         _stats.value = MonitorStats(isRunning = true, locShort = "Loc: N/A", srvShort = "Srv: Not supported on this platform")
     }

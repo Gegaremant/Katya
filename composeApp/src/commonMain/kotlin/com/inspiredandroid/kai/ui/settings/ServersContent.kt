@@ -186,12 +186,12 @@ fun ServersContent(
                 listOf(
                     com.inspiredandroid.kai.data.MonitorOverlayMode.OFF to "Откл",
                     com.inspiredandroid.kai.data.MonitorOverlayMode.SHORT to "Кратко",
-                    com.inspiredandroid.kai.data.MonitorOverlayMode.FULL to "Полная"
+                    com.inspiredandroid.kai.data.MonitorOverlayMode.FULL to "Полная",
                 ).forEach { (mode, label) ->
                     androidx.compose.material3.FilterChip(
                         selected = monitorOverlayMode == mode,
                         onClick = { onChangeMonitorOverlayMode(mode) },
-                        label = { Text(label) }
+                        label = { Text(label) },
                     )
                 }
             }

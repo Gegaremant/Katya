@@ -1,8 +1,7 @@
 package com.inspiredandroid.kai.stt
 
-import kotlinx.coroutines.flow.StateFlow
-
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface WakeWordPlatform {
     val isDownloading: StateFlow<Boolean>

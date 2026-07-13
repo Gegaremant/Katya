@@ -102,7 +102,7 @@ class ChatViewModel(
             dataRepository.loadConversations()
             dataRepository.restoreCurrentConversation()
             presetInteractiveModeForCurrentConversation()
-            
+
             // Start Wake Word listening if enabled
             if (dataRepository.isWakeWordEnabled()) {
                 val lang = dataRepository.getWakeWordModelLang()
@@ -113,7 +113,7 @@ class ChatViewModel(
                 }
                 wakeWordPlatform.startListening(url, dataRepository.getWakeWordTrigger())
             }
-            
+
             _state.update { it.copy(isRestoring = false) }
         }
 
@@ -121,7 +121,7 @@ class ChatViewModel(
             wakeWordPlatform.wakeWordTriggered.collect {
                 wakeWordPlatform.triggerWakeWordResponse(
                     dataRepository.isWakeWordVibrationEnabled(),
-                    dataRepository.isWakeWordSoundEnabled()
+                    dataRepository.isWakeWordSoundEnabled(),
                 )
             }
         }
@@ -175,7 +175,7 @@ class ChatViewModel(
                         port = appSettings.getServerPort(),
                         user = appSettings.getServerUser(),
                         pass = appSettings.getServerPassword(),
-                        isFullMode = (mode == com.inspiredandroid.kai.data.MonitorOverlayMode.FULL)
+                        isFullMode = (mode == com.inspiredandroid.kai.data.MonitorOverlayMode.FULL),
                     )
                 } else {
                     monitorService.stopMonitoring()

@@ -141,7 +141,7 @@ fun ChatScreen(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val monitorStats by viewModel.monitorStats.collectAsStateWithLifecycle()
     var wakeWordTriggerCount by remember { mutableStateOf(0) }
-    
+
     LaunchedEffect(viewModel.wakeWordTriggered) {
         viewModel.wakeWordTriggered.collect {
             wakeWordTriggerCount++
@@ -195,7 +195,7 @@ fun ChatScreenContent(
 @Composable
 private fun InteractiveModeScreen(
     uiState: ChatUiState,
-    wakeWordTriggerCount: Int
+    wakeWordTriggerCount: Int,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -577,7 +577,7 @@ private fun ChatModeScreen(
 
             com.inspiredandroid.kai.ui.chat.composables.MonitorOverlay(
                 mode = uiState.monitorOverlayMode,
-                stats = monitorStats
+                stats = monitorStats,
             )
 
             PendingSmsBanners(

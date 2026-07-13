@@ -214,7 +214,7 @@ fun QuestionInput(
         } else {
             null
         }
-        
+
         LaunchedEffect(wakeWordTriggerCount) {
             if (wakeWordTriggerCount > 0) {
                 if (audioPermissionController?.requestPermission() == true) {

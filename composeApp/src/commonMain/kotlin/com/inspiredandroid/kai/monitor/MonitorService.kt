@@ -7,14 +7,17 @@ data class MonitorStats(
     val locShort: String? = null,
     val srvFull: String? = null,
     val isRunning: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
 )
 
 interface MonitorService {
     val stats: StateFlow<MonitorStats>
     suspend fun startMonitoring(
-        host: String, port: Int, user: String, pass: String, 
-        isFullMode: Boolean
+        host: String,
+        port: Int,
+        user: String,
+        pass: String,
+        isFullMode: Boolean,
     )
     fun stopMonitoring()
 }

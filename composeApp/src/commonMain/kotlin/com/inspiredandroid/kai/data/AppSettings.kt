@@ -40,7 +40,7 @@ enum class ThemeMode {
 enum class MonitorOverlayMode {
     OFF,
     SHORT,
-    FULL
+    FULL,
 }
 
 /**
@@ -365,7 +365,7 @@ class AppSettings(internal val settings: Settings) {
         settings.putString(KEY_THEME_MODE, mode.name)
         _themeModeFlow.value = mode
     }
-    
+
     // Monitor Overlay Mode
     private val _monitorOverlayModeFlow = MutableStateFlow(loadInitialMonitorOverlayMode())
     val monitorOverlayModeFlow: StateFlow<MonitorOverlayMode> = _monitorOverlayModeFlow

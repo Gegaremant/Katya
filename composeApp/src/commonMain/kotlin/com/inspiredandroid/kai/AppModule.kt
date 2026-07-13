@@ -18,6 +18,8 @@ import com.inspiredandroid.kai.data.runMigrations
 import com.inspiredandroid.kai.email.EmailPoller
 import com.inspiredandroid.kai.inference.createLocalInferenceEngine
 import com.inspiredandroid.kai.mcp.McpServerManager
+import com.inspiredandroid.kai.monitor.MonitorService
+import com.inspiredandroid.kai.monitor.createMonitorService
 import com.inspiredandroid.kai.network.Requests
 import com.inspiredandroid.kai.notifications.NotificationReader
 import com.inspiredandroid.kai.skills.SkillManager
@@ -34,8 +36,6 @@ import com.inspiredandroid.kai.tools.NotificationListenerController
 import com.inspiredandroid.kai.tools.NotificationPermissionController
 import com.inspiredandroid.kai.tools.SmsPermissionController
 import com.inspiredandroid.kai.tools.SmsSendPermissionController
-import com.inspiredandroid.kai.monitor.MonitorService
-import com.inspiredandroid.kai.monitor.createMonitorService
 import com.inspiredandroid.kai.tunnel.SshTunnelService
 import com.inspiredandroid.kai.tunnel.createTunnelService
 import com.inspiredandroid.kai.ui.chat.ChatViewModel

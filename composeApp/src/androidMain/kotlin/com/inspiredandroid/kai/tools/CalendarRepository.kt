@@ -7,13 +7,13 @@ import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.inspiredandroid.kai.tools.AppLogger
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import com.inspiredandroid.kai.tools.AppLogger
 import java.util.TimeZone
 
 private const val TAG = "CalendarRepository"
