@@ -271,8 +271,8 @@
     <string name="litert_error_not_enough_disk_space">Недостаточно места на диске для загрузки модели.</string>
     <string name="litert_error_insufficient_memory">Недостаточно памяти для загрузки модели. Закройте другие приложения и попробуйте снова.</string>
     <string name="model_sort_date">Дата</string>
-    <string name="model_sort_score">Сжатие</string>
-    <string name="model_sort_context">Размер</string>
+    <string name="model_sort_score">Оценка</string>
+    <string name="model_sort_context">Контекст</string>
     <string name="tool_check_sms_name">Проверить SMS</string>
     <string name="tool_check_sms_description">Показать недавние непрочитанные SMS-сообщения</string>
     <string name="tool_read_sms_name">Прочитать SMS</string>

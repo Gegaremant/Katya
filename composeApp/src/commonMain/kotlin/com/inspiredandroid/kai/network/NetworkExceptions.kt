@@ -136,3 +136,4 @@ fun Exception.toUiError(): UiError {
         }
     }
 }
+}
