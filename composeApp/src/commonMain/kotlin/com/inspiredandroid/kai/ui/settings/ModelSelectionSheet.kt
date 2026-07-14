@@ -199,7 +199,7 @@ private fun ModelCard(model: SettingsModel, isSelected: Boolean, onClick: () -> 
     } else {
         if (!rawTitle.contains("Text")) rawTitle += " 📝 (Text)"
     }
-    
+
     val title = rawTitle
     val displayName = model.displayName?.takeIf { it.isNotBlank() && it != model.id }
     val secondary = if (displayName == null && model.subtitle.isNotBlank()) model.subtitle else null

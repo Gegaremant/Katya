@@ -71,69 +71,70 @@ sealed interface UiError {
 fun Exception.toUiError(): UiError {
     com.inspiredandroid.kai.tools.AppLogger.e("NetworkException", "Mapping to UiError: ${this.message}\n${this.stackTraceToString()}")
     return when (this) {
-    is UnsupportedFileTypeException -> UiError.Resource(Res.string.error_unsupported_file_type)
+        is UnsupportedFileTypeException -> UiError.Resource(Res.string.error_unsupported_file_type)
 
-    is FileTooLargeException -> UiError.Resource(Res.string.error_file_too_large)
+        is FileTooLargeException -> UiError.Resource(Res.string.error_file_too_large)
 
-    is ContextWindowExceededException -> UiError.Resource(Res.string.error_context_window_exceeded)
+        is ContextWindowExceededException -> UiError.Resource(Res.string.error_context_window_exceeded)
 
-    is AllServicesFailedException -> UiError.Resource(Res.string.error_all_services_failed)
+        is AllServicesFailedException -> UiError.Resource(Res.string.error_all_services_failed)
 
-    is OpenAICompatibleRequestTooLargeException -> UiError.Resource(Res.string.error_image_too_large)
+        is OpenAICompatibleRequestTooLargeException -> UiError.Resource(Res.string.error_image_too_large)
 
-    is GeminiInvalidApiKeyException, is OpenAICompatibleInvalidApiKeyException, is AnthropicInvalidApiKeyException -> UiError.Resource(Res.string.error_invalid_api_key)
+        is GeminiInvalidApiKeyException, is OpenAICompatibleInvalidApiKeyException, is AnthropicInvalidApiKeyException -> UiError.Resource(Res.string.error_invalid_api_key)
 
-    is GeminiRateLimitExceededException, is OpenAICompatibleRateLimitExceededException, is AnthropicRateLimitExceededException -> UiError.Resource(Res.string.error_rate_limit_exceeded)
+        is GeminiRateLimitExceededException, is OpenAICompatibleRateLimitExceededException, is AnthropicRateLimitExceededException -> UiError.Resource(Res.string.error_rate_limit_exceeded)
 
-    is AnthropicOverloadedException -> UiError.Resource(Res.string.error_rate_limit_exceeded)
+        is AnthropicOverloadedException -> UiError.Resource(Res.string.error_rate_limit_exceeded)
 
-    is AnthropicInsufficientCreditsException -> UiError.Resource(Res.string.error_insufficient_credits)
+        is AnthropicInsufficientCreditsException -> UiError.Resource(Res.string.error_insufficient_credits)
 
-    is OpenAICompatibleQuotaExhaustedException -> UiError.Resource(Res.string.error_quota_exhausted)
+        is OpenAICompatibleQuotaExhaustedException -> UiError.Resource(Res.string.error_quota_exhausted)
 
-    is OpenAICompatibleConnectionException -> UiError.Resource(Res.string.error_openai_compatible_connection)
+        is OpenAICompatibleConnectionException -> UiError.Resource(Res.string.error_openai_compatible_connection)
 
-    is OpenAICompatibleModelNotFoundException -> UiError.Resource(Res.string.error_openai_compatible_model_not_found)
+        is OpenAICompatibleModelNotFoundException -> UiError.Resource(Res.string.error_openai_compatible_model_not_found)
 
-    is OpenAICompatibleEmptyResponseException -> UiError.Resource(Res.string.error_empty_response)
+        is OpenAICompatibleEmptyResponseException -> UiError.Resource(Res.string.error_empty_response)
 
-    is OpenAICompatibleTimeoutException -> UiError.Resource(Res.string.error_openai_compatible_connection)
+        is OpenAICompatibleTimeoutException -> UiError.Resource(Res.string.error_openai_compatible_connection)
 
-    is OpenAICompatibleServiceUnavailableException -> UiError.Resource(Res.string.error_service_unavailable)
+        is OpenAICompatibleServiceUnavailableException -> UiError.Resource(Res.string.error_service_unavailable)
 
-    is OpenAICompatibleContentModerationException -> message?.takeIf { it.isNotBlank() }
-        ?.let { UiError.ResourceWithDetail(Res.string.error_content_moderation, it) }
-        ?: UiError.Resource(Res.string.error_content_moderation)
+        is OpenAICompatibleContentModerationException -> message?.takeIf { it.isNotBlank() }
+            ?.let { UiError.ResourceWithDetail(Res.string.error_content_moderation, it) }
+            ?: UiError.Resource(Res.string.error_content_moderation)
 
-    is OpenAICompatibleProviderErrorException -> message?.takeIf { it.isNotBlank() }
-        ?.let { UiError.ResourceWithDetail(Res.string.error_provider_error, it) }
-        ?: UiError.Resource(Res.string.error_provider_error)
+        is OpenAICompatibleProviderErrorException -> message?.takeIf { it.isNotBlank() }
+            ?.let { UiError.ResourceWithDetail(Res.string.error_provider_error, it) }
+            ?: UiError.Resource(Res.string.error_provider_error)
 
-    is OpenAICompatibleBadRequestException -> message?.takeIf { it.isNotBlank() }
-        ?.let { UiError.ResourceWithDetail(Res.string.error_bad_request, it) }
-        ?: UiError.Resource(Res.string.error_bad_request)
+        is OpenAICompatibleBadRequestException -> message?.takeIf { it.isNotBlank() }
+            ?.let { UiError.ResourceWithDetail(Res.string.error_bad_request, it) }
+            ?: UiError.Resource(Res.string.error_bad_request)
 
-    is InsufficientMemoryException -> UiError.Resource(Res.string.litert_error_insufficient_memory)
+        is InsufficientMemoryException -> UiError.Resource(Res.string.litert_error_insufficient_memory)
 
-    is InferenceTimeoutException -> UiError.Resource(Res.string.litert_error_inference_timeout)
+        is InferenceTimeoutException -> UiError.Resource(Res.string.litert_error_inference_timeout)
 
-    is NoModelDownloadedException -> UiError.Resource(Res.string.litert_error_no_model)
+        is NoModelDownloadedException -> UiError.Resource(Res.string.litert_error_no_model)
 
-    is GeminiGenericException, is OpenAICompatibleGenericException, is AnthropicGenericException, is GenericNetworkException ->
-        if (!message.isNullOrBlank()) UiError.Text(message!!) else UiError.Resource(Res.string.error_unknown)
+        is GeminiGenericException, is OpenAICompatibleGenericException, is AnthropicGenericException, is GenericNetworkException ->
+            if (!message.isNullOrBlank()) UiError.Text(message!!) else UiError.Resource(Res.string.error_unknown)
 
-    else -> {
-        val msg = message ?: ""
-        if (msg.contains("ConnectException", ignoreCase = true) || 
-            msg.contains("UnresolvedAddressException", ignoreCase = true) || 
-            msg.contains("SocketTimeoutException", ignoreCase = true) ||
-            msg.contains("UnknownHostException", ignoreCase = true)) {
-            UiError.Resource(Res.string.error_openai_compatible_connection)
-        } else if (msg.isNotBlank()) {
-            UiError.Text(msg)
-        } else {
-            UiError.Resource(Res.string.error_unknown)
+        else -> {
+            val msg = message ?: ""
+            if (msg.contains("ConnectException", ignoreCase = true) ||
+                msg.contains("UnresolvedAddressException", ignoreCase = true) ||
+                msg.contains("SocketTimeoutException", ignoreCase = true) ||
+                msg.contains("UnknownHostException", ignoreCase = true)
+            ) {
+                UiError.Resource(Res.string.error_openai_compatible_connection)
+            } else if (msg.isNotBlank()) {
+                UiError.Text(msg)
+            } else {
+                UiError.Resource(Res.string.error_unknown)
+            }
         }
     }
-}
 }
