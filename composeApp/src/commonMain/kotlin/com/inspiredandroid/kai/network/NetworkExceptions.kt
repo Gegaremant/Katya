@@ -68,7 +68,9 @@ sealed interface UiError {
     data class ResourceWithDetail(val resource: StringResource, val detail: String) : UiError
 }
 
-fun Exception.toUiError(): UiError = when (this) {
+fun Exception.toUiError(): UiError {
+    com.inspiredandroid.kai.tools.AppLogger.e("NetworkException", "Mapping to UiError: ${this.message}\n${this.stackTraceToString()}")
+    return when (this) {
     is UnsupportedFileTypeException -> UiError.Resource(Res.string.error_unsupported_file_type)
 
     is FileTooLargeException -> UiError.Resource(Res.string.error_file_too_large)
@@ -120,5 +122,17 @@ fun Exception.toUiError(): UiError = when (this) {
     is GeminiGenericException, is OpenAICompatibleGenericException, is AnthropicGenericException, is GenericNetworkException ->
         if (!message.isNullOrBlank()) UiError.Text(message!!) else UiError.Resource(Res.string.error_unknown)
 
-    else -> if (!message.isNullOrBlank()) UiError.Text(message!!) else UiError.Resource(Res.string.error_unknown)
+    else -> {
+        val msg = message ?: ""
+        if (msg.contains("ConnectException", ignoreCase = true) || 
+            msg.contains("UnresolvedAddressException", ignoreCase = true) || 
+            msg.contains("SocketTimeoutException", ignoreCase = true) ||
+            msg.contains("UnknownHostException", ignoreCase = true)) {
+            UiError.Resource(Res.string.error_openai_compatible_connection)
+        } else if (msg.isNotBlank()) {
+            UiError.Text(msg)
+        } else {
+            UiError.Resource(Res.string.error_unknown)
+        }
+    }
 }

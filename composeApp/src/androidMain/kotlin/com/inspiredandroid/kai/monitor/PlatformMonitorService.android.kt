@@ -43,7 +43,7 @@ class AndroidMonitorService :
                     } else {
                         // Short mode: top and nvidia-smi
                         val cpuRamCmd = "top -bn1 | grep -iE '^(%Cpu|KiB Mem|MiB Mem)'"
-                        val gpuCmd = "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits"
+                        val gpuCmd = "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total --format=csv,noheader,nounits"
 
                         val cpuRamOut = ssh.executeCommand(host, port, user, pass, cpuRamCmd)
                         val gpuOut = ssh.executeCommand(host, port, user, pass, gpuCmd)
@@ -120,7 +120,9 @@ class AndroidMonitorService :
         var gpuStr = ""
         gpus.forEachIndexed { index, g ->
             val parts = g.split(",")
-            if (parts.size >= 2) {
+            if (parts.size >= 4) {
+                gpuStr += " GPU${index + 1} ${parts[0].trim()}% [T:${parts[1].trim()}C M:${parts[2].trim()}/${parts[3].trim()}M]"
+            } else if (parts.size >= 2) {
                 gpuStr += " GPU${index + 1} ${parts[0].trim()}% [T:${parts[1].trim()}C]"
             }
         }
