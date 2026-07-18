@@ -277,6 +277,12 @@ internal fun ServicesContent(uiState: SettingsUiState, actions: SettingsActions)
                     modelContextTokens = uiState.modelContextTokens,
                     onOpenAppPermissionSettings = actions.onOpenAppPermissionSettings,
                     onRecheckLocalNetworkPermission = { actions.onRecheckLocalNetworkPermission(entry.instanceId) },
+                    hfRepoUrl = uiState.hfRepoUrl,
+                    onChangeHfRepoUrl = actions.onChangeHfRepoUrl,
+                    onFetchHfModels = actions.onFetchHfModels,
+                    isFetchingHfModels = uiState.isFetchingHfModels,
+                    hfError = uiState.hfError,
+                    hfModels = uiState.hfModels,
                 )
             }
         }
@@ -398,6 +404,12 @@ private fun ConfiguredServiceCardContent(
     modelContextTokens: ImmutableMap<String, Int> = persistentMapOf(),
     onOpenAppPermissionSettings: () -> Unit = {},
     onRecheckLocalNetworkPermission: () -> Unit = {},
+    hfRepoUrl: String = "",
+    onChangeHfRepoUrl: (String) -> Unit = {},
+    onFetchHfModels: () -> Unit = {},
+    isFetchingHfModels: Boolean = false,
+    hfError: String? = null,
+    hfModels: ImmutableList<LocalModel> = persistentListOf(),
 ) {
     // Clear a stale denied status when the user returns from granting the permission in
     // system settings; the recheck never re-prompts, so this is a no-op while still denied.
@@ -493,6 +505,12 @@ private fun ConfiguredServiceCardContent(
                         onDeleteModel = onDeleteLocalModel,
                         onChangeModelContextTokens = onChangeModelContextTokens,
                         modelContextTokens = modelContextTokens,
+                        hfRepoUrl = hfRepoUrl,
+                        onChangeHfRepoUrl = onChangeHfRepoUrl,
+                        onFetchHfModels = onFetchHfModels,
+                        isFetchingHfModels = isFetchingHfModels,
+                        hfError = hfError,
+                        hfModels = hfModels,
                     )
                 } else if (entry.service is Service.OpenAICompatible) {
                     OpenAICompatibleSettings(
@@ -673,6 +691,12 @@ private fun LiteRTSettings(
     onDeleteModel: (String) -> Unit,
     onChangeModelContextTokens: (String, Int) -> Unit,
     modelContextTokens: ImmutableMap<String, Int>,
+    hfRepoUrl: String = "",
+    onChangeHfRepoUrl: (String) -> Unit = {},
+    onFetchHfModels: () -> Unit = {},
+    isFetchingHfModels: Boolean = false,
+    hfError: String? = null,
+    hfModels: ImmutableList<LocalModel> = persistentListOf(),
 ) {
     val downloadedIds = remember(downloadedModels) { downloadedModels.map { it.id }.toSet() }
 
@@ -834,6 +858,133 @@ private fun LiteRTSettings(
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
+
+    Spacer(Modifier.height(16.dp))
+    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+    Text(
+        text = "HuggingFace Custom Models",
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primary,
+    )
+    Spacer(Modifier.height(8.dp))
+    Text(
+        text = "Вставьте ссылку на репозиторий с моделями в формате GGUF или LiteRT.",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    Spacer(Modifier.height(8.dp))
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        KaiClearableTextField(
+            value = hfRepoUrl,
+            onValueChange = onChangeHfRepoUrl,
+            label = { Text("https://huggingface.co/...", color = MaterialTheme.colorScheme.onBackground) },
+            modifier = Modifier.weight(1f),
+            singleLine = true,
+        )
+        Spacer(Modifier.width(8.dp))
+        Button(
+            onClick = onFetchHfModels,
+            enabled = !isFetchingHfModels && hfRepoUrl.isNotBlank()
+        ) {
+            if (isFetchingHfModels) {
+                CircularProgressIndicator(modifier = Modifier.size(16.dp), color = MaterialTheme.colorScheme.onPrimary)
+            } else {
+                Text("Поиск")
+            }
+        }
+    }
+    if (hfError != null) {
+        Spacer(Modifier.height(4.dp))
+        Text(hfError, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+    }
+
+    if (hfModels.isNotEmpty()) {
+        Spacer(Modifier.height(12.dp))
+        
+        val fitsDeviceModels = hfModels.filter { calculateDevicePerformance(totalDeviceMemoryBytes, estimateGpuMemoryMb(it, it.defaultContextTokens)) != DevicePerformance.POOR }
+        
+        if (fitsDeviceModels.isEmpty()) {
+            val hfLink = hfRepoUrl.trim().takeIf { it.startsWith("http") } ?: "https://$hfRepoUrl"
+            Text(
+                "Найденные модели не подходят для данного устройства из-за нехватки оперативной памяти. " +
+                "Попробуйте поискать более легкие квантованные версии (например, Q4_K_M) в этом репозитории.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+            Spacer(Modifier.height(4.dp))
+            val annotatedLink = buildAnnotatedString {
+                withLink(LinkAnnotation.Url(url = hfLink)) {
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                        append("Перейти к репозиторию")
+                    }
+                }
+            }
+            Text(annotatedLink)
+        } else {
+            fitsDeviceModels.forEach { model ->
+                val isDownloaded = model.id in downloadedIds
+                val isSelected = selectedModel?.id == model.id
+                val isDownloading = downloadingModelId == model.id
+                val estimatedMemoryMb = estimateGpuMemoryMb(model, model.defaultContextTokens)
+                val performance = calculateDevicePerformance(totalDeviceMemoryBytes, estimatedMemoryMb)
+
+                Surface(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    tonalElevation = if (isSelected) 3.dp else 1.dp,
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            if (isDownloaded) {
+                                RadioButton(
+                                    selected = isSelected,
+                                    onClick = { onSelectModel(model.id) },
+                                    modifier = Modifier.size(20.dp),
+                                )
+                                Spacer(Modifier.width(8.dp))
+                            }
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = model.fileName,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = formatFileSize(model.sizeBytes),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    DevicePerformanceLabel(performance)
+                                }
+                            }
+                            if (isDownloaded) {
+                                IconButton(
+                                    onClick = { onDeleteModel(model.id) },
+                                    modifier = Modifier.handCursor(),
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                            } else if (!isDownloading) {
+                                TextButton(
+                                    onClick = { onDownloadModel(model) },
+                                    modifier = Modifier.handCursor(),
+                                    enabled = downloadingModelId == null,
+                                ) {
+                                    Text(stringResource(Res.string.litert_download))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable

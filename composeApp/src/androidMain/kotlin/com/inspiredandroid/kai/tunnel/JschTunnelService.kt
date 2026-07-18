@@ -34,44 +34,70 @@ class JschTunnelService : SshTunnelService {
 
         tunnelJob = CoroutineScope(Dispatchers.IO).launch {
             try {
-                if (session != null && session!!.isConnected) {
+                var retryCount = 0
+                val maxRetries = 5
+                
+                while (retryCount <= maxRetries && isActive) {
+                    try {
+                        if (session != null && session!!.isConnected) {
+                            session?.disconnect()
+                            session = null
+                        }
+
+                        AppLogger.i("SshTunnel", "Connecting to $sshIp:$sshPort as $sshUser...")
+                        _tunnelState.value = TunnelState(isRunning = true, message = "Connecting to $sshIp...")
+
+                        val jsch = JSch()
+                        session = jsch.getSession(sshUser, sshIp, sshPort)
+                        session?.setPassword(sshPass)
+
+                        val config = Properties()
+                        config["StrictHostKeyChecking"] = "no"
+                        session?.setConfig(config)
+
+                        AppLogger.i("SshTunnel", "Session configured, attempting to connect...")
+                        session?.connect(10000)
+
+                        AppLogger.i("SshTunnel", "Session connected, setting port forwarding L:$localPort -> 127.0.0.1:$remotePort")
+                        session?.setPortForwardingL(localPort, "127.0.0.1", remotePort)
+
+                        AppLogger.i("SshTunnel", "Tunnel established successfully")
+                        _tunnelState.value = TunnelState(isRunning = true, message = "Tunnel established: localhost:$localPort -> $sshIp:$remotePort")
+
+                        // Keep connection alive
+                        while (isActive && session?.isConnected == true) {
+                            delay(5000)
+                        }
+
+                        if (isActive) {
+                            retryCount++
+                            if (retryCount <= maxRetries) {
+                                AppLogger.w("SshTunnel", "Connection lost. Attempting reconnect ($retryCount/$maxRetries)")
+                                _tunnelState.value = TunnelState(isRunning = true, message = "Reconnecting ($retryCount/$maxRetries)...")
+                                delay(2000L * retryCount)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        retryCount++
+                        if (retryCount <= maxRetries && isActive) {
+                            AppLogger.e("SshTunnel", "SSH Error: ${e.message}. Attempting reconnect ($retryCount/$maxRetries)")
+                            _tunnelState.value = TunnelState(isRunning = true, error = "Connection failed, retrying ($retryCount/$maxRetries)...")
+                            delay(2000L * retryCount)
+                        } else {
+                            throw e
+                        }
+                    }
+                }
+                
+                if (retryCount > maxRetries) {
+                    AppLogger.e("SshTunnel", "SSH Error: Max retries reached")
+                    _tunnelState.value = TunnelState(isRunning = false, error = "Failed to establish tunnel after $maxRetries attempts")
                     stopTunnel()
-                }
-
-                AppLogger.i("SshTunnel", "Connecting to $sshIp:$sshPort as $sshUser...")
-                _tunnelState.value = TunnelState(isRunning = true, message = "Connecting to $sshIp...")
-
-                val jsch = JSch()
-                session = jsch.getSession(sshUser, sshIp, sshPort)
-                session?.setPassword(sshPass)
-
-                val config = Properties()
-                config["StrictHostKeyChecking"] = "no"
-                session?.setConfig(config)
-
-                AppLogger.i("SshTunnel", "Session configured, attempting to connect...")
-                // Try to connect
-                session?.connect(10000)
-
-                AppLogger.i("SshTunnel", "Session connected, setting port forwarding L:$localPort -> 127.0.0.1:$remotePort")
-                // Set port forwarding: bind local port to loopback, forward to 127.0.0.1 on the server
-                session?.setPortForwardingL(localPort, "127.0.0.1", remotePort)
-
-                AppLogger.i("SshTunnel", "Tunnel established successfully")
-                _tunnelState.value = TunnelState(isRunning = true, message = "Tunnel established: localhost:$localPort -> $sshIp:$remotePort")
-
-                // Keep connection alive
-                while (isActive && session?.isConnected == true) {
-                    delay(5000)
-                }
-
-                if (isActive) {
-                    AppLogger.w("SshTunnel", "Connection lost")
-                    _tunnelState.value = TunnelState(isRunning = false, error = "Connection lost")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                AppLogger.e("SshTunnel", "SSH Error: ${e.message}")
+                AppLogger.e("SshTunnel", "SSH Critical Error: ${e.message}")
                 _tunnelState.value = TunnelState(isRunning = false, error = e.message ?: "Failed to establish tunnel")
                 stopTunnel()
             }

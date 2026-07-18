@@ -94,7 +94,7 @@ class Requests {
 
     // region Gemini
 
-    suspend fun getGeminiModels(credentials: ServiceCredentials): Result<GeminiModelsResponseDto> = try {
+    suspend fun getGeminiModels(credentials: ServiceCredentials): Result<GeminiModelsResponseDto> = withRetry { try {
         val apiKey = credentials.apiKey.ifEmpty { throw GeminiInvalidApiKeyException() }
         val response: HttpResponse =
             defaultClient.get("https://generativelanguage.googleapis.com/v1beta/models") {
@@ -112,7 +112,7 @@ class Requests {
         Result.failure(e)
     } catch (e: Exception) {
         Result.failure(GeminiGenericException("Connection failed", e))
-    }
+    } }
 
     suspend fun geminiChat(
         credentials: ServiceCredentials,
@@ -120,7 +120,7 @@ class Requests {
         tools: List<Tool> = emptyList(),
         systemInstruction: String? = null,
         requestTimeoutMs: Long? = null,
-    ): Result<GeminiChatResponseDto> = try {
+    ): Result<GeminiChatResponseDto> = withRetry { try {
         val apiKey = credentials.apiKey.ifEmpty { throw GeminiInvalidApiKeyException() }
         val selectedModelId = credentials.modelId
 
@@ -169,7 +169,7 @@ class Requests {
         }
     } catch (e: Exception) {
         Result.failure(e)
-    }
+    } }
 
     // endregion
 
@@ -182,7 +182,7 @@ class Requests {
         tools: List<Tool> = emptyList(),
         customHeaders: Map<String, String> = emptyMap(),
         requestTimeoutMs: Long? = null,
-    ): Result<OpenAICompatibleChatResponseDto> = try {
+    ): Result<OpenAICompatibleChatResponseDto> = withRetry { try {
         val apiKey = getApiKeyOrThrow(service, credentials)
         val model = credentials.modelId.ifEmpty { null }
         val url = resolveUrl(service, credentials, service.chatUrl)
@@ -217,14 +217,14 @@ class Requests {
         Result.failure(OpenAICompatibleConnectionException())
     } catch (e: Exception) {
         Result.failure(mapOpenAICompatibleException(e))
-    }
+    } }
 
     suspend fun getOpenAICompatibleModels(
         service: Service,
         credentials: ServiceCredentials,
-    ): Result<OpenAICompatibleModelResponseDto> = try {
+    ): Result<OpenAICompatibleModelResponseDto> = withRetry { try {
         val modelsUrl = service.modelsUrl
-            ?: return Result.failure(OpenAICompatibleGenericException("Models URL not configured for ${service.displayName}"))
+            ?: return@withRetry Result.failure(OpenAICompatibleGenericException("Models URL not configured for ${service.displayName}"))
         val url = resolveUrl(service, credentials, modelsUrl)
         val apiKey = getOptionalApiKey(service, credentials)
         val response: HttpResponse = defaultClient.get(url) {
@@ -244,9 +244,9 @@ class Requests {
         Result.failure(e)
     } catch (e: Exception) {
         Result.failure(OpenAICompatibleConnectionException())
-    }
+    } }
 
-    suspend fun validateOpenRouterApiKey(credentials: ServiceCredentials): Result<Unit> = try {
+    suspend fun validateOpenRouterApiKey(credentials: ServiceCredentials): Result<Unit> = withRetry { try {
         val apiKey = credentials.apiKey.ifEmpty { throw OpenAICompatibleInvalidApiKeyException() }
         val response: HttpResponse = defaultClient.get("https://openrouter.ai/api/v1/auth/key") {
             bearerAuth(apiKey)
@@ -263,7 +263,7 @@ class Requests {
         Result.failure(e)
     } catch (e: Exception) {
         Result.failure(OpenAICompatibleConnectionException())
-    }
+    } }
 
     // endregion
 
@@ -274,7 +274,7 @@ class Requests {
 
     // region Anthropic
 
-    suspend fun getAnthropicModels(credentials: ServiceCredentials): Result<AnthropicModelsResponseDto> = try {
+    suspend fun getAnthropicModels(credentials: ServiceCredentials): Result<AnthropicModelsResponseDto> = withRetry { try {
         val apiKey = credentials.apiKey.ifEmpty { throw AnthropicInvalidApiKeyException() }
         val response: HttpResponse =
             defaultClient.get("https://api.anthropic.com/v1/models") {
@@ -292,7 +292,7 @@ class Requests {
         Result.failure(e)
     } catch (e: Exception) {
         Result.failure(AnthropicGenericException("Anthropic: ${e.message}", e))
-    }
+    } }
 
     suspend fun anthropicChat(
         credentials: ServiceCredentials,
@@ -300,7 +300,7 @@ class Requests {
         tools: List<Tool> = emptyList(),
         systemInstruction: String? = null,
         requestTimeoutMs: Long? = null,
-    ): Result<AnthropicChatResponseDto> = try {
+    ): Result<AnthropicChatResponseDto> = withRetry { try {
         val apiKey = credentials.apiKey.ifEmpty { throw AnthropicInvalidApiKeyException() }
         val response: HttpResponse =
             defaultClient.post(Service.Anthropic.chatUrl) {
@@ -335,7 +335,7 @@ class Requests {
         Result.failure(e)
     } catch (e: Exception) {
         Result.failure(AnthropicGenericException("Anthropic: ${e.message}", e))
-    }
+    } }
 
     private fun throwAnthropicError(statusCode: Int, responseBody: String): Nothing {
         when (statusCode) {
@@ -361,6 +361,34 @@ class Requests {
     // endregion
 
     // region Helpers
+
+    private suspend fun <T> withRetry(block: suspend () -> Result<T>): Result<T> {
+        var retryCount = 0
+        val maxRetries = 5
+        while (true) {
+            val result = block()
+            if (result.isSuccess) return result
+            
+            val e = result.exceptionOrNull()
+            val name = e?.let { it::class.simpleName.orEmpty() } ?: ""
+            val isNetworkOrServerError = name.contains("Connection", ignoreCase = true) ||
+                name.contains("Timeout", ignoreCase = true) ||
+                name.contains("ProviderError", ignoreCase = true) ||
+                name.contains("ServiceUnavailable", ignoreCase = true) ||
+                name.contains("Overloaded", ignoreCase = true) ||
+                name.contains("IOException", ignoreCase = true) ||
+                name.contains("SocketException", ignoreCase = true) ||
+                e?.cause != null
+                
+            if (isNetworkOrServerError && retryCount < maxRetries) {
+                retryCount++
+                com.inspiredandroid.kai.tools.AppLogger.w("Network", "Request failed (${e?.message}). Retrying ($retryCount/$maxRetries)...")
+                kotlinx.coroutines.delay(2000L * retryCount)
+            } else {
+                return result
+            }
+        }
+    }
 
     private fun resolveUrl(service: Service, credentials: ServiceCredentials, path: String): String = if (service == Service.OpenAICompatible) {
         "${credentials.baseUrl.ifEmpty { Service.DEFAULT_OPENAI_COMPATIBLE_BASE_URL }.trimEnd('/')}$path"

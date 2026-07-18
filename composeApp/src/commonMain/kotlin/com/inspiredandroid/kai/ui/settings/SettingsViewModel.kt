@@ -59,6 +59,16 @@ import org.jetbrains.compose.resources.getString
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class HuggingFaceTreeEntry(
+    val type: String,
+    val oid: String? = null,
+    val size: Long = 0L,
+    val path: String
+)
+
 
 class SettingsViewModel(
     private val appSettings: com.inspiredandroid.kai.data.AppSettings,
@@ -214,6 +224,8 @@ class SettingsViewModel(
         onImportSettings = ::onImportSettings,
         onChangeMonitorOverlayMode = ::onChangeMonitorOverlayMode,
         onUndoDelete = ::onUndoDelete,
+        onChangeHfRepoUrl = ::onChangeHfRepoUrl,
+        onFetchHfModels = ::onFetchHfModels,
     )
 
     private val _state = MutableStateFlow(buildFullState())
@@ -795,6 +807,62 @@ class SettingsViewModel(
 
     private fun onOpenAppPermissionSettings() {
         localNetworkPermissionController.openAppSettings()
+    }
+
+    private fun onChangeHfRepoUrl(url: String) {
+        _state.update { it.copy(hfRepoUrl = url, hfError = null) }
+    }
+
+    private fun onFetchHfModels() {
+        val url = _state.value.hfRepoUrl.trim()
+        if (url.isBlank()) return
+        val regex = Regex("huggingface\\.co/([^/]+)/([^/]+)")
+        val match = regex.find(url)
+        if (match == null) {
+            _state.update { it.copy(hfError = "Invalid HuggingFace URL") }
+            return
+        }
+        val user = match.groupValues[1]
+        val repo = match.groupValues[2]
+
+        _state.update { it.copy(isFetchingHfModels = true, hfError = null, hfModels = kotlinx.collections.immutable.persistentListOf()) }
+        viewModelScope.launch(backgroundDispatcher) {
+            try {
+                val client = httpClient {
+                    install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
+                        json(Json { ignoreUnknownKeys = true })
+                    }
+                }
+                val apiUrl = "https://huggingface.co/api/models/$user/$repo/tree/main"
+                val response = client.get(apiUrl)
+                if (response.status.isSuccess()) {
+                    val entries = response.body<List<HuggingFaceTreeEntry>>()
+                    val models = entries.filter { it.type == "file" && (it.path.endsWith(".gguf") || it.path.endsWith(".litertlm")) }
+                        .map {
+                            LocalModel(
+                                id = it.path,
+                                displayName = it.path,
+                                fileName = it.path,
+                                sizeBytes = it.size,
+                                downloadUrl = "https://huggingface.co/$user/$repo/resolve/main/${it.path}",
+                                gpuMemoryMb = (it.size / (1024 * 1024)).toInt() + 500,
+                                defaultContextTokens = 4096,
+                                maxContextTokens = 8192,
+                                kvPerTokenBytes = 65000,
+                            )
+                        }
+                    if (models.isEmpty()) {
+                        _state.update { it.copy(isFetchingHfModels = false, hfError = "No .gguf or .litertlm files found") }
+                    } else {
+                        _state.update { it.copy(isFetchingHfModels = false, hfModels = models.toImmutableList()) }
+                    }
+                } else {
+                    _state.update { it.copy(isFetchingHfModels = false, hfError = "Failed to fetch repository") }
+                }
+            } catch (e: Exception) {
+                _state.update { it.copy(isFetchingHfModels = false, hfError = e.message ?: "Network error") }
+            }
+        }
     }
 
     /**

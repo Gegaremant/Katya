@@ -20,6 +20,12 @@ An **open-source AI assistant with persistent memory** designed specifically for
 
 </div>
 
+### 🆕 What's New in v1.2.1
+- **HuggingFace Integration:** Search and download local AI models directly from HuggingFace via link, with smart automatic filtering by device RAM.
+- **Smart Reconnection:** SSH tunnel and internet models now automatically retry up to 5 times instead of instantly failing, drastically improving stability on bad connections.
+- **Root Context Memory:** The assistant now permanently remembers its root and system privileges to execute commands without hesitation.
+- UI and Bug fixes from upstream.
+
 ### ✨ Key Features
 
 - **Offline Wake Word**: Detects "Привет Катя" locally using Vosk speech recognition without an internet connection.
@@ -98,6 +104,12 @@ An **open-source AI assistant with persistent memory** designed specifically for
 *Примечание: Инфраструктура сервера для Кати разворачивается через репозиторий [SmartBotHelper](https://github.com/Gegaremant/SmartBotHelper).*
 
 </div>
+
+### 🆕 Что нового в версии 1.2.1
+- **Интеграция с HuggingFace:** Прямое скачивание локальных ИИ-моделей по ссылке с умным фильтром, который подбирает модель под объем ОЗУ устройства.
+- **Умное переподключение:** Автоматическое восстановление SSH-туннеля и связи с внешними моделями (до 5 попыток) при обрывах интернета — больше никаких уходов в спячку при мелких лагах связи.
+- **Память о Root-правах:** Катя теперь постоянно "помнит" о своих привилегиях и не отказывается выполнять системные команды.
+- Актуализация кодовой базы и исправление мелких багов интерфейса.
 
 ### ✨ Ключевые возможности
 

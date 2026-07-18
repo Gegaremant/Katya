@@ -139,6 +139,10 @@ data class SettingsUiState(
     val pastSponsors: ImmutableList<SponsorsResponseDto.Sponsor> = persistentListOf(),
     val pendingDeletion: PendingDeletion? = null,
     val monitorOverlayMode: com.inspiredandroid.kai.data.MonitorOverlayMode = com.inspiredandroid.kai.data.MonitorOverlayMode.OFF,
+    val hfRepoUrl: String = "",
+    val isFetchingHfModels: Boolean = false,
+    val hfError: String? = null,
+    val hfModels: ImmutableList<LocalModel> = persistentListOf(),
 )
 
 @Immutable

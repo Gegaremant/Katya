@@ -79,6 +79,8 @@ data class SettingsActions(
     val onImportSettings: (ByteArray, Set<ImportSection>, Boolean) -> ImportResult,
     val onChangeMonitorOverlayMode: (com.inspiredandroid.kai.data.MonitorOverlayMode) -> Unit,
     val onUndoDelete: () -> Unit,
+    val onChangeHfRepoUrl: (String) -> Unit,
+    val onFetchHfModels: () -> Unit,
 ) {
     companion object {
         val NoOp = SettingsActions(
@@ -152,6 +154,8 @@ data class SettingsActions(
             onImportSettings = { _, _, _ -> ImportResult.Failure },
             onChangeMonitorOverlayMode = {},
             onUndoDelete = {},
+            onChangeHfRepoUrl = {},
+            onFetchHfModels = {},
         )
     }
 }
